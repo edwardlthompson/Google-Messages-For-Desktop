@@ -4,30 +4,9 @@
 # Exit 0 prints count to stdout; exit 1 on API/auth error.
 set -euo pipefail
 
-resolve_gh() {
-  if command -v gh >/dev/null 2>&1; then
-    command -v gh
-    return 0
-  fi
-  local c
-  for c in \
-    "/mnt/c/Program Files/GitHub CLI/gh.exe" \
-    "/c/Program Files/GitHub CLI/gh.exe" \
-    "/c/Program Files (x86)/GitHub CLI/gh.exe" \
-    "${LOCALAPPDATA:-}/Programs/GitHub CLI/gh.exe"; do
-    if [ -n "$c" ] && [ -x "$c" ]; then
-      printf '%s\n' "$c"
-      return 0
-    fi
-  done
-  return 1
-}
-
-GH_BIN="$(resolve_gh || true)"
-if [ -z "${GH_BIN:-}" ]; then
-  echo "ERROR: gh CLI required" >&2
-  exit 1
-fi
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/resolve_gh.sh
+. "$ROOT/scripts/lib/resolve_gh.sh"
 
 REPO="${GITHUB_REPO:-$("$GH_BIN" repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || true)}"
 if [ -z "$REPO" ]; then
