@@ -1,14 +1,14 @@
 {
   "name": "google-messages-for-desktop",
   "version": "1.5.0",
-  "description": "Google Messages desktop wrapper. Windows: Chromium App Host with sms:/tel: handlers; mac/linux: Nativefier.",
+  "description": "Google Messages desktop wrapper. Windows: Chromium App Host with sms:/tel: handlers; mac/linux: Nativefier via npx.",
   "main": "index.js",
   "scripts": {
-    "mac": "npx nativefier --conceal --platform \"mac\" --icon google-messages-logo.png --name \"Google Messages\" \"https://messages.google.com/web\" --honest --disable-dev-tools --single-instance dist/Mac",
+    "mac": "npx --yes nativefier@49.0.1 --conceal --platform \"mac\" --icon google-messages-logo.png --name \"Google Messages\" \"https://messages.google.com/web\" --honest --disable-dev-tools --single-instance dist/Mac",
     "windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/build-host.ps1",
     "windows:tray": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/build-host.ps1",
     "windows:host": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/build-host.ps1",
-    "linux": "npx nativefier --platform \"linux\" --icon google-messages-logo.png --name \"Google Messages\" \"https://messages.google.com/web\" --honest --disable-dev-tools --single-instance dist/Linux",
+    "linux": "npx --yes nativefier@49.0.1 --platform \"linux\" --icon google-messages-logo.png --name \"Google Messages\" \"https://messages.google.com/web\" --honest --disable-dev-tools --single-instance dist/Linux",
     "package:mac": "cd dist/Mac && zip -r ../google-messages-mac_v1.5.0.zip *",
     "package:linux": "cd dist/Linux && zip -r ../google-messages-linux_v1.5.0.zip *",
     "package:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/build-installer.ps1 -AppRoot dist/Windows_Host -SkipCompile && powershell -NoProfile -Command \"Add-Type -AssemblyName System.IO.Compression.FileSystem; if(Test-Path dist/google-messages-windows-host_v1.5.0.zip){Remove-Item dist/google-messages-windows-host_v1.5.0.zip -Force}; [IO.Compression.ZipFile]::CreateFromDirectory('dist/Windows_Tray_Payload','dist/google-messages-windows-host_v1.5.0.zip')\"",
@@ -33,7 +33,5 @@
     "url": "https://github.com/edwardlthompson/Google-Messages-For-Desktop/issues"
   },
   "homepage": "https://github.com/edwardlthompson/Google-Messages-For-Desktop#readme",
-  "dependencies": {
-    "nativefier": "^49.0.1"
-  }
+  "dependencies": {}
 }

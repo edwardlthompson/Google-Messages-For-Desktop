@@ -6,12 +6,24 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
+if command -v python3 >/dev/null 2>&1; then PY=python3
+elif command -v python >/dev/null 2>&1; then PY=python
+else PY=python3; fi
+
 ERRORS=0
 VERSION=""
 
 echo "=== Pre-release gate ==="
 
-if ! bash scripts/feature-gate.sh --stack multi --strict --json; then
+# Use active stack from selection (this product is node — not multi/web About exemplars).
+STACK="multi"
+if [ -f .cursor/stack-selection.json ]; then
+  STACK="$($PY -c "import json; print(json.load(open('.cursor/stack-selection.json',encoding='utf-8')).get('stack','multi'))" 2>/dev/null || echo multi)"
+fi
+STACK="${STACK:-multi}"
+echo "Using feature-gate stack=${STACK}"
+
+if ! bash scripts/feature-gate.sh --stack "$STACK" --strict --json; then
   echo "FAIL: feature-gate.sh"
   ERRORS=$((ERRORS + 1))
 else

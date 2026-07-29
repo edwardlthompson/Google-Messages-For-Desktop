@@ -11,10 +11,10 @@ Copyright (c) 2026 Edward L. Thompson
 
 ## Dependencies
 
-Root `package.json` declares **nativefier** (mac/linux packaging). Windows host packaging uses CLI tools invoked via `npx` / PowerShell (not always declared as root dependencies). There is **no** vendored `examples/**` tree.
+Root `package.json` has **no production npm dependencies**. Windows host packaging and mac/linux Nativefier builds use tools invoked via `npx` / PowerShell (ephemeral install; not locked into `yarn.lock`). There is **no** vendored `examples/**` tree.
 
 ```bash
-# Root (Yarn lockfile; npm CLI OK)
+# Root (Yarn lockfile; npm CLI OK) — expect empty / no production deps
 npx license-checker --production --summary
 
 # Or via project helper when available:
@@ -23,8 +23,7 @@ bash scripts/check-license-compliance.sh
 
 | Package / component | License | Notes |
 |---------------------|---------|-------|
-| nativefier | (see lockfile / license-checker) | mac/linux desktop packaging CLI |
-| Electron (transitive via Nativefier) | (see nativefier tree) | Runtime of mac/linux builds |
+| nativefier@49 (npx) | MIT (+ Electron tree) | mac/linux packaging only (`npm run mac` / `linux`) |
 | @yao-pkg/pkg (npx) | MIT | Windows host EXE packaging (`build-host.ps1`) |
 | rcedit / subsystem patch | (tool-specific) | GUI subsystem patch on packaged EXE |
 | PS-SFTA (`host/windows/src/vendor/SFTA.ps1`) | MIT (DanysysTeam) | UserChoice FTA helper |

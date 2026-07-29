@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - README documents current Windows App Host architecture (tray, pin, protocols, security notes)
 - Agent/docs threat model aligned to Chromium App Host (not Electron-first)
+- Drop locked `nativefier` dependency; mac/linux builds use `npx nativefier@49.0.1` (keeps `yarn.lock` free of Electron packaging CVEs)
 
 ### Security
 

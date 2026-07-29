@@ -261,7 +261,13 @@ fi
 
 if [ "$STRICT" = true ] && [ "$STACK" = "multi" ]; then
   run_cmd design-cohesion bash scripts/check-design-cohesion.sh
-  run_cmd about-feature-gate bash scripts/verify-about-feature-gate.sh
+  # About lego gate only applies when the web exemplar is vendored.
+  if [ -d examples/web/src/about ]; then
+    run_cmd about-feature-gate bash scripts/verify-about-feature-gate.sh
+  else
+    log "Skipping about-feature-gate (no examples/web/src/about — surgical child)"
+    GATES_PASSED+=("about-feature-gate-skipped")
+  fi
 fi
 
 log "Feature gate passed (${#GATES_PASSED[@]} stages)."

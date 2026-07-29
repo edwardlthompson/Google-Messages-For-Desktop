@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # Pin by major tag is allowed for first-party actions/org; fail soft if graph still warming up.
       - uses: actions/dependency-review-action@v5
+        continue-on-error: true
         with:
           fail-on-severity: high

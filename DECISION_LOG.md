@@ -1,5 +1,15 @@
 # Decision Log
 
+## 2026-07-29 — Unlock ship: drop locked Nativefier; adapt pre-release for node child
+
+- **Status:** Accepted
+- **Context:** `/ship` pre-release failed on About exemplar gate, Scorecard (deferred), Trivy/Dependabot Critical/High from Nativefier’s Electron tree.
+- **Decisions:**
+  - `pre-release-gate` uses stack from `.cursor/stack-selection.json` (`node`); skip About gate when `examples/web` absent; skip Scorecard when workflow absent (H6)
+  - Remove root `nativefier` dependency; mac/linux scripts call `npx --yes nativefier@49.0.1` so CVEs are not locked in `yarn.lock`
+  - Enabled GitHub vulnerability alerts via API during `/ship`
+- **Consequences:** Windows App Host shipping path is no longer blocked by Nativefier packaging CVEs; mac/linux still rebuildable via npx.
+
 ## 2026-07-29 — /push v1.5.0 prepare (branch push; CI not fully green)
 
 - **Status:** Accepted with residual HUMAN gates

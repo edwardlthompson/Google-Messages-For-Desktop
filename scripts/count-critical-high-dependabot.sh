@@ -4,6 +4,19 @@
 # Exit 0 prints count to stdout; exit 1 on API/auth error.
 set -euo pipefail
 
+# Git Bash on Windows often lacks `gh` on PATH even when the CLI is installed.
+if ! command -v gh >/dev/null 2>&1; then
+  for c in \
+    "/c/Program Files/GitHub CLI/gh.exe" \
+    "/mnt/c/Program Files/GitHub CLI/gh.exe" \
+    "${LOCALAPPDATA:-}/Programs/GitHub CLI/gh.exe"; do
+    if [ -n "$c" ] && [ -x "$c" ]; then
+      PATH="$(dirname "$c"):$PATH"
+      export PATH
+      break
+    fi
+  done
+fi
 if ! command -v gh >/dev/null 2>&1; then
   echo "ERROR: gh CLI required" >&2
   exit 1

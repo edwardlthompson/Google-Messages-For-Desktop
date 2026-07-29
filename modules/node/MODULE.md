@@ -7,11 +7,11 @@
 | Platform | UI shell | Build |
 |----------|----------|-------|
 | **Windows** | Chromium App Host (`host/windows`) + Chrome/Edge `--app` / `chrome_proxy` | `npm run windows` / `windows:host` → `scripts/windows/build-host.ps1` |
-| **macOS / Linux** | Nativefier | `npm run mac` / `linux` |
+| **macOS / Linux** | Nativefier via `npx` (not a locked root dep) | `npm run mac` / `linux` |
 
 - Icon input: `google-messages-logo.png` (tracked; required)
 - Outputs under `dist/` (gitignored)
-- Lockfile: **`yarn.lock`** (do not migrate to `package-lock.json` without HUMAN approval)
+- Lockfile: **`yarn.lock`** (may be empty — root has no production deps; do not migrate to `package-lock.json` without HUMAN approval)
 - npm CLI remains supported for `npm run mac|windows|linux|release`
 - **Do not** rewrite the Messages UI as Electron/WebView2 — Google blocks sign-in there
 
