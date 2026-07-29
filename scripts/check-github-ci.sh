@@ -43,10 +43,9 @@ workflow_file_for() {
   esac
 }
 
-if ! command -v gh >/dev/null 2>&1; then
-  echo "ERROR: gh CLI required (https://cli.github.com/)"
-  exit 1
-fi
+# shellcheck source=lib/resolve_gh.sh
+. "$ROOT/scripts/lib/resolve_gh.sh"
+gh() { "$GH_BIN" "$@"; }
 
 REPO="$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || true)"
 if [ -z "$REPO" ]; then
