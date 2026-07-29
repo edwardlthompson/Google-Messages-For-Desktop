@@ -40,6 +40,13 @@
 - `sms:` and `tel:` both mean **new text** (not voice)
 - HUMAN: local `release:windows`, smoke-test, tag/release
 
+## Milestone: /push prepare v1.5.0 (2026-07-29)
+
+- Commit `3d68e97` on `cursor/bootstrap-alignment-378a` pushed to origin
+- README documents App Host + pin + tray + security notes
+- Local pre-release gates PASS; GitHub **CI hygiene PASS**; Trivy + Dependency Review **FAIL** (HUMAN: graph + Nativefier CVEs)
+- No Release Please PR to merge
+
 ## Milestone: R-Audit-2026-07-29b (Windows App Host)
 
 - Gates: validate-bootstrap / feature-gate(multi) / hygiene / README health **PASS**

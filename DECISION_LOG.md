@@ -1,5 +1,15 @@
 # Decision Log
 
+## 2026-07-29 — /push v1.5.0 prepare (branch push; CI not fully green)
+
+- **Status:** Accepted with residual HUMAN gates
+- **Context:** User invoked `/push` after README update for Windows App Host.
+- **Decisions:**
+  - Pushed `chore(release): prepare v1.5.0 release` to `cursor/bootstrap-alignment-378a` (repo default branch is **`master`**, not `main`)
+  - Local gates (bootstrap, feature-gate, hygiene, README, license) passed before push
+  - Halt further release merge: Security Scan (Trivy Nativefier transitive HIGH/CRITICAL) and Dependency Review (graph disabled) failed; no Release Please PR open
+- **Consequences:** PR #1 has CI hygiene green; HUMAN must enable Dependency graph / Dependabot and triage Trivy before treating release CI as green.
+
 ## 2026-07-29 — Bootstrap alignment §8 locked (Phase 0→1+)
 
 - **Status:** Accepted
