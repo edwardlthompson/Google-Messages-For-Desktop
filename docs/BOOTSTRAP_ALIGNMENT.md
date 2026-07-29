@@ -2,9 +2,57 @@
 
 > **Phase 0 deliverable** for aligning `edwardlthompson/google-messages-for-desktop` with upstream [`edwardlthompson/agent-project-bootstrap`](https://github.com/edwardlthompson/agent-project-bootstrap) **v0.15.1** (as of 2026-07-25).
 >
-> Status: **Awaiting human confirmation on high-risk items** before Phase 1+ execution.
+> Status: **Local handoff** — continue on **This Computer** (Cursor Desktop). Do **not** use Cursor Cloud Agents for this project. Phase 1+ still awaits HUMAN confirmation of §8 high-risk items, but execution should happen locally.
 >
 > Mode: migration / alignment on a live (maintenance-mode) codebase — not a fresh bootstrap.
+
+---
+
+## 0. Local handoff (do this on your machine)
+
+Cloud Agent work stops here. Pull the branch and finish alignment in **Cursor Desktop** with Agent/Plan modes on **This Computer**.
+
+### Clone / open
+
+```bash
+git clone https://github.com/edwardlthompson/Google-Messages-For-Desktop.git
+cd Google-Messages-For-Desktop
+git fetch origin cursor/bootstrap-alignment-378a
+git checkout cursor/bootstrap-alignment-378a
+```
+
+Or, if you already have a clone:
+
+```bash
+git fetch origin
+git checkout cursor/bootstrap-alignment-378a
+git pull origin cursor/bootstrap-alignment-378a
+```
+
+Open the folder in **Cursor Desktop** (not a Cloud Agent). Draft PR: https://github.com/edwardlthompson/Google-Messages-For-Desktop/pull/1
+
+### Local session protocol (once Phase 1 files exist)
+
+1. Read `docs/START_HERE.md` → `docs/CURSOR_MODES.md` → pick **Plan** or **Agent**
+2. Work `BUILD_PLAN.md` **Sequential** first
+3. Prefer local parallelism (Task subagents, worktrees, `/best-of-n`) — see template `local-compute.mdc`
+4. Do **not** hand tasks to Cloud Agents
+
+### Explicitly out of scope for this repo
+
+| Item | Policy |
+|------|--------|
+| Cursor Cloud Agents | **Do not use** |
+| Commercial cloud hooks / Automations / Bugbot | Keep hidden (`distribution_tier: foss`) |
+| `.cursor/environment.json` cloud environments | Do not add for this project |
+| Cloud-only MCP / remote compute for gates | Prefer local `scripts/agent-run.py` + local terminals |
+
+### Decision (2026-07-29)
+
+- **Status:** Accepted
+- **Context:** Human directed: move project work to the local machine; do not use the cloud.
+- **Decision:** All further bootstrap alignment and maintenance agent work runs on Cursor Desktop (This Computer). Cloud Agents are rejected for this repository.
+- **Consequences:** Phase 1+ implementation, validation scripts, and Nativefier builds run locally; FOSS `.cursor` integrations only; no commercial cloud activation docs as live config.
 
 ---
 
@@ -158,18 +206,19 @@ Use emoji markers only. Labels: `[AGENT]` `[HUMAN]` `[ADB]` `[AUTO]`.
 #### Sequential
 
 1. ✅ [AGENT] Orient repo + fetch upstream v0.15.1; write this gap analysis
-2. 🔲 [HUMAN] Confirm high-risk decisions (Section 8 checklist)
-3. 🔲 [AGENT] After confirmation: execute Phase 1 → 2 → 3 → 4 per BUILD_PLAN
+2. ✅ [HUMAN] Venue: continue on local Cursor Desktop — no Cloud Agents (Section 0)
+3. 🔲 [HUMAN] Confirm remaining high-risk decisions (Section 8 checklist, except H11)
+4. 🔲 [AGENT] **On This Computer:** after confirmation, execute Phase 1 → 2 → 3 → 4 per BUILD_PLAN
 
 #### Parallel
 
 | Task | Owner | Isolated scope |
 |------|-------|----------------|
-| *None until HUMAN confirms Section 8* | — | — |
+| *None until HUMAN confirms remaining Section 8 items locally* | — | — |
 
 #### Human & device (after automation)
 
-1. 🔲 [HUMAN] Approve high-risk checklist (Section 8)
+1. 🔲 [HUMAN] Open branch locally (Section 0); approve remaining §8 items in Cursor Desktop
 2. 🔲 [HUMAN] Enable Dependabot alerts / secret scanning on GitHub (Settings → Code security) after workflows land
 
 ---
@@ -257,10 +306,11 @@ Please confirm or amend before Phase 1+ execution:
 | H4 | Stack selection | `node` + **no** `examples/` vendor | ⬜ |
 | H5 | CI scope (v1) | Hygiene + validate-bootstrap + CodeQL JS + dependency-review + Dependabot; **no** Nativefier build in CI | ⬜ |
 | H6 | Optional workflows | Defer Scorecard, Release Please, Pages, stale, weekly-health until asked | ⬜ |
-| H7 | Cursor hooks | Adopt FOSS hooks (fail-open) from template | ⬜ |
+| H7 | Cursor hooks | Adopt FOSS hooks (fail-open) from template; local Desktop only | ✅ assumed (local-first) |
 | H8 | Product scope | Alignment tooling only — no feature revival / Electron rewrite | ⬜ |
 | H9 | CODEOWNERS | `* @edwardlthompson` | ⬜ |
 | H10 | Run `init-project.sh`? | **No** — surgical file bring-up only | ⬜ |
+| H11 | Compute venue | **This Computer only** — no Cursor Cloud Agents | ✅ confirmed 2026-07-29 |
 
 ---
 
@@ -286,6 +336,7 @@ After Phase 1–4 land, agents and humans should:
 - Changing default branch without approval
 - Force-push / history rewrite
 - Enabling paid/commercial Cursor integrations
+- **Cursor Cloud Agents / cloud environments for this repo** (local Desktop only)
 - F-Droid / Android paths (`[ADB]` N/A)
 
 ---
