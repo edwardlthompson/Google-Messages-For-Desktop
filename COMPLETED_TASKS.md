@@ -1,5 +1,13 @@
 # Completed Tasks
 
+## Ship v1.5.0 (2026-07-29)
+
+- ✅ [AGENT] Adapt pre-release for node child (stack selection, skip About/Scorecard when absent)
+- ✅ [AGENT] Drop locked nativefier; empty yarn.lock; Trivy/Dependabot Critical/High clear on master
+- ✅ [AGENT] Enable vulnerability alerts; merge PR #1; tag `v1.5.0`; GitHub Release notes
+- ✅ [AUTO] CI + Security Scan + CodeQL green on `master`; upgrade simulation passed
+- ✅ [AGENT] WSL `resolve_gh.sh` for CI/Dependabot scripts
+
 ## R-Audit-2026-07-29b — Windows App Host /audit (2026-07-29)
 
 - ✅ [AGENT] F-001: Allowlist pipe/`ensureBrowser` URLs to `https://messages.google.com/`

@@ -2,13 +2,14 @@
 
 ## KB-001 — Product shape
 
-This repo has **no first-party app source**. Desktop apps are produced by `npx nativefier` via `package.json` scripts. Treat Nativefier flags and the tracked logo as the product surface.
+**Windows (shipping):** Chromium App Host under `host/windows` — thin EXE + Chrome/Edge `--app` / `chrome_proxy` (Electron/WebView2 login rejected by Google).  
+**mac/linux:** `npx --yes nativefier@49.0.1` via `package.json` scripts (not a locked root dependency).
 
 **Fork provenance:** GitHub repo is `edwardlthompson/Google-Messages-For-Desktop`. Upstream product origin remains `kelyvin/Google-Messages-For-Desktop`. `package.json` `repository` / `bugs` / `homepage` point at this fork; keep Kelvin Nguyen as `author` for attribution.
 
 ## KB-002 — Yarn lockfile + npm scripts
 
-`yarn.lock` is authoritative. README and scripts use `npm run …`. Do not add `package-lock.json` without HUMAN approval. Dependabot `npm` ecosystem on `/` still applies.
+`yarn.lock` is authoritative and may be empty (no production root deps as of v1.5.0). README and scripts use `npm run …`. Do not add `package-lock.json` without HUMAN approval. Do not re-add locked `nativefier` — it floods Trivy/Dependabot with Electron packaging CVEs.
 
 ## KB-003 — Default branch is master
 
@@ -20,7 +21,15 @@ Template Golden Paths under `examples/**` are intentionally absent. Node module 
 
 ## KB-005 — Maintenance mode
 
-README states no new features. Alignment work must not revive product features or replace Nativefier with a custom Electron app.
+README states no new features. Do not rewrite the Messages UI as Electron/WebView2. Windows host hardening and packaging are in scope.
+
+## KB-009 — /ship v1.5.0 regressions (2026-07-29)
+
+- Pre-release `feature-gate --stack multi` fails without `examples/web` — use stack from `.cursor/stack-selection.json` (`node`).
+- Scorecard deferred (H6): no `scorecard.yml`; security triage must skip when absent.
+- WSL: `gh` lives under `/mnt/c/Program Files/GitHub CLI/gh.exe` (spaces) — use `scripts/lib/resolve_gh.sh`.
+- GitHub Release `v1.5.0` notes published; **binary assets** (Setup EXE / zip) still need HUMAN `npm run release:windows` upload.
+- Pages demo N/A (not a web stack).
 
 ## KB-006 — Windows notifications quirk
 

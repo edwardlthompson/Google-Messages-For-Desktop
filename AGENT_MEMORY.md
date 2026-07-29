@@ -40,6 +40,14 @@
 - `sms:` and `tel:` both mean **new text** (not voice)
 - HUMAN: local `release:windows`, smoke-test, tag/release
 
+## Milestone: /ship v1.5.0 (2026-07-29)
+
+- Pre-release gate **PASS** on `master` after node-stack adaptations + empty yarn.lock
+- Merged PR #1; tagged **v1.5.0**; Release: https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases/tag/v1.5.0
+- CI / Security Scan / CodeQL green; Dependabot Critical/High = 0
+- Regress: upgrade simulation PASS; no SBOM/binary assets on Release yet (HUMAN upload)
+- Pages N/A
+
 ## Milestone: /push prepare v1.5.0 (2026-07-29)
 
 - Commit `3d68e97` on `cursor/bootstrap-alignment-378a` pushed to origin

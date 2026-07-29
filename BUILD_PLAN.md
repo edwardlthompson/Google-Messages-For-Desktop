@@ -23,9 +23,8 @@
 
 Product is in **maintenance mode**. Active work = bootstrap alignment + ongoing hygiene — not feature Golden Path.
 
-> **R-Audit-2026-07-29b** AGENT/AUTO archived in COMPLETED_TASKS.md; residual HUMAN below. See `CODE_REVIEW.md`.  
-> **R-Audit-2026-07-29** archived in COMPLETED_TASKS.md (AGENT/AUTO). Residual HUMAN rows below.  
-> **Sprint A–D** archived in COMPLETED_TASKS.md @ local bring-up 2026-07-29.
+> **Ship v1.5.0** tagged on `master` (`v1.5.0`); CI/Security/CodeQL green; Dependabot Critical/High = 0.  
+> **R-Audit / Sprint A–D / W AGENT** archived in COMPLETED_TASKS.md. Residual HUMAN: attach Windows binaries + device smoke.
 
 ## Archived Sprints
 
@@ -37,17 +36,16 @@ Product is in **maintenance mode**. Active work = bootstrap alignment + ongoing 
 | Sprint D — Phase 3-4 | 2026-07-29 | `COMPLETED_TASKS.md` |
 | R-Audit-2026-07-29 | 2026-07-29 | AGENT/AUTO done; HUMAN residual |
 | R-Audit-2026-07-29b | 2026-07-29 | Windows App Host harden + docs; HUMAN residual |
+| Ship v1.5.0 | 2026-07-29 | Tag + GitHub Release notes; binaries still HUMAN |
 
 ---
 
-> **R-Audit-2026-07-29b** AGENT/AUTO archived in COMPLETED_TASKS.md @ local `/audit` 2026-07-29. Residual HUMAN below.
-
-## R-Audit-2026-07-29b — residual HUMAN
+## Post-ship v1.5.0 — residual HUMAN
 
 ### Sequential
 
-1. 🔲 [HUMAN] F-003: Enable Dependabot alerts + secret scanning; commit/push so CI/CodeQL run
-2. 🔲 [HUMAN] F-011: Optional `engines.node` bump after packaging smoke
+1. 🔲 [HUMAN] Run `npm run release:windows`; upload Setup EXE + portable zip to GitHub Release `v1.5.0`
+2. 🔲 [HUMAN] F-011 optional: bump `engines.node` after packaging smoke
 
 ### Parallel
 
@@ -59,56 +57,9 @@ Product is in **maintenance mode**. Active work = bootstrap alignment + ongoing 
 
 ### Human & device (after automation)
 
-1. 🔲 [HUMAN] F-003 / F-011 as above
-2. 🔲 [HUMAN] Re-pin Messages window after host rebuild; confirm taskbar identity ≠ Google Chrome
-
----
-
-## Sprint W — Windows sms/tel + public release 1.5.0
-
-### Sequential
-
-1. ✅ [AGENT] Inject compose helper + post-Nativefier protocol patch; wire `windows` / `windows:tray`
-2. ✅ [AGENT] Inno Setup packaging + `release:windows` scripts
-3. ✅ [AGENT] Bump `1.5.0`, CHANGELOG, README, `docs/WINDOWS_PROTOCOL_HANDLERS.md`
-4. 🔲 [HUMAN] Install Inno Setup 6 if needed; run `npm run release:windows`; smoke-test `start sms:+1…` / `tel:+1…`
-5. 🔲 [HUMAN] Commit/push; tag `v1.5.0`; `gh release create` with Setup EXE + portable zip
-6. 🔲 [HUMAN] Enable Dependabot alerts (F-001) if still disabled
-
-### Parallel
-
-<!-- parallel_exception: packaging pipeline is sequential (nativefier → patch → Inno) -->
-
-| Task | Owner | Isolated scope |
-|------|-------|----------------|
-| *None — see exception* | — | — |
-
-### Human & device (after automation)
-
-1. 🔲 [HUMAN] Confirm Default apps link-type UI lists Google Messages for sms/tel
-2. 🔲 [HUMAN] Pair phone and verify compose banner / Start chat fill
-
----
-
-## R-Audit-2026-07-29 — residual HUMAN
-
-### Sequential
-
-1. 🔲 [HUMAN] F-001: Enable Dependabot alerts + secret scanning on GitHub
-2. 🔲 [HUMAN] F-002: Commit/push alignment + audit + 1.5.0 packaging so PR/CI can run
-
-### Parallel
-
-<!-- parallel_exception: residual HUMAN-only gate; no AGENT parallel scopes -->
-
-| Task | Owner | Isolated scope |
-|------|-------|----------------|
-| *None — see exception* | — | — |
-
-### Human & device (after automation)
-
-1. 🔲 [HUMAN] F-001 / F-002 as above
-2. 🔲 [HUMAN] F-008 optional: bump `engines.node` after local Nativefier smoke on target LTS
+1. 🔲 [HUMAN] Smoke-test `tel:`/`sms:`; confirm Default apps lists Google Messages
+2. 🔲 [HUMAN] Re-pin Messages window; confirm taskbar identity ≠ Google Chrome
+3. 🔲 [HUMAN] Pair phone and verify compose banner / Start chat fill
 
 ---
 

@@ -1,5 +1,12 @@
 # Decision Log
 
+## 2026-07-29 — /ship v1.5.0 published
+
+- **Status:** Accepted
+- **Context:** User invoked `/ship` (prerelease → push → regress).
+- **Decisions:** Merged alignment to `master`, tagged product **`v1.5.0`**, published GitHub Release notes; template `.template-version` remains **0.15.1** (bootstrap pin, not product semver).
+- **Consequences:** HUMAN still uploads Windows Setup/zip assets; no Pages/SBOM workflow for this stack.
+
 ## 2026-07-29 — Unlock ship: drop locked Nativefier; adapt pre-release for node child
 
 - **Status:** Accepted
