@@ -1,26 +1,28 @@
 {
   "name": "google-messages-for-desktop",
-  "version": "1.4.2",
-  "description": "A \"native-like\" desktop app for Google Messages. ",
+  "version": "1.5.0",
+  "description": "Google Messages desktop wrapper. Windows: Chromium App Host with sms:/tel: handlers; mac/linux: Nativefier.",
   "main": "index.js",
   "scripts": {
     "mac": "npx nativefier --conceal --platform \"mac\" --icon google-messages-logo.png --name \"Google Messages\" \"https://messages.google.com/web\" --honest --disable-dev-tools --single-instance dist/Mac",
-    "windows": "npx nativefier --platform \"windows\" --icon google-messages-logo.png --name \"Google Messages\" \"https://messages.google.com/web\" --honest --disable-dev-tools --single-instance dist/Windows",
-    "windows:tray": "npx nativefier --platform \"windows\" --icon google-messages-logo.png --name \"Google Messages\" \"https://messages.google.com/web\" --honest --disable-dev-tools --single-instance --tray dist/Windows_Tray",
+    "windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/build-host.ps1",
+    "windows:tray": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/build-host.ps1",
+    "windows:host": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/build-host.ps1",
     "linux": "npx nativefier --platform \"linux\" --icon google-messages-logo.png --name \"Google Messages\" \"https://messages.google.com/web\" --honest --disable-dev-tools --single-instance dist/Linux",
-    "package:mac": "cd dist/Mac; zip -r ../google-messages-mac_v$(npm -s run env echo '$npm_package_version').zip *",
-    "package:linux": "cd dist/Linux; zip -r ../google-messages-linux_v$(npm -s run env echo '$npm_package_version').zip *",
-    "package:windows": "cd dist/Windows; zip -r ../google-messages-windows_v$(npm -s run env echo '$npm_package_version').zip *",
-    "package:windows_tray": "cd dist/Windows_Tray; zip -r ../google-messages-windows-tray_v$(npm -s run env echo '$npm_package_version').zip *",
-    "clean:dist": "rm -rf dist",
-    "clean:packages": "rm -rf Windows/*.zip Mac/*.zip Linux/*.zip",
-    "build:all": "npm run clean:dist && npm run mac && npm run windows && npm run windows:tray && npm run linux",
-    "package:all": "npm run clean:packages && npm run package:mac && npm run package:linux && npm run package:windows && npm run package:windows_tray",
-    "release": "npm run build:all && npm run package:all"
+    "package:mac": "cd dist/Mac && zip -r ../google-messages-mac_v1.5.0.zip *",
+    "package:linux": "cd dist/Linux && zip -r ../google-messages-linux_v1.5.0.zip *",
+    "package:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/build-installer.ps1 -AppRoot dist/Windows_Host -SkipCompile && powershell -NoProfile -Command \"Add-Type -AssemblyName System.IO.Compression.FileSystem; if(Test-Path dist/google-messages-windows-host_v1.5.0.zip){Remove-Item dist/google-messages-windows-host_v1.5.0.zip -Force}; [IO.Compression.ZipFile]::CreateFromDirectory('dist/Windows_Tray_Payload','dist/google-messages-windows-host_v1.5.0.zip')\"",
+    "clean:dist": "node -e \"try{require('fs').rmSync('dist',{recursive:true,force:true})}catch(e){}\"",
+    "build:installer": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/build-installer.ps1 -AppRoot dist/Windows_Host",
+    "release:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/release-windows.ps1",
+    "build:all": "npm run clean:dist && npm run mac && npm run windows:host && npm run linux",
+    "package:all": "npm run package:mac && npm run package:linux && npm run package:windows",
+    "release": "npm run build:all && npm run package:all",
+    "host:dev": "node host/windows/src/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kelyvin/Google-Messages-For-Desktop.git"
+    "url": "git+https://github.com/edwardlthompson/Google-Messages-For-Desktop.git"
   },
   "engines": {
     "node": ">=12.0.0"
@@ -28,9 +30,9 @@
   "author": "Kelvin Nguyen",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kelyvin/Google-Messages-For-Desktop/issues"
+    "url": "https://github.com/edwardlthompson/Google-Messages-For-Desktop/issues"
   },
-  "homepage": "https://github.com/kelyvin/Google-Messages-For-Desktop#readme",
+  "homepage": "https://github.com/edwardlthompson/Google-Messages-For-Desktop#readme",
   "dependencies": {
     "nativefier": "^49.0.1"
   }

@@ -2,7 +2,7 @@
 
 > **Phase 0 deliverable** for aligning `edwardlthompson/google-messages-for-desktop` with upstream [`edwardlthompson/agent-project-bootstrap`](https://github.com/edwardlthompson/agent-project-bootstrap) **v0.15.1** (as of 2026-07-25).
 >
-> Status: **Local handoff** — continue on **This Computer** (Cursor Desktop). Do **not** use Cursor Cloud Agents for this project. Phase 1+ still awaits HUMAN confirmation of §8 high-risk items, but execution should happen locally.
+> Status: **§8 accepted · Sprint B–D bring-up executed** on **This Computer** (Cursor Desktop). Do **not** use Cursor Cloud Agents for this project.
 >
 > Mode: migration / alignment on a live (maintenance-mode) codebase — not a fresh bootstrap.
 
@@ -64,14 +64,14 @@ Open the folder in **Cursor Desktop** (not a Cloud Agent). Draft PR: https://git
 | Default branch | `master` |
 | Product | Nativefier/Electron wrapper for `https://messages.google.com/web` |
 | Declared version | `1.4.2` (`package.json`) |
-| License claim | `"license": "MIT"` in `package.json`; **no `LICENSE` file** (GitHub `license: null`) |
-| Package manager | **Yarn** (`yarn.lock` present; no `package-lock.json`) |
+| License claim | MIT `LICENSE` present (dual copyright); `package.json` `"license": "MIT"` |
+| Package manager | **Yarn** (`yarn.lock` present; no `package-lock.json`; npm CLI OK for scripts) |
 | Engines | Node `>=12` |
 | Runtime app code | None in-repo — build scripts invoke `npx nativefier` |
-| Tracked files (HEAD) | 5: `README.md`, `package.json`, `yarn.lock`, `.gitignore`, `google-messages-logo.png` |
-| Agent surface | **None** (no `AGENTS.md`, `.cursor/`, docs router, memory files) |
-| CI / `.github/` | **None** |
-| Security docs | **None** |
+| Tracked files (Phase 0 product) | 5 product files + this gap doc; Phase 1+ adds agent/CI/security surface |
+| Agent surface | FOSS Cursor router adopted (`AGENTS.md`, `.cursor/`, docs, memory files) |
+| CI / `.github/` | Conservative workflows on **`master`** (ci, security, CodeQL JS, dependency-review) + Dependabot |
+| Security docs | `SECURITY.md` + triage/threat/privacy stubs |
 | Product posture | README states **maintenance mode** — no new features |
 
 ### Tech stack classification
@@ -207,18 +207,18 @@ Use emoji markers only. Labels: `[AGENT]` `[HUMAN]` `[ADB]` `[AUTO]`.
 
 1. ✅ [AGENT] Orient repo + fetch upstream v0.15.1; write this gap analysis
 2. ✅ [HUMAN] Venue: continue on local Cursor Desktop — no Cloud Agents (Section 0)
-3. 🔲 [HUMAN] Confirm remaining high-risk decisions (Section 8 checklist, except H11)
-4. 🔲 [AGENT] **On This Computer:** after confirmation, execute Phase 1 → 2 → 3 → 4 per BUILD_PLAN
+3. ✅ [HUMAN] Confirm §8 high-risk decisions (accepted 2026-07-29)
+4. ✅ [AGENT] **On This Computer:** execute Phase 1 → 2 → 3 → 4 per BUILD_PLAN
 
 #### Parallel
 
 | Task | Owner | Isolated scope |
 |------|-------|----------------|
-| *None until HUMAN confirms remaining Section 8 items locally* | — | — |
+| *Completed with Sequential bring-up* | — | — |
 
 #### Human & device (after automation)
 
-1. 🔲 [HUMAN] Open branch locally (Section 0); approve remaining §8 items in Cursor Desktop
+1. ✅ [HUMAN] Open branch locally; §8 accepted in Cursor Desktop
 2. 🔲 [HUMAN] Enable Dependabot alerts / secret scanning on GitHub (Settings → Code security) after workflows land
 
 ---
@@ -298,18 +298,18 @@ Use emoji markers only. Labels: `[AGENT]` `[HUMAN]` `[ADB]` `[AUTO]`.
 
 Please confirm or amend before Phase 1+ execution:
 
-| # | Decision | Proposed default | Confirm? |
-|---|----------|------------------|----------|
-| H1 | Copyright line for new `LICENSE` | MIT; copyright text TBD by HUMAN (original Kelvin Nguyen + current maintainer?) | ⬜ |
-| H2 | Default branch | Keep **`master`**; adapt all workflows | ⬜ |
-| H3 | Package manager | Keep **Yarn** / `yarn.lock`; do not migrate to npm | ⬜ |
-| H4 | Stack selection | `node` + **no** `examples/` vendor | ⬜ |
-| H5 | CI scope (v1) | Hygiene + validate-bootstrap + CodeQL JS + dependency-review + Dependabot; **no** Nativefier build in CI | ⬜ |
-| H6 | Optional workflows | Defer Scorecard, Release Please, Pages, stale, weekly-health until asked | ⬜ |
-| H7 | Cursor hooks | Adopt FOSS hooks (fail-open) from template; local Desktop only | ✅ assumed (local-first) |
-| H8 | Product scope | Alignment tooling only — no feature revival / Electron rewrite | ⬜ |
-| H9 | CODEOWNERS | `* @edwardlthompson` | ⬜ |
-| H10 | Run `init-project.sh`? | **No** — surgical file bring-up only | ⬜ |
+| # | Decision | Resolved answer | Confirm? |
+|---|----------|-----------------|----------|
+| H1 | Copyright line for new `LICENSE` | MIT; `Copyright (c) 2018-2023 Kelvin Nguyen` + `Copyright (c) 2026 Edward L. Thompson` | ✅ |
+| H2 | Default branch | Keep **`master`**; adapt all workflows | ✅ |
+| H3 | Package manager | Keep **Yarn** / `yarn.lock`; npm CLI OK; do not migrate to npm lockfile | ✅ |
+| H4 | Stack selection | `node` + **no** `examples/` vendor | ✅ |
+| H5 | CI scope (v1) | Hygiene + validate-bootstrap + CodeQL JS + dependency-review + Dependabot; **no** Nativefier build in CI | ✅ |
+| H6 | Optional workflows | Defer Scorecard, Release Please, Pages, stale, weekly-health, automerge PAT | ✅ |
+| H7 | Cursor hooks | Adopt FOSS hooks (fail-open) from template; local Desktop only | ✅ |
+| H8 | Product scope | Alignment tooling only — no feature revival / Electron rewrite | ✅ |
+| H9 | CODEOWNERS | `* @edwardlthompson` | ✅ |
+| H10 | Run `init-project.sh`? | **No** — surgical file bring-up only | ✅ |
 | H11 | Compute venue | **This Computer only** — no Cursor Cloud Agents | ✅ confirmed 2026-07-29 |
 
 ---
@@ -352,4 +352,4 @@ After Phase 1–4 land, agents and humans should:
 
 ---
 
-*Phase 0 complete. Do not start broad Phase 1+ file changes until Section 8 is confirmed.*
+*Phase 0 complete. Section 8 confirmed 2026-07-29. Sprint B–D surgical bring-up executed on This Computer.*

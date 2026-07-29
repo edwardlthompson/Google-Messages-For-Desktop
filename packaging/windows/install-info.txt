@@ -1,0 +1,10 @@
+Google Messages uses a dedicated Chrome/Edge app window (Google blocks login inside Electron/WebView2).
+
+After install:
+1. Open Google Messages from the Start Menu and sign in inside the app window.
+2. In Default apps settings (opens after install):
+   - Search for "sms" (link type) OR open Google Messages under apps
+   - Set SMS to Google Messages
+3. Click an sms: link or phone number that uses SMS — Windows/Chrome should offer this app.
+
+The app is registered as "GoogleMessages" for Default Programs (display name: Google Messages).

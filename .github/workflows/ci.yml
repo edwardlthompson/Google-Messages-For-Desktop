@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  bootstrap-hygiene:
+    name: Bootstrap validate (quick) + hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: validate-bootstrap --quick
+        env:
+          BOOTSTRAP_CHECK_JOBS: "2"
+        run: bash scripts/validate-bootstrap.sh --quick
+
+      - name: Repo hygiene
+        run: bash scripts/check-repo-hygiene.sh
