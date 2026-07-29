@@ -1,0 +1,21 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # Pin by major tag is allowed for first-party actions/org; fail soft if graph still warming up.
+      - uses: actions/dependency-review-action@v5
+        continue-on-error: true
+        with:
+          fail-on-severity: high

@@ -1,3 +1,75 @@
-.DS_STORE
-dist/
+# Dependencies
 node_modules/
+.venv/
+__pycache__/
+*.py[cod]
+.uv/
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+.coverage
+htmlcov/
+coverage/
+
+# IDE / OS
+.DS_STORE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
+*.swp
+.cursor-session-state
+.cursor/agent-progress.json
+.cursor/parallel-scope-lock.json
+.cursor/worktrees/
+.cursor/mcp.json
+.cursor/mcp-audit.log
+.cursor/environment.json
+.cursor/sandbox.json
+CURSOR_RADAR_REPORT.md
+CURSOR_RADAR_BACKLOG.md
+
+# Cursor plugin pack output
+dist/cursor-plugin/
+
+# Test artifacts
+test-results/
+playwright-report/
+.lighthouseci/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Live user configs
+.app-update.json
+donations.json
+
+# Node / tooling
+.turbo/
+.parcel-cache/
+*.tsbuildinfo
+
+# OS / editor extras
+*.tmp
+*.temp
+*.log
+
+# Ephemeral agent outputs (examples tracked)
+CODE_REVIEW.md
+RELEASE_NOTES.md
+
+# Yarn lockfile is authoritative — do not commit npm lock
+package-lock.json
+
+# Local smoke / packaging leftovers
+tmp-protocol-smoke/
+win32-x64-template/
+*.bak
+*.tgz
+png-to-ico-*.tgz
+google-messages-logo.ico.large.bak

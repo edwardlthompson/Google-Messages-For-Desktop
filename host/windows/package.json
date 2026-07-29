@@ -1,0 +1,17 @@
+{
+  "name": "google-messages-windows-host",
+  "version": "1.5.0",
+  "private": true,
+  "description": "Thin Windows host: tray, sms:/tel: protocols, Chrome/Edge --app Messages UI",
+  "main": "src/index.js",
+  "bin": {
+    "google-messages-host": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "build:exe": "powershell -NoProfile -ExecutionPolicy Bypass -File ../../scripts/windows/build-host.ps1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

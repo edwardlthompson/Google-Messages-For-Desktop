@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  # Root packaging tooling (Nativefier). Lockfile is yarn.lock; Dependabot npm
+  # ecosystem still applies to package.json at repo root.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      root-dependencies:
+        patterns: ["*"]
