@@ -21,8 +21,8 @@
   "scripts": {
     "dev": "npm run build:dev && cross-env NODE_ENV=development electron --enable-source-maps ./app/background.js",
     "dist": "npm run package",
-    "build": "webpack --mode=production",
-    "build:dev": "webpack --mode=development",
+    "build": "webpack --mode=production --config webpack.config.mjs",
+    "build:dev": "webpack --mode=development --config webpack.config.mjs",
     "package": "npm run build && electron-builder --config electron-builder.config.js --publish never",
     "package:win": "npm run build && electron-builder --config electron-builder.config.js --win --publish never",
     "package:mac": "npm run build && electron-builder --config electron-builder.config.js --mac --publish never",

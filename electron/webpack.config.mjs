@@ -1,4 +1,3 @@
-import type { Configuration } from "webpack";
 import nodeExternals from "webpack-node-externals";
 import process from "process";
 import path from "path";
@@ -9,7 +8,7 @@ import { EsbuildPlugin } from "esbuild-loader";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const base: Configuration = {
+const base = {
   mode: process.env.NODE_ENV === "development" ? "development" : "production",
   externals: [nodeExternals()],
   devtool: "source-map",
