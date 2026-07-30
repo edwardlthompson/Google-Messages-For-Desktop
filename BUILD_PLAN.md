@@ -23,7 +23,7 @@
 
 > **R-Audit-2026-07-29c** archived in COMPLETED_TASKS.md (AGENT/AUTO done; HUMAN residual).
 
-> **Ship v1.5.0** tagged; Electron is primary shipping path (v1.7.0). Residual HUMAN: signed binaries + device smoke.
+> **Ship v1.7.0** tagged + unsigned Electron artifacts on GitHub Release. Residual HUMAN: sign/notarize + device smoke.
 
 ## Archived Sprints
 
@@ -37,16 +37,17 @@
 | R-Audit-2026-07-29b | 2026-07-29 | Windows App Host harden + docs; HUMAN residual |
 | Ship v1.5.0 | 2026-07-29 | Tag + Release notes; binaries HUMAN |
 | R-Audit-2026-07-29c | 2026-07-29 | Electron first-run audit fixes; HUMAN residual |
+| Ship v1.7.0 | 2026-07-29 | Electron multi-platform + unsigned CI artifacts |
 
 ---
 
-## Post-audit residual HUMAN (R-Audit-2026-07-29c)
+## Post-ship residual HUMAN (v1.7.0)
 
 ### Sequential
 
-1. 🔲 [HUMAN] F-010 Sign/notarize desktop artifacts; smoke first-run Defaults → Sign in → Verify
-2. 🔲 [HUMAN] Confirm CodeQL alert #1 clears after AGENT host-parse fix on `master`
-3. 🔲 [HUMAN] Run `npm run release:windows`; upload builds as appropriate
+1. 🔲 [HUMAN] F-010 Sign/notarize desktop artifacts (replace unsigned Release assets for production)
+2. 🔲 [HUMAN] Confirm CodeQL alert #1 cleared on `master` after host-parse fix
+3. 🔲 [HUMAN] Device smoke: first-run Defaults → Sign in → Verify; `tel:`/`sms:` compose
 
 ### Parallel
 
@@ -58,7 +59,7 @@
 
 ### Human & device
 
-1. 🔲 [HUMAN] Device smoke: onboarding checklist, sign-in, `tel:`/`sms:` compose
+1. 🔲 [HUMAN] Optional local `npm run release:windows` for signed Windows builds
 
 ---
 

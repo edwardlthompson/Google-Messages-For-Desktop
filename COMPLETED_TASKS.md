@@ -1,5 +1,14 @@
 # Completed Tasks
 
+## Ship v1.7.0 — Electron multi-platform (2026-07-29)
+
+- ✅ [AGENT] Prepare CHANGELOG/RELEASE_NOTES; commit Electron tree + docs; push `master`
+- ✅ [AGENT] Pin `brace-expansion@5.0.8` override (CVE-2026-14257 / Trivy HIGH)
+- ✅ [AGENT] Webpack before electron-builder; `webpack.config.mjs` for CI Node 20
+- ✅ [AGENT] Tag `v1.7.0`; GitHub Release notes; retag onto green packaging commit
+- ✅ [AUTO] CI + Security Scan + CodeQL green; `release-desktop.yml` win/mac/linux + attach-release
+- ✅ [AGENT] Update AGENT_MEMORY / KNOWLEDGE_BASE / DECISION_LOG for Electron shipping path
+
 ## R-Audit-2026-07-29c — Electron first-run / multi-platform (2026-07-29)
 
 - ✅ [AGENT] F-004 Index `.github/workflows/release-desktop.yml` in `TEMPLATE_INDEX.json`

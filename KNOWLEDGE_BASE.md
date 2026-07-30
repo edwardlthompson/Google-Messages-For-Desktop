@@ -27,6 +27,13 @@ Prefer Electron packaging and protocol/onboarding work over rewriting the Messag
 
 Trivy HIGH CVE-2026-14257 on transitive `brace-expansion@2.1.3` via Electron lockfile. Pin with `electron/package.json` `overrides.brace-expansion: 5.0.8` until parents ship a fixed range. Remove override when unused.
 
+## KB-011 — /ship v1.7.0 regressions (2026-07-29)
+
+- Trivy fails on Electron lockfile HIGH unless `brace-expansion` overridden to 5.0.8.
+- `release-desktop` must webpack before package; CI Node 20 cannot load `webpack.config.ts` without a register — use `webpack.config.mjs`.
+- Local `package:win` can EBUSY if `electron/dist/win-unpacked` is locked by a running app.
+- Product tag `v1.7.0` is manual; template pin stays **0.15.1**. Unsigned CI artifacts attach to the GitHub Release; SBOM/Pages N/A for this stack.
+
 ## KB-009 — /ship v1.5.0 regressions (2026-07-29)
 
 - Pre-release `feature-gate --stack multi` fails without `examples/web` — use stack from `.cursor/stack-selection.json` (`node`).
