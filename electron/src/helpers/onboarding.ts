@@ -18,9 +18,59 @@ export const DONATE_VENMO_URL =
 
 let onboardingWindow: BrowserWindow | null = null;
 let signInWindow: BrowserWindow | null = null;
+let signInPollTimer: ReturnType<typeof setInterval> | null = null;
+let signInGuidanceOpening = false;
 let ipcRegistered = false;
 let boundMainWindow: BrowserWindow | null = null;
 let clickedSchemes = new Set<string>();
+
+/** How long signed-in must hold before Stage B auto-dismisses (verify still available). */
+const SIGN_IN_AUTO_DISMISS_MS = 4000;
+
+/**
+ * Detect whether the Messages SPA looks signed-in / paired (conversation list).
+ * Runs in the main BrowserWindow renderer.
+ */
+const SIGNED_IN_DETECT_JS = `(() => {
+  const href = location.href || '';
+  if (/accounts\\.google\\.com/i.test(href)) return { signedIn: false, reason: 'accounts' };
+  if (/messages\\.google\\.com\\/web\\/?$/i.test(href) && document.querySelector('img[alt*="QR"], canvas, [data-e2e-qr]')) {
+    return { signedIn: false, reason: 'qr' };
+  }
+  const hasList = !!(
+    document.querySelector('[data-e2e-conversation-list], mw-conversation-list, mws-conversations-list') ||
+    document.querySelector('a[href*="/conversations/"]')
+  );
+  const bodyText = (document.body && document.body.innerText) || '';
+  if (/scan the qr code|link your phone|sign in/i.test(bodyText) && !hasList) {
+    return { signedIn: false, reason: 'prompt' };
+  }
+  return { signedIn: hasList || /\\/conversations/i.test(href), reason: hasList ? 'list' : 'url' };
+})()`;
+
+function completeSignInGuidance(): void {
+  if (signInPollTimer != null) {
+    clearInterval(signInPollTimer);
+    signInPollTimer = null;
+  }
+  settings.signInGuidanceCompleted.next(true);
+  if (signInWindow && !signInWindow.isDestroyed()) {
+    signInWindow.close();
+  }
+  signInWindow = null;
+}
+
+async function detectSignedIn(mainWindow: BrowserWindow): Promise<boolean> {
+  if (mainWindow.isDestroyed()) return false;
+  try {
+    const result = (await mainWindow.webContents.executeJavaScript(
+      SIGNED_IN_DETECT_JS
+    )) as { signedIn?: boolean };
+    return result?.signedIn === true;
+  } catch {
+    return false;
+  }
+}
 
 /** URI that opens Default apps focused on this app (Win11 22H2+ with CU). */
 export function defaultAppsDeepLink(): string {
@@ -187,16 +237,12 @@ function ensureIpc(mainWindow: BrowserWindow): void {
   });
 
   ipcMain.on("gmfd-signin-dismiss", () => {
-    settings.signInGuidanceCompleted.next(true);
-    if (signInWindow && !signInWindow.isDestroyed()) signInWindow.close();
-    signInWindow = null;
+    completeSignInGuidance();
   });
 
   ipcMain.on("gmfd-signin-verify-protocol", () => {
     if (!boundMainWindow || boundMainWindow.isDestroyed()) return;
-    settings.signInGuidanceCompleted.next(true);
-    if (signInWindow && !signInWindow.isDestroyed()) signInWindow.close();
-    signInWindow = null;
+    completeSignInGuidance();
     setAssociationOnlyMode(false);
     void shell.openExternal(`sms:${ONBOARDING_SAMPLE_NUMBER}`);
   });
@@ -318,6 +364,7 @@ export function startSignInGuidance(mainWindow: BrowserWindow): void {
     signInWindow.focus();
     return;
   }
+  if (signInGuidanceOpening) return;
 
   ensureIpc(mainWindow);
 
@@ -327,6 +374,36 @@ export function startSignInGuidance(mainWindow: BrowserWindow): void {
     }
   }
 
+  // Returning users: wait briefly for the SPA before deciding. First-time QR
+  // users still get the window after a few probes fail.
+  signInGuidanceOpening = true;
+  void (async () => {
+    try {
+      for (const delayMs of [0, 1500, 3000]) {
+        if (delayMs > 0) {
+          await new Promise((r) => setTimeout(r, delayMs));
+        }
+        if (settings.signInGuidanceCompleted.value) return;
+        if (mainWindow.isDestroyed()) return;
+        if (await detectSignedIn(mainWindow)) {
+          settings.signInGuidanceCompleted.next(true);
+          return;
+        }
+      }
+      if (
+        settings.signInGuidanceCompleted.value ||
+        (signInWindow && !signInWindow.isDestroyed())
+      ) {
+        return;
+      }
+      openSignInGuidanceWindow(mainWindow);
+    } finally {
+      signInGuidanceOpening = false;
+    }
+  })();
+}
+
+function openSignInGuidanceWindow(mainWindow: BrowserWindow): void {
   signInWindow = new BrowserWindow({
     width: 480,
     height: 520,
@@ -350,44 +427,40 @@ export function startSignInGuidance(mainWindow: BrowserWindow): void {
     signInWindow?.show();
     signInWindow?.focus();
   });
-  // Poll for signed-in SPA and enable verify step in the guidance window.
-  const timer = setInterval(() => {
+
+  // Poll for signed-in SPA: enable verify step, then auto-dismiss so the
+  // guidance window (and its timer) do not linger across every launch.
+  let signedInSince: number | null = null;
+  clearInterval(signInPollTimer);
+  signInPollTimer = setInterval(() => {
     if (!mainWindow || mainWindow.isDestroyed()) {
-      clearInterval(timer);
+      clearInterval(signInPollTimer);
+      signInPollTimer = null;
       return;
     }
-    void mainWindow.webContents
-      .executeJavaScript(
-        `(() => {
-          const href = location.href || '';
-          if (/accounts\\.google\\.com/i.test(href)) return { signedIn: false, reason: 'accounts' };
-          if (/messages\\.google\\.com\\/web\\/?$/i.test(href) && document.querySelector('img[alt*="QR"], canvas, [data-e2e-qr]')) {
-            return { signedIn: false, reason: 'qr' };
-          }
-          const hasList = !!(
-            document.querySelector('[data-e2e-conversation-list], mw-conversation-list, mws-conversations-list') ||
-            document.querySelector('a[href*="/conversations/"]')
-          );
-          const bodyText = (document.body && document.body.innerText) || '';
-          if (/scan the qr code|link your phone|sign in/i.test(bodyText) && !hasList) {
-            return { signedIn: false, reason: 'prompt' };
-          }
-          return { signedIn: hasList || /\\/conversations/i.test(href), reason: hasList ? 'list' : 'url' };
-        })()`
-      )
-      .then((result: { signedIn?: boolean }) => {
+    void detectSignedIn(mainWindow)
+      .then((signedIn) => {
         if (signInWindow && !signInWindow.isDestroyed()) {
-          signInWindow.webContents.send(
-            "gmfd-signin-status",
-            result?.signedIn === true
-          );
+          signInWindow.webContents.send("gmfd-signin-status", signedIn);
+        }
+        if (signedIn) {
+          if (signedInSince == null) {
+            signedInSince = Date.now();
+          } else if (
+            Date.now() - signedInSince >= SIGN_IN_AUTO_DISMISS_MS
+          ) {
+            completeSignInGuidance();
+          }
+        } else {
+          signedInSince = null;
         }
       })
       .catch(() => undefined);
   }, 2500);
 
   signInWindow.on("closed", () => {
-    clearInterval(timer);
+    clearInterval(signInPollTimer);
+    signInPollTimer = null;
     signInWindow = null;
     if (!settings.signInGuidanceCompleted.value) {
       settings.signInGuidanceCompleted.next(true);

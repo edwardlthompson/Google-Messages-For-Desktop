@@ -9,7 +9,7 @@
     if (signedIn) {
       if (status) {
         status.textContent =
-          "Signed in detected — you can verify with a test SMS link.";
+          "Signed in detected — verify below, or this window closes automatically.";
         status.classList.add("ready");
       }
       if (verifyBtn) verifyBtn.disabled = false;

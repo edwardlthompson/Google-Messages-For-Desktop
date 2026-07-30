@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.1] - 2026-07-30
+
+### Fixed
+
+- Sign-in guidance auto-completes when conversation list is detected (skip reopen on later launches)
+- Tray/notification/update icons: skip invalid NativeImage / non-`data:image` URLs
+- Preload bridge path always resolves beside `background.js` (no `app/app/bridge.js`)
+- Windows `package:win` verifies `win-unpacked` includes Chromium ICU/pak/locales (incomplete package crash)
+
+### Changed
+
+- Window icon set via `nativeImage` on all platforms
+
 ## [1.7.0] - 2026-07-29
 
 ### Added

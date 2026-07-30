@@ -46,16 +46,24 @@ export class TrayManager {
 
   constructor() {
     trayEnabled.subscribe((val) => this.handleTrayEnabledToggle(val));
-    monochromeIconEnabled.subscribe(() =>
-      this.tray?.setImage(this.getIconPath())
-    );
+    monochromeIconEnabled.subscribe(() => {
+      const icon = this.getIconImage();
+      if (icon) this.tray?.setImage(icon);
+    });
     trayIconRedDotEnabled.subscribe(() => {
-      this.tray?.setImage(this.getIconPath());
+      const icon = this.getIconImage();
+      if (icon) this.tray?.setImage(icon);
     });
   }
 
   public startIfEnabled(): void {
     if (this.tray || !this.enabled) {
+      return;
+    }
+
+    const icon = this.getIconImage();
+    if (!icon) {
+      console.warn("Tray icon missing; not starting tray", this.getIconPath());
       return;
     }
 
@@ -65,9 +73,9 @@ export class TrayManager {
         UUID_NAMESPACE
       );
 
-      this.tray = new Tray(this.getIconPath(), guid);
+      this.tray = new Tray(icon, guid);
     } else {
-      this.tray = new Tray(this.getIconPath());
+      this.tray = new Tray(icon);
     }
 
     const trayContextMenu = Menu.buildFromTemplate(trayMenuTemplate);
@@ -84,7 +92,10 @@ export class TrayManager {
    */
   public setUnread(val: boolean): void {
     this.messagesAreUnread = val;
-    this.tray?.setImage(this.getIconPath());
+    const icon = this.getIconImage();
+    if (icon) {
+      this.tray?.setImage(icon);
+    }
   }
 
   public setRecentConversations(data: Conversation[]): void {
@@ -95,19 +106,10 @@ export class TrayManager {
   public refreshTrayMenu() {
     const conversationMenuItems: MenuItemConstructorOptions[] =
       this.recentConversations.map(({ name, image, recentMessage, i }) => {
-        const icon =
-          image != null &&
-          image != INITIAL_ICON_IMAGE &&
-          showIconsInRecentConversationTrayEnabled.value
-            ? nativeImage
-                .createFromDataURL(image)
-                .resize({ width: TRAY_AVATAR_SIZE, height: TRAY_AVATAR_SIZE })
-            : undefined;
-
         return {
           label: name || "Name not Found",
           sublabel: recentMessage || undefined,
-          icon,
+          icon: this.avatarIconFromDataUrl(image),
           click: () => {
             getMainWindow()?.show();
             getMainWindow()?.webContents.send("focus-conversation", i);
@@ -121,6 +123,33 @@ export class TrayManager {
         ...trayMenuTemplate,
       ])
     );
+  }
+
+  /**
+   * Build a tray-menu avatar from a canvas data URL. Invalid / placeholder /
+   * empty images are skipped so Electron never logs NativeImage warnings.
+   */
+  private avatarIconFromDataUrl(image: string | undefined) {
+    if (
+      image == null ||
+      image === INITIAL_ICON_IMAGE ||
+      !showIconsInRecentConversationTrayEnabled.value ||
+      !image.startsWith("data:image/")
+    ) {
+      return undefined;
+    }
+    try {
+      const img = nativeImage.createFromDataURL(image);
+      if (img.isEmpty()) {
+        return undefined;
+      }
+      return img.resize({
+        width: TRAY_AVATAR_SIZE,
+        height: TRAY_AVATAR_SIZE,
+      });
+    } catch {
+      return undefined;
+    }
   }
 
   /**
@@ -138,6 +167,11 @@ export class TrayManager {
     }
 
     return path.resolve(RESOURCES_PATH, "tray", filename);
+  }
+
+  private getIconImage() {
+    const img = nativeImage.createFromPath(this.getIconPath());
+    return img.isEmpty() ? undefined : img;
   }
 
   private setupEventListeners() {

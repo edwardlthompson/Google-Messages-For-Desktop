@@ -3,8 +3,8 @@
 ## First-run (v1.7+)
 
 1. **Defaults** — sample protocol links are association-only (compose suppressed via `onboardingMode`).
-2. **Sign in** — guidance window + main Messages window.
-3. **Verify** — optional test SMS after signed-in detection.
+2. **Sign in** — guidance window + main Messages window; auto-dismisses once signed-in is detected (and is skipped on later launches).
+3. **Verify** — optional test SMS after signed-in detection (available briefly before auto-dismiss).
 
 See [`electron/resources/onboarding.html`](../electron/resources/onboarding.html) and [`signin-guidance.html`](../electron/resources/signin-guidance.html).
 

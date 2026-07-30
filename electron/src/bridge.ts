@@ -140,15 +140,23 @@ webFrame.executeJavaScript(`window.OldNotification = window.Notification;
 window.Notification = function (title, options) {
   try {
     const hideContent = window.interop.should_hide();
+    const isDataImage = (v) =>
+      typeof v === "string" && v.startsWith("data:image/");
+    const safeIcon = (...candidates) => {
+      for (const c of candidates) {
+        if (isDataImage(c)) return c;
+      }
+      return undefined;
+    };
 
     const notificationOpts = hideContent
       ? {
           body: "Click to open",
-          icon: window.icon_data_uri
+          icon: safeIcon(window.icon_data_uri),
         }
       : {
           body: options?.body || "",
-          icon: options?.icon
+          icon: safeIcon(options?.icon, window.icon_data_uri),
         };
 
     const newTitle = hideContent ? "New Message" : title;

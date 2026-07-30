@@ -27,6 +27,12 @@ Prefer Electron packaging and protocol/onboarding work over rewriting the Messag
 
 Trivy HIGH CVE-2026-14257 on transitive `brace-expansion@2.1.3` via Electron lockfile. Pin with `electron/package.json` `overrides.brace-expansion: 5.0.8` until parents ship a fixed range. Remove override when unused.
 
+## KB-012 — /ship v1.7.1 regressions (2026-07-30)
+
+- Incomplete `electron/dist/win-unpacked` (missing `icudtl.dat` / paks / locales) → ICU FD error and instant exit; always run `verify-win-unpacked` after package.
+- Stage B sign-in guidance must auto-complete when `/conversations` is live or it reopens every launch and burns a BrowserWindow + 2.5s poll timer.
+- Product tag is manual; template pin stays **0.15.1**.
+
 ## KB-011 — /ship v1.7.0 regressions (2026-07-29)
 
 - Trivy fails on Electron lockfile HIGH unless `brace-expansion` overridden to 5.0.8.

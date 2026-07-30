@@ -1,6 +1,6 @@
 {
   "name": "google-messages-for-desktop",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Google Messages desktop app (Electron). sms/tel/smsto/callto/im protocol compose on Windows, macOS, and Linux.",
   "main": "index.js",
   "scripts": {

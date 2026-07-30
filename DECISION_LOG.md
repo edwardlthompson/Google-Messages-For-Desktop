@@ -1,5 +1,15 @@
 # Decision Log
 
+## 2026-07-30 — Sign-in guidance auto-complete + package verify
+
+- **Status:** Accepted
+- **Context:** `/ship` follow-up after Electron log scan: Stage B window stayed open after pairing (`signInGuidanceCompleted` false); incomplete `win-unpacked` lacked ICU/pak files and crashed on relaunch.
+- **Decisions:**
+  - Probe/auto-dismiss Stage B when conversation list detected; persist `signInGuidanceCompleted`
+  - Harden tray/notification/window NativeImage inputs; preload path = `__dirname/bridge.js`
+  - Gate `package:win` with `electron/scripts/verify-win-unpacked.mjs`
+- **Consequences:** Product **v1.7.1**; fewer stuck guidance windows; packaging fails closed if Chromium runtime files missing.
+
 ## 2026-07-29 — Electron package scripts must webpack first
 
 - **Status:** Accepted

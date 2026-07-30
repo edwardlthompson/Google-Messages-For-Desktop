@@ -23,7 +23,7 @@
 
 > **R-Audit-2026-07-29c** archived in COMPLETED_TASKS.md (AGENT/AUTO done; HUMAN residual).
 
-> **Ship v1.7.0** tagged + unsigned Electron artifacts on GitHub Release. Residual HUMAN: sign/notarize + device smoke.
+> **Ship v1.7.1** tagged + unsigned Electron artifacts on GitHub Release. Residual HUMAN: sign/notarize + device smoke.
 
 ## Archived Sprints
 
@@ -38,10 +38,11 @@
 | Ship v1.5.0 | 2026-07-29 | Tag + Release notes; binaries HUMAN |
 | R-Audit-2026-07-29c | 2026-07-29 | Electron first-run audit fixes; HUMAN residual |
 | Ship v1.7.0 | 2026-07-29 | Electron multi-platform + unsigned CI artifacts |
+| Ship v1.7.1 | 2026-07-30 | Sign-in auto-complete + package verify + NativeImage |
 
 ---
 
-## Post-ship residual HUMAN (v1.7.0)
+## Post-ship residual HUMAN (v1.7.1)
 
 ### Sequential
 

@@ -1,5 +1,5 @@
 import { autoUpdater } from "electron-updater";
-import { app, BrowserWindow, dialog } from "electron";
+import { app, BrowserWindow, dialog, nativeImage } from "electron";
 import path from "path";
 import { IS_DEV, RESOURCES_PATH } from "./constants";
 
@@ -9,7 +9,12 @@ import { IS_DEV, RESOURCES_PATH } from "./constants";
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = false;
 
-const icon = (): string => path.resolve(RESOURCES_PATH, "icons", "64x64.png");
+const icon = (): Electron.NativeImage | undefined => {
+  const img = nativeImage.createFromPath(
+    path.resolve(RESOURCES_PATH, "icons", "64x64.png")
+  );
+  return img.isEmpty() ? undefined : img;
+};
 
 // The window used to parent update dialogs and show download progress in the
 // dock/taskbar. Set once the main window exists.

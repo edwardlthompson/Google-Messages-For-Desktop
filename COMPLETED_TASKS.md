@@ -1,5 +1,13 @@
 # Completed Tasks
 
+## Ship v1.7.1 — Electron hardenings (2026-07-30)
+
+- ✅ [AGENT] Sign-in guidance auto-complete / skip when signed in
+- ✅ [AGENT] NativeImage + preload path hardenings; window icon via nativeImage
+- ✅ [AGENT] `verify-win-unpacked.mjs` wired into `package:win`
+- ✅ [AGENT] Prepare CHANGELOG/RELEASE_NOTES; bump to 1.7.1; push `master`; tag `v1.7.1`
+- ✅ [AUTO] CI + Security Scan + CodeQL; `release-desktop.yml` on tag
+
 ## Ship v1.7.0 — Electron multi-platform (2026-07-29)
 
 - ✅ [AGENT] Prepare CHANGELOG/RELEASE_NOTES; commit Electron tree + docs; push `master`

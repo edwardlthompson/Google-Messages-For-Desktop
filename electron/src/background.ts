@@ -3,6 +3,7 @@ import {
   app,
   Event as ElectronEvent,
   ipcMain,
+  nativeImage,
   powerMonitor,
   shell,
 } from "electron";
@@ -10,7 +11,7 @@ import { BrowserWindow } from "electron/main";
 import path from "path";
 import process from "process";
 import { checkForUpdate, setUpdateWindow } from "./helpers/autoUpdate";
-import { IS_DEV, IS_LINUX, IS_MAC, RESOURCES_PATH } from "./helpers/constants";
+import { IS_DEV, IS_MAC, RESOURCES_PATH } from "./helpers/constants";
 import { MenuManager } from "./helpers/menuManager";
 import { setSettingsFlushEnabled, settings } from "./helpers/settings";
 import { Conversation, TrayManager } from "./helpers/trayManager";
@@ -37,6 +38,15 @@ const {
   taskbarFlashEnabled,
   spellCheckEnabled,
 } = settings;
+
+/** Preload is always emitted next to background.js under app/. */
+const PRELOAD_BRIDGE = path.resolve(__dirname, "bridge.js");
+
+function appWindowIcon() {
+  const iconPath = path.resolve(RESOURCES_PATH, "icons", "256x256.png");
+  const img = nativeImage.createFromPath(iconPath);
+  return img.isEmpty() ? undefined : img;
+}
 
 let mainWindow: BrowserWindow;
 let trayManager: TrayManager;
@@ -119,14 +129,10 @@ if (gotTheLock) {
       autoHideMenuBar: autoHideMenuEnabled.value,
       title: "Google Messages",
       show: false,
-      icon: IS_LINUX
-        ? path.resolve(RESOURCES_PATH, "icons", "128x128.png")
-        : undefined,
+      icon: appWindowIcon(),
       titleBarStyle: IS_MAC ? "hiddenInset" : "default",
       webPreferences: {
-        preload: IS_DEV
-          ? path.resolve(app.getAppPath(), "bridge.js")
-          : path.resolve(app.getAppPath(), "app", "bridge.js"),
+        preload: PRELOAD_BRIDGE,
         contextIsolation: true,
         nodeIntegration: false,
         sandbox: false,
@@ -242,9 +248,7 @@ if (gotTheLock) {
             autoHideMenuBar: true,
             titleBarStyle: "default",
             webPreferences: {
-              preload: IS_DEV
-                ? path.resolve(app.getAppPath(), "bridge.js")
-                : path.resolve(app.getAppPath(), "app", "bridge.js"),
+              preload: PRELOAD_BRIDGE,
               contextIsolation: true,
               nodeIntegration: false,
               sandbox: false,
