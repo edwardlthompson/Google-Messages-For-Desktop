@@ -20,13 +20,13 @@
   "desktopName": "com.edwardlthompson.google-messages",
   "scripts": {
     "dev": "npm run build:dev && cross-env NODE_ENV=development electron --enable-source-maps ./app/background.js",
-    "dist": "npm run build && npm run package",
+    "dist": "npm run package",
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
-    "package": "electron-builder --config electron-builder.config.js",
-    "package:win": "electron-builder --config electron-builder.config.js --win",
-    "package:mac": "electron-builder --config electron-builder.config.js --mac",
-    "package:linux": "electron-builder --config electron-builder.config.js --linux"
+    "package": "npm run build && electron-builder --config electron-builder.config.js --publish never",
+    "package:win": "npm run build && electron-builder --config electron-builder.config.js --win --publish never",
+    "package:mac": "npm run build && electron-builder --config electron-builder.config.js --mac --publish never",
+    "package:linux": "npm run build && electron-builder --config electron-builder.config.js --linux --publish never"
   },
   "dependencies": {
     "about-window": "1.15.2",

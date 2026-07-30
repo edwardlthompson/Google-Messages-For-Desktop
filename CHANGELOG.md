@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Windows shipping path is Electron (Chromium App Host / Nativefier are legacy)
 - SFTA UserChoice no longer forced on every launch (opt-in `GMFD_FORCE_SFTA=1`)
 - `shell.openExternal` from Messages webview limited to `https:` / `mailto:`
+- Electron `package:*` scripts run webpack before electron-builder (`app/background.js`)
 
 ### Security
 

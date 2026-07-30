@@ -2,14 +2,14 @@
 
 ## KB-001 — Product shape
 
-**Windows (shipping):** Chromium App Host under `host/windows` — thin EXE + Chrome/Edge `--app` / `chrome_proxy` (Electron/WebView2 login rejected by Google).  
-**mac/linux:** `npx --yes nativefier@49.0.1` via `package.json` scripts (not a locked root dependency).
+**Shipping:** Electron app under `electron/` (Windows / macOS / Linux) — OrangeDrangon-derived shell; `sms:`/`tel:`/`im:` compose.  
+**Legacy:** Chromium App Host (`host/windows`) and Nativefier scripts — rollback only.
 
-**Fork provenance:** GitHub repo is `edwardlthompson/Google-Messages-For-Desktop`. Upstream product origin remains `kelyvin/Google-Messages-For-Desktop`. `package.json` `repository` / `bugs` / `homepage` point at this fork; keep Kelvin Nguyen as `author` for attribution.
+**Fork provenance:** GitHub repo is `edwardlthompson/Google-Messages-For-Desktop`. Upstream product origin remains `kelyvin/Google-Messages-For-Desktop`.
 
 ## KB-002 — Yarn lockfile + npm scripts
 
-`yarn.lock` is authoritative and may be empty (no production root deps as of v1.5.0). README and scripts use `npm run …`. Do not add `package-lock.json` without HUMAN approval. Do not re-add locked `nativefier` — it floods Trivy/Dependabot with Electron packaging CVEs.
+Root `yarn.lock` may be empty. Electron uses `electron/package-lock.json`. Do not re-add locked `nativefier` at root — it floods Trivy/Dependabot with Electron packaging CVEs. Electron `package:*` must webpack into `app/` before electron-builder (CI failure if package-only).
 
 ## KB-003 — Default branch is master
 
@@ -17,11 +17,15 @@ All GitHub Actions must trigger on `master`. Do not rename to `main` without HUM
 
 ## KB-004 — No examples vendor
 
-Template Golden Paths under `examples/**` are intentionally absent. Node module docs describe **root** Nativefier packaging, not Hono.
+Template Golden Paths under `examples/**` are intentionally absent. Node module docs describe **root** / `electron/` packaging, not Hono.
 
-## KB-005 — Maintenance mode
+## KB-005 — Maintenance posture
 
-README states no new features. Do not rewrite the Messages UI as Electron/WebView2. Windows host hardening and packaging are in scope.
+Prefer Electron packaging and protocol/onboarding work over rewriting the Messages SPA UI.
+
+## KB-010 — Electron brace-expansion override (2026-07-29)
+
+Trivy HIGH CVE-2026-14257 on transitive `brace-expansion@2.1.3` via Electron lockfile. Pin with `electron/package.json` `overrides.brace-expansion: 5.0.8` until parents ship a fixed range. Remove override when unused.
 
 ## KB-009 — /ship v1.5.0 regressions (2026-07-29)
 

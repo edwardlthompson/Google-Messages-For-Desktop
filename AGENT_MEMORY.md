@@ -5,14 +5,20 @@
 ## Project
 
 - **Repo:** `edwardlthompson/Google-Messages-For-Desktop` (fork of `kelyvin/Google-Messages-For-Desktop`)
-- **Product:** Electron desktop app for Google Messages Web (`1.7.0` prep); Chromium App Host / Nativefier = legacy
+- **Product:** Electron desktop app for Google Messages Web (**v1.7.0** shipped); Chromium App Host / Nativefier = legacy
 - **Posture:** Active Electron first-run + multi-platform packaging; bootstrap FOSS alignment retained
 - **Template pin:** `agent-project-bootstrap` **0.15.1** (surgical child)
 - **Stack:** `node` / `foss` — root packaging + `electron/`; no `examples/`
 - **Default branch:** `master`
-- **Lockfile:** root `yarn.lock`; Electron `electron/package-lock.json`
+- **Lockfile:** root `yarn.lock`; Electron `electron/package-lock.json` (+ `brace-expansion@5.0.8` override)
 - **Compute:** This Computer only — Cloud Agents rejected
 - **Donate:** Venmo `https://venmo.com/code?user_id=1857304970395648420`
+
+## Milestone: /ship v1.7.0 (2026-07-29)
+
+- Tagged **v1.7.0**; GitHub Release notes published; required CI / Security Scan / CodeQL green on `0453f87`+ packaging fix
+- Electron first-run + mac/linux CI (`release-desktop.yml`); package scripts webpack before builder
+- HUMAN residual: signed binaries, device smoke first-run, close app before local `package:win` (EBUSY)
 
 ## Milestone: R-Audit-2026-07-29c (2026-07-29)
 

@@ -1,5 +1,12 @@
 # Decision Log
 
+## 2026-07-29 — Electron package scripts must webpack first
+
+- **Status:** Accepted
+- **Context:** `release-desktop.yml` failed on all OS: `app/background.js` missing from asar (webpack output is gitignored).
+- **Decisions:** `package` / `package:win|mac|linux` run `npm run build` then electron-builder with `--publish never`.
+- **Consequences:** CI unsigned smoke can attach artifacts; local packaging needs `electron/dist` unlocked (close running app).
+
 ## 2026-07-29 — Electron brace-expansion override (CVE-2026-14257)
 
 - **Status:** Accepted
