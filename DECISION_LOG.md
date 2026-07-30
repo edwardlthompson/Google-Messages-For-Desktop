@@ -1,5 +1,12 @@
 # Decision Log
 
+## 2026-07-29 — Electron brace-expansion override (CVE-2026-14257)
+
+- **Status:** Accepted
+- **Context:** `/ship` Security Scan (Trivy) failed on `electron/package-lock.json` HIGH `brace-expansion@2.1.3` (transitive via `fs-jetpack` / builder tooling).
+- **Decisions:** Add `overrides.brace-expansion: 5.0.8` in `electron/package.json`; refresh lockfile; retag `v1.7.0` to the fixed commit in the same ship session (release CI had not gone green).
+- **Consequences:** Trivy production FS scan should clear; remove override when upstream parents depend on a fixed line without forcing major jump.
+
 ## 2026-07-29 — First-run stages + mac/linux Electron + Venmo
 
 - **Status:** Accepted

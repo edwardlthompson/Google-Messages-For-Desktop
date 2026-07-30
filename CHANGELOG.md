@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Block non-https/mailto `openExternal` from SPA window-open handler
 - Onboarding navigation only opens sample association URLs
+- npm `overrides` pin `brace-expansion@5.0.8` (CVE-2026-14257 / Trivy HIGH in Electron lockfile)
 
 ## [1.5.0] - 2026-07-29
 

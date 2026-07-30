@@ -54,5 +54,8 @@
     "electron@41.10.1": true,
     "esbuild@0.28.1": true,
     "electron-winstaller@5.4.0": true
+  },
+  "overrides": {
+    "brace-expansion": "5.0.8"
   }
 }
