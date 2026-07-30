@@ -62,6 +62,12 @@ Historical Electron/Windows issue: `app.setAppUserModelId(process.execPath)` ins
 - Unread false→true also sends a generic OS toast (no DOM snippets) through the same dedupe path.
 - Installed NSIS builds with a Start Menu shortcut remain the most reliable Action Center target; `npm run dev` / portable may still be flaky for toasts.
 
+### Regress — /ship v1.8.0 (2026-07-30)
+
+- Pre-release gate + upgrade simulation **PASS**; CI / Security Scan / CodeQL green on `f298bf5`
+- GitHub Release **v1.8.0** has **11** unsigned desktop assets (no SBOM attach — expected); Pages N/A
+- `release-desktop.yml` annotates Node.js 20 action deprecation (non-blocking; optional future bump to Node 24 actions)
+
 ## KB-007 — Local compute only
 
 Do not use Cursor Cloud Agents for this repository. Prefer local parallel Task/worktrees; `BOOTSTRAP_CHECK_JOBS=2` tip on Windows.
