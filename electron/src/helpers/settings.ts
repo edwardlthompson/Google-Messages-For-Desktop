@@ -1,5 +1,6 @@
 import { BehaviorSubject } from "rxjs";
 import jetpack from "fs-jetpack";
+import process from "process";
 import { SETTINGS_FILE } from "./constants";
 
 // base types in json
@@ -49,6 +50,8 @@ export interface JsonSettings {
   taskbarFlashEnabled: boolean;
   trayIconRedDotEnabled: boolean;
   spellCheckEnabled: boolean;
+  /** One-time Windows rollout: force tray on for notify/unread badge feature. */
+  windowsTrayRolloutV1: boolean;
 }
 
 // wraps json settings in the setting type for export
@@ -68,7 +71,8 @@ type WindowPosition = {
 
 // default settings for the app
 const defaultSettings: JsonSettings = {
-  trayEnabled: false,
+  // Windows: tray on by default so unread red-dot works for new installs.
+  trayEnabled: process.platform === "win32",
   hideNotificationContentEnabled: false,
   startInTrayEnabled: false,
   autoHideMenuEnabled: false,
@@ -78,11 +82,13 @@ const defaultSettings: JsonSettings = {
   savedWindowSize: { width: 1100, height: 800 },
   savedWindowPosition: null,
   checkForUpdateOnLaunchEnabled: false,
-  monochromeIconEnabled: true,
+  // Color icon is far more visible in the Windows notification area.
+  monochromeIconEnabled: process.platform !== "win32",
   showIconsInRecentConversationTrayEnabled: true,
   taskbarFlashEnabled: true,
   trayIconRedDotEnabled: true,
   spellCheckEnabled: true,
+  windowsTrayRolloutV1: false,
 };
 
 // create default settings file if it doesnt exist
@@ -129,4 +135,16 @@ for (const name in settings) {
       jetpack.write(SETTINGS_FILE(), seriazableSettings);
     }
   });
+}
+
+// One-time Windows rollout: existing installs still had trayEnabled=false from
+// before OS notify / unread badge. Force tray + color icon once; users can
+// disable again via Settings → Enable Tray Icon.
+if (
+  process.platform === "win32" &&
+  !settings.windowsTrayRolloutV1.value
+) {
+  settings.trayEnabled.next(true);
+  settings.monochromeIconEnabled.next(false);
+  settings.windowsTrayRolloutV1.next(true);
 }

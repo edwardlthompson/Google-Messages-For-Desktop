@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-07-30
+
+### Added
+
+- Windows OS toasts for new messages via main-process Electron `Notification` (session allowlist for `messages.google.com`)
+- Unread tray red-dot with remount-safe conversation-list observers
+- Unread false→true toast fallback when the web app suppresses HTML5 notifications
+- `npm run test:unit` for notification sanitize/dedupe and unread detection helpers
+
+### Fixed
+
+- Tray icon missing on unsigned Windows builds (omit Tray GUID; resize oversized tray PNGs)
+- Existing Windows installs kept `trayEnabled: false` — one-time `windowsTrayRolloutV1` enables tray + color icon
+
+### Changed
+
+- Windows defaults: tray on for new settings; color tray icon preferred over monochrome
+
 ## [1.7.1] - 2026-07-30
 
 ### Fixed

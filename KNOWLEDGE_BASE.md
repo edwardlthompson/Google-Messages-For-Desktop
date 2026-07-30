@@ -50,7 +50,17 @@ Trivy HIGH CVE-2026-14257 on transitive `brace-expansion@2.1.3` via Electron loc
 
 ## KB-006 — Windows notifications quirk
 
-Historical Electron/Windows issue: `app.setAppUserModelId(process.execPath)` inside generated Nativefier `resources/app/lib/main.js`. See product `README.md`.
+Historical Electron/Windows issue: `app.setAppUserModelId(process.execPath)` inside generated Nativefier `resources/app/lib/main.js`. Current Electron shell sets AUMID to `com.edwardlthompson.google-messages` (matches `appId`).
+
+**Current behavior (Electron under `electron/`):**
+
+- Session `persist:main` grants `"notifications"` only for `messages.google.com`.
+- On Windows, page `Notification` is routed via IPC to a main-process Electron `Notification` (4s dedupe; skip when main window focused; honors Hide Notification Content).
+- Unread tray red-dot requires tray enabled (`trayEnabled` defaults **true** on Windows for new settings; one-time `windowsTrayRolloutV1` also enables tray + color icon for older installs). Observers re-bind if the conversation list SPA remounts.
+- Unsigned Windows builds omit Tray GUID (GUID + path changes can prevent icon creation until the app is code-signed).
+- Look for the icon in the notification area near the clock (and the overflow chevron), not as a taskbar app button. Toggle: app **Settings → Enable Tray Icon** (not Windows Settings → Default apps).
+- Unread false→true also sends a generic OS toast (no DOM snippets) through the same dedupe path.
+- Installed NSIS builds with a Start Menu shortcut remain the most reliable Action Center target; `npm run dev` / portable may still be flaky for toasts.
 
 ## KB-007 — Local compute only
 

@@ -26,6 +26,8 @@ import {
   isAssociationOnlyMode,
   isOnboardingSampleUrl,
 } from "./helpers/onboardingMode";
+import { registerOsNotifyIpc } from "./helpers/osNotification";
+import { isMessagesGoogleHost } from "./helpers/osNotificationLogic";
 import { popupContextMenu } from "./menu/contextMenu";
 import fs from "fs";
 
@@ -141,6 +143,24 @@ if (gotTheLock) {
     });
 
     process.env.MAIN_WINDOW_ID = mainWindow.id.toString();
+
+    const session = mainWindow.webContents.session;
+    session.setPermissionCheckHandler((_wc, permission, requestingOrigin) => {
+      if (permission === "notifications") {
+        return isMessagesGoogleHost(requestingOrigin || "");
+      }
+      // Do not tighten unrelated permissions (media, clipboard, etc.).
+      return true;
+    });
+    session.setPermissionRequestHandler(
+      (_wc, permission, callback, details) => {
+        if (permission === "notifications") {
+          callback(isMessagesGoogleHost(details?.requestingUrl || ""));
+          return;
+        }
+        callback(true);
+      }
+    );
 
     setUpdateWindow(mainWindow);
     if (checkForUpdateOnLaunchEnabled.value && !IS_DEV) {
@@ -324,6 +344,8 @@ if (gotTheLock) {
   ipcMain.on("should-hide-notification-content", (event) => {
     event.returnValue = settings.hideNotificationContentEnabled.value;
   });
+
+  registerOsNotifyIpc();
 
   ipcMain.on("show-main-window", () => {
     mainWindow.show();

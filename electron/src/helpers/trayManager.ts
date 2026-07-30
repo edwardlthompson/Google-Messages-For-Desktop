@@ -1,5 +1,4 @@
 import {
-  app,
   Menu,
   MenuItemConstructorOptions,
   nativeImage,
@@ -9,15 +8,12 @@ import path from "path";
 import { trayMenuTemplate } from "../menu/trayMenu";
 import {
   INITIAL_ICON_IMAGE,
-  IS_DEV,
   IS_MAC,
   IS_WINDOWS,
   RESOURCES_PATH,
   TRAY_AVATAR_SIZE,
-  UUID_NAMESPACE,
 } from "./constants";
 import { settings } from "./settings";
-import { v5 as uuidv5 } from "uuid";
 import { separator } from "../menu/items/separator";
 import { getMainWindow } from "./getMainWindow";
 
@@ -67,15 +63,14 @@ export class TrayManager {
       return;
     }
 
-    if (IS_WINDOWS) {
-      const guid = uuidv5(
-        `${app.getName()}${IS_DEV ? "-development" : ""}-${app.getAppPath()}`,
-        UUID_NAMESPACE
-      );
-
-      this.tray = new Tray(icon, guid);
-    } else {
+    try {
+      // Unsigned Windows builds: Electron associates Tray GUIDs with the exe
+      // path; path changes then break icon creation. Skip GUID until signed.
       this.tray = new Tray(icon);
+    } catch (err) {
+      console.error("Failed to create tray icon", err, this.getIconPath());
+      this.tray = null;
+      return;
     }
 
     const trayContextMenu = Menu.buildFromTemplate(trayMenuTemplate);
@@ -171,7 +166,17 @@ export class TrayManager {
 
   private getIconImage() {
     const img = nativeImage.createFromPath(this.getIconPath());
-    return img.isEmpty() ? undefined : img;
+    if (img.isEmpty()) {
+      return undefined;
+    }
+    // Windows notification area is ~16px; oversized PNGs often look blank/clipped.
+    if (IS_WINDOWS) {
+      const { width, height } = img.getSize();
+      if (width > 32 || height > 32) {
+        return img.resize({ width: 16, height: 16 });
+      }
+    }
+    return img;
   }
 
   private setupEventListeners() {
@@ -183,7 +188,7 @@ export class TrayManager {
     this.tray?.removeListener("double-click", this.handleTrayClick);
   }
 
-  private handleTrayClick() {
+  private handleTrayClick = () => {
     const mainWindow = getMainWindow();
     if (!mainWindow) return;
 
@@ -192,7 +197,7 @@ export class TrayManager {
     } else {
       mainWindow.show();
     }
-  }
+  };
 
   private destroy(): void {
     this.destroyEventListeners();

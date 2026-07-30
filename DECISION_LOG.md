@@ -1,5 +1,16 @@
 # Decision Log
 
+## 2026-07-30 — Windows OS notifications + tray unread badge
+
+- **Status:** Accepted
+- **Context:** Users need Windows toasts and a tray unread red-dot for new Messages; tray was off by default and unsigned Tray GUIDs could fail when the exe path changed.
+- **Decisions:**
+  - Grant `notifications` on `persist:main` only for `messages.google.com`
+  - Windows: route page `Notification` via IPC to main-process Electron toasts (focus skip, 4s dedupe, hide-content)
+  - Remount-safe unread observers; unread false→true generic toast fallback (no DOM snippets)
+  - One-time `windowsTrayRolloutV1` enables tray + color icon; omit Tray GUID until code-signed
+- **Consequences:** Product **v1.8.0**; look for icon in notification area (not taskbar pin); HUMAN smoke for toast/red-dot.
+
 ## 2026-07-30 — Sign-in guidance auto-complete + package verify
 
 - **Status:** Accepted

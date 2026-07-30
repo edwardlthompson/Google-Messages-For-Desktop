@@ -1,9 +1,10 @@
 import { contextBridge, ipcRenderer, webFrame } from "electron";
 
-import { INITIAL_ICON_IMAGE, IS_MAC } from "./preload/constants_preload";
+import { INITIAL_ICON_IMAGE, IS_MAC, IS_WINDOWS } from "./preload/constants_preload";
 import {
   createRecentThreadObserver,
   createUnreadObserver,
+  ensureConversationObservers,
   focusFunctions,
   recentThreadObserver,
 } from "./preload/observers";
@@ -15,6 +16,7 @@ declare global {
       flash_main: () => void;
       should_hide: () => boolean;
       get_icon: () => Promise<string>;
+      os_notify: (payload: { title?: string; body?: string }) => void;
       preload_init: () => void;
     };
   }
@@ -72,12 +74,13 @@ const preload_init = () => {
   }
 
   const conversationListObserver = new MutationObserver(() => {
-    if (document.querySelector("mws-conversations-list") != null) {
+    if (ensureConversationObservers()) {
       createUnreadObserver();
       createRecentThreadObserver();
 
       // keep trying to get an image that isnt blank until they load
       const interval = setInterval(() => {
+        ensureConversationObservers();
         const conversation = document.body.querySelector(
           "mws-conversation-list-item"
         );
@@ -94,8 +97,10 @@ const preload_init = () => {
           }
         }
       }, 250);
-      conversationListObserver.disconnect();
+      // Stay connected: remount detection via ensureConversationObservers on mutations
     }
+
+    ensureConversationObservers();
 
     const title = document.head.querySelector("title");
     if (title != null) {
@@ -108,6 +113,7 @@ const preload_init = () => {
     subtree: true,
     childList: true,
   });
+  ensureConversationObservers();
 };
 
 ipcRenderer.on("focus-conversation", (event, i) => {
@@ -128,6 +134,9 @@ contextBridge.exposeInMainWorld("interop", {
     const data = await ipcRenderer.invoke("get-icon");
     return `data:image/png;base64,${data}`;
   },
+  os_notify: (payload: { title?: string; body?: string }) => {
+    ipcRenderer.send("os-notify", payload ?? {});
+  },
   preload_init,
 });
 webFrame.executeJavaScript(`
@@ -136,44 +145,95 @@ webFrame.executeJavaScript(`
     window.icon_data_uri = await window.interop.get_icon();
   });
 `);
-webFrame.executeJavaScript(`window.OldNotification = window.Notification;
-window.Notification = function (title, options) {
-  try {
-    const hideContent = window.interop.should_hide();
-    const isDataImage = (v) =>
-      typeof v === "string" && v.startsWith("data:image/");
-    const safeIcon = (...candidates) => {
-      for (const c of candidates) {
-        if (isDataImage(c)) return c;
-      }
-      return undefined;
+
+const useOsNotifyOnly = IS_WINDOWS;
+
+webFrame.executeJavaScript(`
+(function () {
+  const useOsNotifyOnly = ${useOsNotifyOnly ? "true" : "false"};
+  window.OldNotification = window.Notification;
+  window.Notification = function (title, options) {
+    const stub = function () {
+      return {
+        close: function () {},
+        addEventListener: function () {},
+        removeEventListener: function () {},
+        onclick: null,
+        onclose: null,
+        onerror: null,
+        onshow: null,
+      };
     };
-
-    const notificationOpts = hideContent
-      ? {
-          body: "Click to open",
-          icon: safeIcon(window.icon_data_uri),
+    try {
+      const hideContent = window.interop.should_hide();
+      const isDataImage = (v) =>
+        typeof v === "string" && v.startsWith("data:image/");
+      const safeIcon = (...candidates) => {
+        for (const c of candidates) {
+          if (isDataImage(c)) return c;
         }
-      : {
-          body: options?.body || "",
-          icon: safeIcon(options?.icon, window.icon_data_uri),
-        };
+        return undefined;
+      };
 
-    const newTitle = hideContent ? "New Message" : title;
-    const notification = new window.OldNotification(newTitle, notificationOpts);
-    notification.addEventListener("click", () => {
-      window.interop.show_main_window();
-      document.dispatchEvent(new Event("focus"));
-    });
-    window.interop.flash_main();
-    return notification;
-  } catch (e) {
-  console.error(e);
-  console.trace();
-  }
-};
+      const body = hideContent
+        ? "Click to open"
+        : options?.body || "";
+      const newTitle = hideContent ? "New Message" : title || "Google Messages";
 
-window.Notification.permission = "granted";
-window.Notification.requestPermission = async () => "granted";
+      if (useOsNotifyOnly) {
+        window.interop.os_notify({
+          title: newTitle,
+          body: body || "New message",
+        });
+        window.interop.flash_main();
+        return stub();
+      }
+
+      const notificationOpts = hideContent
+        ? {
+            body: "Click to open",
+            icon: safeIcon(window.icon_data_uri),
+          }
+        : {
+            body: options?.body || "",
+            icon: safeIcon(options?.icon, window.icon_data_uri),
+          };
+
+      try {
+        const notification = new window.OldNotification(newTitle, notificationOpts);
+        notification.addEventListener("click", () => {
+          window.interop.show_main_window();
+          document.dispatchEvent(new Event("focus"));
+        });
+        window.interop.flash_main();
+        return notification;
+      } catch (inner) {
+        console.error("HTML5 Notification failed; falling back to OS notify", inner);
+        window.interop.os_notify({
+          title: newTitle,
+          body: body || "New message",
+        });
+        window.interop.flash_main();
+        return stub();
+      }
+    } catch (e) {
+      console.error(e);
+      console.trace();
+      try {
+        window.interop.os_notify({
+          title: typeof title === "string" ? title : "Google Messages",
+          body: (options && options.body) || "New message",
+        });
+        window.interop.flash_main();
+      } catch (fallbackErr) {
+        console.error("os_notify fallback failed", fallbackErr);
+      }
+      return stub();
+    }
+  };
+
+  window.Notification.permission = "granted";
+  window.Notification.requestPermission = async () => "granted";
+})();
 `);
 contextBridge.exposeInMainWorld("module", { exports: null });

@@ -1,5 +1,12 @@
 # Completed Tasks
 
+## Ship v1.8.0 — Windows notify + tray unread (2026-07-30)
+
+- ✅ [AGENT] Windows OS notify + tray unread (session allowlist, main-process toasts, remount-safe observers, tray default on Win)
+- ✅ [AGENT] Fix unsigned Tray GUID / rollout / color icon so notification-area icon appears
+- ✅ [AGENT] Prepare CHANGELOG/RELEASE_NOTES; bump to 1.8.0; push `master`; tag `v1.8.0`
+- ✅ [AUTO] CI + Security Scan + CodeQL; `release-desktop.yml` on tag
+
 ## Ship v1.7.1 — Electron hardenings (2026-07-30)
 
 - ✅ [AGENT] Sign-in guidance auto-complete / skip when signed in

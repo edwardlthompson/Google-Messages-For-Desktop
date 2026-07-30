@@ -5,7 +5,7 @@
 ## Project
 
 - **Repo:** `edwardlthompson/Google-Messages-For-Desktop` (fork of `kelyvin/Google-Messages-For-Desktop`)
-- **Product:** Electron desktop app for Google Messages Web (**v1.7.1** shipped); Chromium App Host / Nativefier = legacy
+- **Product:** Electron desktop app for Google Messages Web (**v1.8.0** shipped); Chromium App Host / Nativefier = legacy
 - **Posture:** Active Electron first-run + multi-platform packaging; bootstrap FOSS alignment retained
 - **Template pin:** `agent-project-bootstrap` **0.15.1** (surgical child)
 - **Stack:** `node` / `foss` — root packaging + `electron/`; no `examples/`
@@ -13,6 +13,12 @@
 - **Lockfile:** root `yarn.lock`; Electron `electron/package-lock.json` (+ `brace-expansion@5.0.8` override)
 - **Compute:** This Computer only — Cloud Agents rejected
 - **Donate:** Venmo `https://venmo.com/code?user_id=1857304970395648420`
+
+## Milestone: /ship v1.8.0 (2026-07-30)
+
+- Windows OS toasts + tray unread red-dot; session notification allowlist; tray rollout for existing Win installs
+- Tagged **v1.8.0**; unsigned desktop artifacts via `release-desktop.yml` on tag
+- Template pin remains **0.15.1**; HUMAN residual: sign/notarize + toast/tray device smoke
 
 ## Milestone: /ship v1.7.1 (2026-07-30)
 

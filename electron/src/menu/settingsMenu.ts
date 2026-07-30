@@ -54,6 +54,9 @@ export const settingsMenu: MenuItemConstructorOptions = {
       checked: trayEnabled.value,
       click: async (item: MenuItem): Promise<void> =>
         trayEnabled.next(item.checked),
+      toolTip: IS_WINDOWS
+        ? "Shows Google Messages in the notification area (system tray), near the clock — not the taskbar pin."
+        : undefined,
     },
     {
       id: "startInTrayMenuItem",

@@ -21,9 +21,9 @@
 
 **Task format:** `🔲 [OWNER] Description` · done: `✅ [OWNER] Description` · blocked: `❌ [OWNER] Description — reason`
 
-> **R-Audit-2026-07-29c** archived in COMPLETED_TASKS.md (AGENT/AUTO done; HUMAN residual).
+> **Ship v1.8.0** tagged + unsigned Electron artifacts on GitHub Release. Residual HUMAN: sign/notarize + toast/tray device smoke.
 
-> **Ship v1.7.1** tagged + unsigned Electron artifacts on GitHub Release. Residual HUMAN: sign/notarize + device smoke.
+> **R-Audit-2026-07-29c** archived in COMPLETED_TASKS.md (AGENT/AUTO done; HUMAN residual).
 
 ## Archived Sprints
 
@@ -39,16 +39,18 @@
 | R-Audit-2026-07-29c | 2026-07-29 | Electron first-run audit fixes; HUMAN residual |
 | Ship v1.7.0 | 2026-07-29 | Electron multi-platform + unsigned CI artifacts |
 | Ship v1.7.1 | 2026-07-30 | Sign-in auto-complete + package verify + NativeImage |
+| Ship v1.8.0 | 2026-07-30 | Windows OS notify + tray unread |
 
 ---
 
-## Post-ship residual HUMAN (v1.7.1)
+## Post-ship residual HUMAN (v1.8.0)
 
 ### Sequential
 
 1. 🔲 [HUMAN] F-010 Sign/notarize desktop artifacts (replace unsigned Release assets for production)
 2. 🔲 [HUMAN] Confirm CodeQL alert #1 cleared on `master` after host-parse fix
 3. 🔲 [HUMAN] Device smoke: first-run Defaults → Sign in → Verify; `tel:`/`sms:` compose
+4. 🔲 [HUMAN] Smoke: Windows toast + tray unread red-dot (unfocused SMS; Hide Notification Content; notification area near clock)
 
 ### Parallel
 

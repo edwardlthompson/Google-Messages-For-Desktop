@@ -1,7 +1,7 @@
 {
   "name": "google-messages-for-desktop",
   "description": "Google Messages for web as a desktop app (Electron shell from OrangeDrangon; sms/tel protocol compose)",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "author": {
     "name": "edwardlthompson",
     "email": "edwardlthompson@users.noreply.github.com"
@@ -27,7 +27,8 @@
     "package:win": "npm run build && electron-builder --config electron-builder.config.js --win --publish never && node scripts/verify-win-unpacked.mjs",
     "package:mac": "npm run build && electron-builder --config electron-builder.config.js --mac --publish never",
     "package:linux": "npm run build && electron-builder --config electron-builder.config.js --linux --publish never",
-    "verify:win-unpacked": "node scripts/verify-win-unpacked.mjs"
+    "verify:win-unpacked": "node scripts/verify-win-unpacked.mjs",
+    "test:unit": "node --experimental-strip-types --test src/helpers/osNotificationLogic.test.ts src/preload/unreadDetect.test.ts"
   },
   "dependencies": {
     "about-window": "1.15.2",
