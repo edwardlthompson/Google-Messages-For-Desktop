@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'"
+    />
+    <title>Sign in — Google Messages</title>
+    <style>
+      :root {
+        --ink: #102033;
+        --muted: #4a5d73;
+        --paper: #f7f9fc;
+        --panel: #fff;
+        --line: #d7e0ec;
+        --accent: #1a73e8;
+        --accent-ink: #0b57d0;
+        --soft: #e8f0fe;
+        --ok: #137333;
+        --ok-bg: #e6f4ea;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", "Candara", "Gill Sans", sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+      }
+      main { padding: 22px 24px; }
+      .steps-bar { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+      .step-pill {
+        font-size: 0.75rem; font-weight: 700; padding: 5px 9px; border-radius: 999px;
+        background: var(--panel); border: 1px solid var(--line); color: var(--muted);
+      }
+      .step-pill.active { background: var(--soft); color: var(--accent-ink); border-color: #aecbfa; }
+      .step-pill.done { background: var(--ok-bg); color: var(--ok); border-color: #a8dab5; }
+      h1 { margin: 0 0 8px; font-size: 1.35rem; }
+      p { color: var(--muted); font-size: 0.92rem; line-height: 1.45; }
+      ol { color: var(--muted); font-size: 0.9rem; padding-left: 1.2rem; }
+      .status-box {
+        margin: 14px 0;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: var(--soft);
+        color: var(--accent-ink);
+        font-size: 0.88rem;
+        font-weight: 650;
+      }
+      .status-box.ready { background: var(--ok-bg); color: var(--ok); }
+      .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+      button {
+        appearance: none; border: 0; border-radius: 10px; font: inherit; font-weight: 650;
+        padding: 10px 14px; cursor: pointer;
+      }
+      button.primary { background: var(--accent); color: #fff; }
+      button.primary:disabled { opacity: 0.4; cursor: not-allowed; }
+      button.secondary { background: var(--soft); color: var(--accent-ink); }
+      button.ghost { background: transparent; color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="steps-bar">
+        <span class="step-pill done">1 · Defaults</span>
+        <span class="step-pill active">2 · Sign in</span>
+        <span class="step-pill" id="step3">3 · Verify</span>
+      </div>
+      <h1>Step 2 — Sign in to Messages</h1>
+      <p>
+        Use the main Google Messages window to sign in with Google and pair your
+        phone (QR code) if asked. Auth popups stay inside this app.
+      </p>
+      <ol>
+        <li>Complete Google sign-in in any modal that opens.</li>
+        <li>If shown a QR code, scan it with the Messages app on your phone.</li>
+        <li>When your conversation list appears, continue to an optional test link.</li>
+      </ol>
+      <div class="status-box" id="status">Waiting for sign-in / phone link…</div>
+      <div class="actions">
+        <button type="button" class="primary" id="verify" disabled>
+          Step 3 — Try a test SMS link
+        </button>
+        <button type="button" class="secondary" id="donate">Donate (Venmo)</button>
+        <button type="button" class="ghost" id="dismiss">I’m signed in — Done</button>
+      </div>
+    </main>
+    <script src="./signin-guidance-ui.js"></script>
+  </body>
+</html>

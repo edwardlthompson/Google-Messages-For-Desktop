@@ -1,0 +1,142 @@
+import {
+  BaseWindow,
+  BrowserWindow,
+  MenuItem,
+  MenuItemConstructorOptions,
+} from "electron";
+import { IS_MAC, IS_WINDOWS } from "../helpers/constants";
+import {
+  openOsDefaultAppsSettings,
+  showOnboardingAgain,
+} from "../helpers/onboarding";
+import { settings } from "../helpers/settings";
+import { separator } from "./items/separator";
+
+// bring the settings into scope
+const {
+  autoHideMenuEnabled,
+  trayEnabled,
+  startInTrayEnabled,
+  hideNotificationContentEnabled,
+  checkForUpdateOnLaunchEnabled,
+  monochromeIconEnabled,
+  showIconsInRecentConversationTrayEnabled,
+  trayIconRedDotEnabled,
+  taskbarFlashEnabled,
+  spellCheckEnabled,
+} = settings;
+
+export const settingsMenu: MenuItemConstructorOptions = {
+  label: IS_MAC ? "&Preferences" : "&Settings",
+  submenu: [
+    {
+      // This option doesn't apply to Mac, so this hides it but keeps the order of menu items
+      // to make updating based on array indices easier.
+      visible: !IS_MAC,
+      id: "autoHideMenuBarMenuItem",
+      label: "Auto Hide Menu Bar",
+      type: "checkbox",
+      checked: autoHideMenuEnabled.value,
+      click: (item: MenuItem, window?: BaseWindow): void => {
+        autoHideMenuEnabled.next(item.checked);
+        window?.setMenuBarVisibility(!autoHideMenuEnabled.value);
+        window?.setAutoHideMenuBar(autoHideMenuEnabled.value);
+      },
+    },
+    {
+      ...separator,
+      visible: !IS_MAC,
+    },
+    {
+      id: "enableTrayIconMenuItem",
+      label: IS_MAC ? "Enable Menu Bar Icon" : "Enable Tray Icon",
+      type: "checkbox",
+      checked: trayEnabled.value,
+      click: async (item: MenuItem): Promise<void> =>
+        trayEnabled.next(item.checked),
+    },
+    {
+      id: "startInTrayMenuItem",
+      label: IS_MAC ? "Start Hidden" : "Start In Tray",
+      type: "checkbox",
+      checked: startInTrayEnabled.value,
+      enabled: trayEnabled.value,
+      click: (item: MenuItem): void => startInTrayEnabled.next(item.checked),
+    },
+    {
+      id: "monochromeIconEnabledMenuItem",
+      label: "Use Monochrome Tray Icon",
+      type: "checkbox",
+      checked: monochromeIconEnabled.value,
+      enabled: trayEnabled.value,
+      click: (item) => monochromeIconEnabled.next(item.checked),
+    },
+    {
+      id: "showIconsInRecentConversationTrayEnabledMenuItem",
+      label: "Show Icons in Tray Menu",
+      type: "checkbox",
+      checked: showIconsInRecentConversationTrayEnabled.value,
+      enabled: trayEnabled.value,
+      click: (item) =>
+        showIconsInRecentConversationTrayEnabled.next(item.checked),
+    },
+    {
+      id: "trayIconRedDotEnabledMenuItem",
+      label: "Show Red Dot for Unread Messages",
+      type: "checkbox",
+      checked: trayIconRedDotEnabled.value,
+      enabled: trayEnabled.value,
+      click: (item) => trayIconRedDotEnabled.next(item.checked),
+    },
+    separator,
+    {
+      id: "hideNotificationContentMenuItem",
+      label: "Hide Notification Content",
+      type: "checkbox",
+      checked: hideNotificationContentEnabled.value,
+      click: (item) => hideNotificationContentEnabled.next(item.checked),
+    },
+    {
+      id: "taskbarFlashEnabledMenuItem",
+      label: "Taskbar Flash on New Message",
+      type: "checkbox",
+      checked: taskbarFlashEnabled.value,
+      click: (item) => taskbarFlashEnabled.next(item.checked),
+    },
+    {
+      id: "spellCheckEnabledMenuItem",
+      label: "Enable Spell Checking",
+      type: "checkbox",
+      checked: spellCheckEnabled.value,
+      click: (item) => spellCheckEnabled.next(item.checked),
+    },
+    separator,
+    {
+      id: "defaultMessagingAppsMenuItem",
+      label: "Set as Default Messaging App…",
+      click: (_item, window?: BaseWindow): void => {
+        const win =
+          (window as BrowserWindow | undefined) ||
+          BrowserWindow.getFocusedWindow() ||
+          BrowserWindow.getAllWindows()[0];
+        if (win) showOnboardingAgain(win);
+        else openOsDefaultAppsSettings();
+      },
+    },
+    {
+      id: "openWindowsDefaultAppsMenuItem",
+      label: IS_WINDOWS
+        ? "Open Windows Default Apps Settings"
+        : "Open OS Default Apps Settings",
+      click: (): void => openOsDefaultAppsSettings(),
+    },
+    separator,
+    {
+      id: "checkForUpdateOnLaunchEnabledMenuItem",
+      label: "Check for Update on Launch",
+      type: "checkbox",
+      checked: checkForUpdateOnLaunchEnabled.value,
+      click: (item) => checkForUpdateOnLaunchEnabled.next(item.checked),
+    },
+  ],
+};

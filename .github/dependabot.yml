@@ -8,12 +8,20 @@ updates:
       github-actions:
         patterns: ["*"]
 
-  # Root packaging tooling (Nativefier). Lockfile is yarn.lock; Dependabot npm
-  # ecosystem still applies to package.json at repo root.
+  # Root packaging tooling. Lockfile is yarn.lock; Dependabot npm applies to root package.json.
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
     groups:
       root-dependencies:
+        patterns: ["*"]
+
+  # Windows Electron app (OrangeDrangon-derived shell).
+  - package-ecosystem: npm
+    directory: /electron
+    schedule:
+      interval: weekly
+    groups:
+      electron-dependencies:
         patterns: ["*"]

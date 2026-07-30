@@ -1,0 +1,69 @@
+module.exports = {
+  appId: "com.edwardlthompson.google-messages",
+  artifactName: "${productName}-v${version}-${os}-${arch}.${ext}",
+  productName: "Google Messages",
+  copyright:
+    "Copyright Google Messages For Desktop contributors; based on OrangeDrangon/android-messages-desktop (MIT)",
+  files: ["app/**/*", "resources/**/*"],
+  directories: {
+    buildResources: "resources",
+    output: "dist",
+  },
+  publish: null,
+  linux: {
+    target: ["AppImage", "deb", "zip"],
+    executableName: "GoogleMessages",
+    category: "Network",
+    mimeTypes: [
+      "x-scheme-handler/sms",
+      "x-scheme-handler/smsto",
+      "x-scheme-handler/tel",
+      "x-scheme-handler/callto",
+      "x-scheme-handler/im",
+    ],
+    desktop: {
+      entry: {
+        Name: "Google Messages",
+        Comment: "Google Messages for web with sms/tel/im protocol handlers",
+        Categories: "Network;InstantMessaging;",
+        MimeType:
+          "x-scheme-handler/sms;x-scheme-handler/smsto;x-scheme-handler/tel;x-scheme-handler/callto;x-scheme-handler/im;",
+      },
+    },
+  },
+  win: {
+    target: ["nsis", "portable", "zip"],
+    executableName: "GoogleMessages",
+  },
+  mac: {
+    category: "public.app-category.social-networking",
+    target: [
+      { target: "dmg", arch: ["universal"] },
+      { target: "zip", arch: ["universal"] },
+    ],
+    extendInfo: {
+      CFBundleURLTypes: [
+        {
+          CFBundleURLName: "SMS",
+          CFBundleURLSchemes: ["sms", "smsto"],
+        },
+        {
+          CFBundleURLName: "Telephone",
+          CFBundleURLSchemes: ["tel", "callto"],
+        },
+        {
+          CFBundleURLName: "Instant Message",
+          CFBundleURLSchemes: ["im"],
+        },
+      ],
+    },
+  },
+  portable: {
+    artifactName: "${productName}-v${version}-${os}-${arch}.portable.${ext}",
+  },
+  nsis: {
+    allowToChangeInstallationDirectory: true,
+    oneClick: false,
+    shortcutName: "Google Messages",
+  },
+};

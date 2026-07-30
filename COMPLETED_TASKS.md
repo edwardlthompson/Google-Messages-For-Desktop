@@ -1,5 +1,16 @@
 # Completed Tasks
 
+## R-Audit-2026-07-29c — Electron first-run / multi-platform (2026-07-29)
+
+- ✅ [AGENT] F-004 Index `.github/workflows/release-desktop.yml` in `TEMPLATE_INDEX.json`
+- ✅ [AGENT] F-001 Allowlist `https:`/`mailto:` for SPA `openExternal`
+- ✅ [AGENT] F-002 Stop auto-SFTA on every launch (`GMFD_FORCE_SFTA=1` opt-in)
+- ✅ [AGENT] F-005/F-006 Harden onboarding sample URL matching + navigation
+- ✅ [AGENT] F-003/F-007 Tighten release-desktop permissions; mark artifacts unsigned
+- ✅ [AGENT] CHANGELOG Unreleased notes for Electron 1.7 / security
+- ✅ [AGENT] CodeQL incomplete URL substring sanitization (host parse for Messages/auth)
+- ✅ [AUTO] validate-bootstrap --quick + watch-agent-gates + hygiene + README health pass
+
 ## Ship v1.5.0 (2026-07-29)
 
 - ✅ [AGENT] Adapt pre-release for node child (stack selection, skip About/Scorecard when absent)

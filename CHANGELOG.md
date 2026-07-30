@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-07-29
+
+### Added
+
+- Electron multi-platform app (`electron/`) with first-run Defaults → Sign in → Verify
+- `sms:` / `tel:` / `smsto:` / `callto:` / `im:` protocol compose; association-only onboarding probes
+- macOS/Linux electron-builder packaging + `.github/workflows/release-desktop.yml`
+- Venmo donate link in README / Help / About
+
+### Changed
+
+- Windows shipping path is Electron (Chromium App Host / Nativefier are legacy)
+- SFTA UserChoice no longer forced on every launch (opt-in `GMFD_FORCE_SFTA=1`)
+- `shell.openExternal` from Messages webview limited to `https:` / `mailto:`
+
+### Security
+
+- Block non-https/mailto `openExternal` from SPA window-open handler
+- Onboarding navigation only opens sample association URLs
+
 ## [1.5.0] - 2026-07-29
 
 ### Added

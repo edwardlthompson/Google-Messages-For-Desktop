@@ -1,27 +1,28 @@
 # Threat Model — Google Messages for Desktop
 
-> Windows Chromium App Host + mac/linux Nativefier. No first-party backend. Align security tasks in `BUILD_PLAN.md`.
+> Windows Electron app + mac/linux Nativefier. No first-party backend. Align security tasks in `BUILD_PLAN.md`.
 
 ## Scope
 
 | Item | Value |
 |------|-------|
 | Project | Google Messages for Desktop |
-| Stack | Node tooling; **Windows:** thin host EXE + Chrome/Edge `--app`; **mac/linux:** Nativefier |
+| Stack | Node tooling; **Windows:** Electron (`electron/`); **mac/linux:** Nativefier |
 | Methodology | STRIDE adapted for a thin desktop web wrapper |
 
 ## Trust Boundaries
 
 ```text
-[User] --> [GoogleMessages.exe host] --> [chrome_proxy / Chrome --app] --> [messages.google.com]
-                |                              |
-         tray / sms:tel: / named pipe    dedicated Chromium profile + CDP (loopback)
+[User] --> [Google Messages Electron] --> [messages.google.com]
+                |
+         tray / sms:tel: / compose in page
                 |
          [Maintainer PC] --> [npm registry / GitHub Actions] (supply chain)
 ```
 
 - Message content and auth live in Google's web app / Google account — not in this repo's code.
-- Windows host registers protocols, tray, and CDP compose; it does **not** embed the SPA in Electron/WebView2.
+- Electron loads the SPA with a persistent partition; Google auth popups stay in-app on that partition.
+- Protocol handlers invoke page compose scripts (not a remote backend).
 
 ## STRIDE Summary
 
@@ -30,30 +31,21 @@
 | Spoofing | Fake release binary | Publish only from trusted maintainer GitHub Releases; verify download source | HUMAN |
 | Tampering | Modified `dist/` build | Rebuild from this repo; do not commit `dist/`; hygiene ignores build outputs | AGENT/HUMAN |
 | Repudiation | Unclear release provenance | Conventional Commits + GitHub Release notes | HUMAN |
-| Information disclosure | Secrets in agent session / `.env`; CDP cookie scrape | `.env` gitignored; CDP bound to `127.0.0.1` with ephemeral port file; private vuln reporting | AGENT/HUMAN |
+| Information disclosure | Secrets in agent session / `.env` | `.env` gitignored; private vuln reporting | AGENT/HUMAN |
 | Denial of service | N/A at app scale (Google hosts web) | N/A for wrapper; CI rate/minute awareness for Actions | AUTO |
-| Elevation of privilege | Local pipe/CDP abuse; malicious npm dep | Pipe token (`pipe.token`); URL allowlist for open/navigate; Dependabot | AGENT/HUMAN/AUTO |
+| Elevation of privilege | Malicious local protocol URL / npm dep | Protocol parse + allowlisted Messages navigation; Dependabot | AGENT/HUMAN/AUTO |
 
 ## Top Abuse Cases
 
-1. Supply-chain compromise via malicious npm dependency (`nativefier` or packaging tools)
+1. Supply-chain compromise via malicious npm dependency (Electron / electron-builder)
 2. User downloads unofficial binary from a phishing mirror
-3. Secret leakage via accidental commit of `.env` or tokens
-4. **Local** process attaches to CDP or spoofs named-pipe commands (same-user malware)
-5. Silent UserChoice override via PS-SFTA surprising other tel:/sms: handlers (`GMFD_SKIP_SFTA=1` opt-out)
-6. Agent/tooling misconfiguration enabling Cloud Agents against local policy (rejected for this repo)
+3. Crafted `sms:`/`tel:` URL trying to drive unexpected page script behavior (compose is number-fill only)
 
-## Data Handling
+## Out of scope
 
-- No first-party telemetry in this repository.
-- Google Messages Web handles user messages under Google's policies; see `docs/PRIVACY.md`.
-- Windows profile: `%LOCALAPPDATA%\GoogleMessages\chromium-profile` (out of band for packaging repo).
+- Google account / Messages for web server security
+- Compromised OS-level malware with the user's session already unlocked
 
-## Residual risk
+## Legacy host note
 
-| Risk | Notes |
-|------|-------|
-| Local CDP / pipe (same user) | Token + ephemeral port reduce drive-by attach; not a cross-user sandbox |
-| Upstream Chrome / Nativefier CVEs | Track Dependabot; rebuild releases when critical deps land |
-| Web content trust | Fully deferred to `messages.google.com` |
-| Old root `engines.node >=12` | Optional bump (HUMAN); host package requires `>=18` |
+The Chromium App Host under `host/windows` (CDP on loopback, named pipe) is no longer the shipping path; its threat notes (pipe token, CDP port file) apply only if that host is run for rollback.

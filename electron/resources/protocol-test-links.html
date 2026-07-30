@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Google Messages — protocol test links</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0f1419;
+        --card: #1a2332;
+        --text: #e8eef7;
+        --muted: #9aadc2;
+        --accent: #8ab4f8;
+        --line: #2a3a4f;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #f4f7fb;
+          --card: #fff;
+          --text: #1a2332;
+          --muted: #5a6b7d;
+          --accent: #1a73e8;
+          --line: #d5deea;
+        }
+      }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.45;
+      }
+      main {
+        max-width: 40rem;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 3rem;
+      }
+      h1 {
+        font-size: 1.35rem;
+        font-weight: 600;
+        margin: 0 0 0.35rem;
+      }
+      p {
+        color: var(--muted);
+        margin: 0 0 1.25rem;
+      }
+      section {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 1rem 1.1rem;
+        margin-bottom: 1rem;
+      }
+      h2 {
+        font-size: 0.95rem;
+        margin: 0 0 0.75rem;
+        font-weight: 600;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        margin: 0.45rem 0;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      code {
+        font-family: Consolas, "Cascadia Mono", monospace;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Protocol test links</h1>
+      <p>
+        Click a link to open <strong>Google Messages</strong>. Phone links start
+        a new text; bare <code>im:</code> only focuses the app.
+      </p>
+
+      <section>
+        <h2>Open app (Instant Messaging)</h2>
+        <ul>
+          <li><a href="im:">im:</a> — open / focus Google Messages</li>
+          <li><a href="im:open">im:open</a> — same, open only</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Start a new text (sample number)</h2>
+        <ul>
+          <li>
+            <a href="sms:+15555550100">sms:+15555550100</a>
+          </li>
+          <li>
+            <a href="smsto:+15555550100">smsto:+15555550100</a>
+          </li>
+          <li>
+            <a href="tel:+15555550100">tel:+15555550100</a>
+          </li>
+          <li>
+            <a href="callto:+15555550100">callto:+15555550100</a>
+          </li>
+          <li>
+            <a href="im:+15555550100">im:+15555550100</a> — IM + compose
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Notes</h2>
+        <p style="margin: 0">
+          If Windows asks which app to use, pick <strong>Google Messages</strong>.
+          Set defaults under Settings → Apps → Default apps. Replace the sample
+          number with a real one when you want an actual conversation.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

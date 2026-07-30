@@ -21,10 +21,9 @@
 
 **Task format:** `🔲 [OWNER] Description` · done: `✅ [OWNER] Description` · blocked: `❌ [OWNER] Description — reason`
 
-Product is in **maintenance mode**. Active work = bootstrap alignment + ongoing hygiene — not feature Golden Path.
+> **R-Audit-2026-07-29c** archived in COMPLETED_TASKS.md (AGENT/AUTO done; HUMAN residual).
 
-> **Ship v1.5.0** tagged on `master` (`v1.5.0`); CI/Security/CodeQL green; Dependabot Critical/High = 0.  
-> **R-Audit / Sprint A–D / W AGENT** archived in COMPLETED_TASKS.md. Residual HUMAN: attach Windows binaries + device smoke.
+> **Ship v1.5.0** tagged; Electron is primary shipping path (v1.7.0). Residual HUMAN: signed binaries + device smoke.
 
 ## Archived Sprints
 
@@ -36,16 +35,18 @@ Product is in **maintenance mode**. Active work = bootstrap alignment + ongoing 
 | Sprint D — Phase 3-4 | 2026-07-29 | `COMPLETED_TASKS.md` |
 | R-Audit-2026-07-29 | 2026-07-29 | AGENT/AUTO done; HUMAN residual |
 | R-Audit-2026-07-29b | 2026-07-29 | Windows App Host harden + docs; HUMAN residual |
-| Ship v1.5.0 | 2026-07-29 | Tag + GitHub Release notes; binaries still HUMAN |
+| Ship v1.5.0 | 2026-07-29 | Tag + Release notes; binaries HUMAN |
+| R-Audit-2026-07-29c | 2026-07-29 | Electron first-run audit fixes; HUMAN residual |
 
 ---
 
-## Post-ship v1.5.0 — residual HUMAN
+## Post-audit residual HUMAN (R-Audit-2026-07-29c)
 
 ### Sequential
 
-1. 🔲 [HUMAN] Run `npm run release:windows`; upload Setup EXE + portable zip to GitHub Release `v1.5.0`
-2. 🔲 [HUMAN] F-011 optional: bump `engines.node` after packaging smoke
+1. 🔲 [HUMAN] F-010 Sign/notarize desktop artifacts; smoke first-run Defaults → Sign in → Verify
+2. 🔲 [HUMAN] Confirm CodeQL alert #1 clears after AGENT host-parse fix on `master`
+3. 🔲 [HUMAN] Run `npm run release:windows`; upload builds as appropriate
 
 ### Parallel
 
@@ -55,11 +56,9 @@ Product is in **maintenance mode**. Active work = bootstrap alignment + ongoing 
 |------|-------|----------------|
 | *None — see exception* | — | — |
 
-### Human & device (after automation)
+### Human & device
 
-1. 🔲 [HUMAN] Smoke-test `tel:`/`sms:`; confirm Default apps lists Google Messages
-2. 🔲 [HUMAN] Re-pin Messages window; confirm taskbar identity ≠ Google Chrome
-3. 🔲 [HUMAN] Pair phone and verify compose banner / Start chat fill
+1. 🔲 [HUMAN] Device smoke: onboarding checklist, sign-in, `tel:`/`sms:` compose
 
 ---
 
@@ -68,20 +67,18 @@ Product is in **maintenance mode**. Active work = bootstrap alignment + ongoing 
 ### Sequential
 
 1. 🔲 [AGENT] Dependabot / security triage per `docs/SECURITY_TRIAGE.md` when alerts appear
-2. 🔲 [HUMAN] Nativefier rebuilds / GitHub Releases when packaging updates are needed
+2. 🔲 [HUMAN] GitHub Releases when packaging updates are needed (Electron via Actions or local)
 3. 🔲 [AGENT] Template update checks via `scripts/check-template-updates.sh` (stdout)
 4. 🔲 [HUMAN] Skim `AGENTS.md` + `BUILD_PLAN.md` for product-fit
 5. 🔲 [HUMAN] Optional: configure branch protection required checks for CI / CodeQL
-6. 🔲 [HUMAN] Keep deferred workflows deferred unless explicitly requested (Scorecard, Release Please, Pages, stale, weekly-health)
+6. 🔲 [HUMAN] Keep deferred workflows deferred unless explicitly requested
+7. 🔲 [HUMAN] Optional: bump `engines.node` after packaging smoke
+8. 🔲 [DEFERRED] F-009 Wire auto-update publish + signing before enabling launch checks
 
 ### Parallel
 
-<!-- parallel_exception: maintenance lane is reactive (alerts/releases); no standing parallel AGENT scopes -->
+<!-- parallel_exception: maintenance lane is reactive; no standing parallel AGENT scopes -->
 
 | Task | Owner | Isolated scope |
 |------|-------|----------------|
 | *None — see exception* | — | — |
-
-### Human & device (after automation)
-
-1. 🔲 [HUMAN] Clear items in `HUMAN_BACKLOG.md` as completed

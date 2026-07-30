@@ -1,129 +1,97 @@
 # Google Messages for Desktop
 
-> This project is currently in maintenance mode and no new features will be added. If you'd like to use a similar app with potential richer functionality, go check out [OrangeDragon's android-messages-desktop project](https://github.com/OrangeDrangon/android-messages-desktop)!
+A dedicated desktop app for [Google Messages for web](https://messages.google.com/web) — Electron window, tray options, and OS handlers for messaging links.
 
-## How agents should work
+**Not** an official Google product and not affiliated with Google.
 
-Cursor agents: start at [`docs/START_HERE.md`](docs/START_HERE.md), then [`AGENTS.md`](AGENTS.md) and [`BUILD_PLAN.md`](BUILD_PLAN.md) (Sequential first).  
-This Computer only — no Cloud Agents. Stack is `node` / FOSS alignment with [`agent-project-bootstrap`](https://github.com/edwardlthompson/agent-project-bootstrap) v0.15.1 (see [`docs/BOOTSTRAP_ALIGNMENT.md`](docs/BOOTSTRAP_ALIGNMENT.md)). Windows product path: Chromium App Host (`host/windows`).
+| Platform | Package |
+|----------|---------|
+| **Windows** | NSIS installer, portable EXE, zip |
+| **macOS** | dmg, zip (build on macOS or [GitHub Actions](.github/workflows/release-desktop.yml)) |
+| **Linux** | AppImage, deb, zip (build on Linux or Actions) |
 
-![Google Messages Home Page](https://i.imgur.com/OVKBkNY.png)
+**Downloads:** [GitHub Releases](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases)  
+**Version:** 1.7.0 (see [CHANGELOG](CHANGELOG.md))
 
-A "native-like" desktop app for [Google Messages](https://messages.google.com/web).
+## Support / Donate
 
-| Platform | How it runs |
-|----------|-------------|
-| **Windows** | Thin host EXE (`GoogleMessages.exe`) + Chrome/Edge `--app` window via `chrome_proxy.exe` |
-| **macOS / Linux** | [Nativefier](https://github.com/nativefier/nativefier) rebuild scripts |
+Support development on [Venmo](https://venmo.com/code?user_id=1857304970395648420).  
+In the app: **Help → Donate (Venmo)…** (also linked from About).
 
-**Why not Electron on Windows?** Google rejects sign-in in Electron/WebView2 (`signin/rejected` / blank SPA). Cookie import does not fix it. The UI must be a real Chrome or Edge process.
+## Credits
 
-**Downloads:** [GitHub Releases](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases) (this fork). Upstream history: [kelyvin/Google-Messages-For-Desktop](https://github.com/kelyvin/Google-Messages-For-Desktop).
+Electron shell based on [OrangeDrangon/android-messages-desktop](https://github.com/OrangeDrangon/android-messages-desktop) (MIT; Chris Knepper / Kyle Rosenberg). See [`electron/NOTICE-ORANGEDRANGON.txt`](electron/NOTICE-ORANGEDRANGON.txt).
 
-## Purpose
+**What makes this app different:** registers `sms:` / `tel:` / `smsto:` / `callto:` / `im:` so phone and messaging links can open Google Messages and start a new text, with a first-run defaults checklist. OrangeDrangon’s app does not.
 
-Dedicated desktop entry points for Google Messages with OS notifications and (on Windows) `sms:` / `tel:` protocol handlers.
+Upstream history: [kelyvin/Google-Messages-For-Desktop](https://github.com/kelyvin/Google-Messages-For-Desktop).
 
-This desktop app and project is not an official product of Google and I am not affiliated with Google in any way.
+## Features
 
-## Windows setup (v1.5.0+)
+- Dedicated Messages window (no full Chrome/Edge browser chrome)
+- Google sign-in in-app (shared session + auth modals)
+- Protocol handlers that compose a **new text** (not a voice call)
+- First-run: **Defaults → Sign in → optional Verify**
+- Tray / start-in-tray (from the OrangeDrangon-derived shell)
+- Windows, macOS, and Linux builds from the same [`electron/`](electron/) app
 
-### What you get
+## First-run (v1.7.0+)
 
-| Piece | Role |
-|--------|------|
-| `GoogleMessages.exe` | Tray, protocol handlers, single-instance, CDP compose |
-| Chrome / Edge app window | Messages UI (`--app=` or `--app-id=`), launched via **`chrome_proxy.exe`** |
-| Profile | `%LOCALAPPDATA%\GoogleMessages\chromium-profile` (dedicated; not your everyday browser) |
-| App shortcut | `%LOCALAPPDATA%\GoogleMessages\Google Messages App.lnk` (matched AppUserModelID for taskbar pin) |
+1. **Defaults** — Click each sample link (`sms:`, `smsto:`, `tel:`, `callto:`, `im:`) and choose **Google Messages**. These samples only set associations; they do **not** require you to be signed in and do not compose a message.
+2. **Sign in** — In the main window, sign in with Google and pair your phone (QR) if asked.
+3. **Verify (optional)** — After you’re signed in, use the guidance panel’s test SMS link (or **Help → Protocol Test Links…**).
 
-### Install & first run
+Re-open the defaults wizard anytime: **Settings → Set as Default Messaging App…**
 
-1. Download **`GoogleMessagesSetup-1.5.0.exe`** (or portable `google-messages-windows-host_v1.5.0.zip`).
-2. Install/launch **Google Messages** (requires **Chrome or Edge** on the machine).
-3. Sign in inside the app window.
-4. Defaults for phone links (host also sets UserChoice when allowed):
-   - **Settings → Apps → Default apps → Google Messages** (assign **tel** and **sms**)
-5. Test: `"GoogleMessages.exe" "tel:+15551234567"` or click a phone number in Chrome after step 4.
+### Windows Default apps
 
-**Important:** both `sms:` and `tel:` open a **new text**. They do **not** place a voice call. `smsto:` / `callto:` are registered the same way.
+- The app registers as a messaging client for those URL schemes.
+- Windows does **not** force itself as the default on every launch. Pick Google Messages in the chooser or in **Settings → Apps → Default apps**.
+- Optional advanced: set `GMFD_FORCE_SFTA=1` to force UserChoice via PS-SFTA (enterprise/testing). Details: [`docs/WINDOWS_PROTOCOL_HANDLERS.md`](docs/WINDOWS_PROTOCOL_HANDLERS.md).
 
-### Tray & quiet start
+## Build locally
 
-- No args → host stays in the **system tray** (no console window).
-- `--open`, tray **Open Messages**, or a `tel:`/`sms:` link → opens the Messages app window.
-- Tray: **Open Messages** · **Sign out (clear profile)** · **Quit**
-
-### Taskbar pin (not “Google Chrome”)
-
-Pins must use Chromium’s app-shortcut model:
-
-1. Open Messages once (`--open` or tray).
-2. Unpin any old **Google Chrome** pin for this window.
-3. Pin the Messages window again — shortcut targets `chrome_proxy.exe` with an AppUserModelID synced from the live window.
-
-Details: [`docs/WINDOWS_PROTOCOL_HANDLERS.md`](docs/WINDOWS_PROTOCOL_HANDLERS.md).
-
-### Build Windows release locally
-
-Requires Node 18+ and [Inno Setup 6+](https://jrsoftware.org/isinfo.php) for the Setup EXE:
+Requires **Node 18+**.
 
 ```powershell
+# Dev
+npm run electron:dev
+
+# Windows release artifacts → electron/dist/ and dist/
 npm run release:windows
 ```
 
-Outputs: `dist/GoogleMessagesSetup-<version>.exe`, `dist/google-messages-windows-host_v<version>.zip`, `dist/Windows_Host/GoogleMessages.exe`.
+```bash
+# macOS or Linux (run on that OS)
+bash scripts/desktop/release-electron.sh
+# or: npm run release:mac   /   npm run release:linux
+```
 
-Dev host (Node): `npm run host:dev`.
-
-Optional: set `GMFD_SKIP_SFTA=1` to register protocol ProgIds without forcing Windows UserChoice defaults.
-
-## Rebuilding the app
+CI packages all three platforms on tag `v*` or `workflow_dispatch`: [`.github/workflows/release-desktop.yml`](.github/workflows/release-desktop.yml).  
+Actions artifacts are **unsigned smoke builds** unless you add signing secrets; prefer signed installers for production.
 
 ### Quick commands
 
 | Command | What it does |
 |---------|----------------|
-| `npm run windows` / `windows:host` | Build Windows Chromium App Host EXE |
-| `npm run release:windows` | Host + portable zip + Inno Setup EXE |
-| `npm run host:dev` | Run the host under Node (dev) |
-| `npm run mac` / `npm run linux` | Nativefier rebuilds (non-Windows) |
+| `npm run electron:dev` | Run Electron (dev) |
+| `npm run windows` / `release:windows` | Package Windows |
+| `npm run mac` / `release:mac` | Package macOS (on macOS) |
+| `npm run linux` / `release:linux` | Package Linux (on Linux) |
 
-## Windows notes
+### Legacy (rollback only)
 
-### Notifications
+| Command | What it does |
+|---------|----------------|
+| `npm run windows:host` / `release:windows:host-legacy` | Old Chromium App Host (Chrome/Edge `--app`) |
+| `npm run mac:nativefier-legacy` / `linux:nativefier-legacy` | Old Nativefier wrappers |
 
-Chrome/Edge show site notifications for the dedicated profile. Allow notifications for Messages when prompted; check Windows notification settings for Google Chrome/Edge if needed.
+## Docs for agents & contributors
 
-### Security notes (local)
+- Start: [`docs/START_HERE.md`](docs/START_HERE.md)
+- Agents: [`AGENTS.md`](AGENTS.md) · board: [`BUILD_PLAN.md`](BUILD_PLAN.md)
+- Protocols: [`docs/WINDOWS_PROTOCOL_HANDLERS.md`](docs/WINDOWS_PROTOCOL_HANDLERS.md)
+- Threat model: [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md)
+- Bootstrap alignment: [`docs/BOOTSTRAP_ALIGNMENT.md`](docs/BOOTSTRAP_ALIGNMENT.md)
 
-- CDP debugging is loopback-only; port is written to `%LOCALAPPDATA%\GoogleMessages\cdp-port.json`.
-- Named-pipe commands require a token in `%LOCALAPPDATA%\GoogleMessages\pipe.token`.
-- Threat model: [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md).
-
-## Ubuntu Shortcut
-
-Submitted by user [FlorentLM](https://github.com/kelyvin/Android-Messages-For-Desktop/issues/8), to create a shortcut for the Ubuntu launcher, please do the following:
-
-1. Create and open the shortcut file
-```bash
-nano ~/.local/share/applications/Android-Messages.desktop
-```
-
-2. Copy and paste the following entry inside the file:
-
-```ini
-[Desktop Entry]
-Version=1.0.0
-Name=Google Messages
-Comment=Send and recieve messages from your Android Phone
-Keywords=Message;Messaging;Android;SMS
-Exec=/path/to/installfolder/GoogleMessages
-Icon=/path/to/installfolder/resources/app/icon.png
-Terminal=false
-Type=Application
-Categories=Internet;Application;
-StartupWMClass=android-messages-nativefier-f3cfa3
-```
-
-Be sure to replace /path/to/installfolder/ with your actual installation folder and Android Messages should appear along your other native apps.
+This Computer only — no Cursor Cloud Agents. Stack: `node` / FOSS (`agent-project-bootstrap` v0.15.1).

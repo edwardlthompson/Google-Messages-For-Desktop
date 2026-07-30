@@ -63,10 +63,17 @@ donations.json
 CODE_REVIEW.md
 RELEASE_NOTES.md
 
-# Yarn lockfile is authoritative — do not commit npm lock
-package-lock.json
+# Yarn lockfile is authoritative at repo root — do not commit root npm lock
+/package-lock.json
+!electron/package-lock.json
+
+# Electron app build outputs / deps (sources live under electron/src)
+electron/node_modules/
+electron/app/
+electron/dist/
 
 # Local smoke / packaging leftovers
+.tmp/
 tmp-protocol-smoke/
 win32-x64-template/
 *.bak

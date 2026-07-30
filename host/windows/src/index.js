@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 'use strict';
 
+/**
+ * LEGACY Chromium App Host (Chrome/Edge --app + CDP).
+ * Windows shipping path is now the Electron app under electron/.
+ * Kept for rollback / reference: npm run windows:host / release:windows:host-legacy
+ */
+
 const { registerProtocols } = require('./register-protocols');
 const { tryBecomePrimary, sendToPrimary } = require('./single-instance');
 const browser = require('./browser');

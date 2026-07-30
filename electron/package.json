@@ -1,0 +1,58 @@
+{
+  "name": "google-messages-for-desktop",
+  "description": "Google Messages for web as a desktop app (Electron shell from OrangeDrangon; sms/tel protocol compose)",
+  "version": "1.7.0",
+  "author": {
+    "name": "edwardlthompson",
+    "email": "edwardlthompson@users.noreply.github.com"
+  },
+  "license": "MIT",
+  "copyright": "Copyright Google Messages For Desktop contributors; Electron shell based on OrangeDrangon/android-messages-desktop (MIT)",
+  "homepage": "https://github.com/edwardlthompson/Google-Messages-For-Desktop",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edwardlthompson/Google-Messages-For-Desktop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/edwardlthompson/Google-Messages-For-Desktop/issues"
+  },
+  "main": "app/background.js",
+  "desktopName": "com.edwardlthompson.google-messages",
+  "scripts": {
+    "dev": "npm run build:dev && cross-env NODE_ENV=development electron --enable-source-maps ./app/background.js",
+    "dist": "npm run build && npm run package",
+    "build": "webpack --mode=production",
+    "build:dev": "webpack --mode=development",
+    "package": "electron-builder --config electron-builder.config.js",
+    "package:win": "electron-builder --config electron-builder.config.js --win",
+    "package:mac": "electron-builder --config electron-builder.config.js --mac",
+    "package:linux": "electron-builder --config electron-builder.config.js --linux"
+  },
+  "dependencies": {
+    "about-window": "1.15.2",
+    "electron-updater": "6.8.9",
+    "fs-jetpack": "^5.1.0",
+    "rxjs": "^7.8.2",
+    "uuid": "^14.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "25.9.5",
+    "@types/webpack": "5.28.5",
+    "@types/webpack-node-externals": "3.0.4",
+    "cross-env": "^7.0.3",
+    "electron": "41.10.1",
+    "electron-builder": "26.15.3",
+    "esbuild": "0.28.1",
+    "esbuild-loader": "4.5.0",
+    "typescript": "7.0.2",
+    "webpack": "5.106.2",
+    "webpack-cli": "7.2.1",
+    "webpack-merge": "6.0.1",
+    "webpack-node-externals": "3.0.0"
+  },
+  "allowScripts": {
+    "electron@41.10.1": true,
+    "esbuild@0.28.1": true,
+    "electron-winstaller@5.4.0": true
+  }
+}

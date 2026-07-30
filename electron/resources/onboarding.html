@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'"
+    />
+    <title>Welcome — Google Messages</title>
+    <style>
+      :root {
+        --ink: #102033;
+        --muted: #4a5d73;
+        --paper: #f7f9fc;
+        --panel: #ffffff;
+        --line: #d7e0ec;
+        --accent: #1a73e8;
+        --accent-ink: #0b57d0;
+        --soft: #e8f0fe;
+        --warn-bg: #fff8e6;
+        --warn-ink: #7a5b00;
+        --ok: #137333;
+        --ok-bg: #e6f4ea;
+        --pending: #9aadc2;
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", "Candara", "Gill Sans", sans-serif;
+        background:
+          radial-gradient(1200px 500px at 10% -10%, #dceaff 0%, transparent 55%),
+          radial-gradient(900px 420px at 100% 0%, #e7f6ef 0%, transparent 50%),
+          var(--paper);
+        color: var(--ink);
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        padding: 22px 26px 18px;
+        max-width: 780px;
+        margin: 0 auto;
+      }
+      .brand {
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-ink);
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 1.55rem;
+        line-height: 1.15;
+        font-weight: 700;
+      }
+      .lede {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.45;
+      }
+      .steps-bar {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+      .step-pill {
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        color: var(--muted);
+      }
+      .step-pill.active {
+        background: var(--soft);
+        border-color: #aecbfa;
+        color: var(--accent-ink);
+      }
+      .why, .note, .checklist {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin-bottom: 12px;
+      }
+      .why h2, .checklist h2 { margin: 0 0 6px; font-size: 0.95rem; }
+      .why p, .checklist .hint, .note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.88rem;
+        line-height: 1.4;
+      }
+      .note {
+        background: var(--warn-bg);
+        color: var(--warn-ink);
+        border: 0;
+      }
+      .note strong { color: var(--ink); }
+      .row {
+        display: grid;
+        grid-template-columns: 1.6rem 4.6rem 1fr auto;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 4px;
+        border-top: 1px solid var(--line);
+      }
+      .row:first-of-type { border-top: 0; }
+      .mark {
+        width: 1.3rem;
+        height: 1.3rem;
+        border-radius: 999px;
+        border: 2px solid var(--pending);
+        display: grid;
+        place-items: center;
+        font-size: 0.72rem;
+        font-weight: 800;
+        color: transparent;
+      }
+      .row.done .mark {
+        border-color: var(--ok);
+        background: var(--ok-bg);
+        color: var(--ok);
+      }
+      .tag {
+        font-family: Consolas, "Cascadia Mono", monospace;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--accent-ink);
+        background: var(--soft);
+        border-radius: 8px;
+        padding: 6px 8px;
+        text-align: center;
+      }
+      .row h3 { margin: 0; font-size: 0.9rem; }
+      .row p { margin: 2px 0 0; color: var(--muted); font-size: 0.78rem; }
+      .row button.linkish {
+        appearance: none;
+        border: 0;
+        background: var(--soft);
+        color: var(--accent-ink);
+        font: inherit;
+        font-weight: 650;
+        font-size: 0.8rem;
+        padding: 8px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .progress {
+        margin: 0 0 10px;
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+      .progress.all-set { color: var(--ok); font-weight: 650; }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+      button {
+        appearance: none;
+        border: 0;
+        border-radius: 10px;
+        font: inherit;
+        font-weight: 650;
+        padding: 10px 14px;
+        cursor: pointer;
+      }
+      button.primary { background: var(--accent); color: #fff; }
+      button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+      button.secondary { background: var(--soft); color: var(--accent-ink); }
+      button.ghost { background: transparent; color: var(--muted); font-weight: 600; }
+      .status { width: 100%; font-size: 0.82rem; color: var(--muted); min-height: 1.1em; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="brand">Google Messages For Desktop</div>
+      <h1>Step 1 of 3 — Set messaging defaults</h1>
+      <div class="steps-bar" aria-hidden="true">
+        <span class="step-pill active">1 · Defaults</span>
+        <span class="step-pill">2 · Sign in</span>
+        <span class="step-pill">3 · Verify</span>
+      </div>
+      <p class="lede">
+        Click each sample link and choose <strong>Google Messages</strong> as the
+        handler. These clicks only register defaults — they will
+        <strong>not</strong> send a text or require you to be signed in yet.
+      </p>
+
+      <section class="why">
+        <h2>Why these defaults?</h2>
+        <p>
+          Not contacts, mic, or SMS history access — only OS associations so
+          <code>sms:</code>, <code>tel:</code>, and <code>im:</code> links open
+          this app. Next you’ll sign in to Google Messages; after that, real
+          links can start a new text.
+        </p>
+      </section>
+
+      <div class="note">
+        This window minimizes when you open a sample so the OS chooser stays
+        visible. Sample number <code>+15555550100</code> is association-only
+        (compose is suppressed during this step).
+      </div>
+
+      <section class="checklist">
+        <h2>Default handler checklist</h2>
+        <p class="hint" id="mode-hint">Checking platform…</p>
+
+        <div class="row" data-scheme="sms">
+          <div class="mark">✓</div>
+          <div class="tag">SMS</div>
+          <div>
+            <h3>SMS</h3>
+            <p><code>sms:+15555550100</code></p>
+          </div>
+          <button type="button" class="linkish" data-open="sms">Open sms:</button>
+        </div>
+        <div class="row" data-scheme="smsto">
+          <div class="mark">✓</div>
+          <div class="tag">SMSTO</div>
+          <div>
+            <h3>SMSTO</h3>
+            <p><code>smsto:+15555550100</code></p>
+          </div>
+          <button type="button" class="linkish" data-open="smsto">Open smsto:</button>
+        </div>
+        <div class="row" data-scheme="tel">
+          <div class="mark">✓</div>
+          <div class="tag">TEL</div>
+          <div>
+            <h3>TEL</h3>
+            <p><code>tel:+15555550100</code> (text, not voice)</p>
+          </div>
+          <button type="button" class="linkish" data-open="tel">Open tel:</button>
+        </div>
+        <div class="row" data-scheme="callto">
+          <div class="mark">✓</div>
+          <div class="tag">CALLTO</div>
+          <div>
+            <h3>CALLTO</h3>
+            <p><code>callto:+15555550100</code></p>
+          </div>
+          <button type="button" class="linkish" data-open="callto">Open callto:</button>
+        </div>
+        <div class="row" data-scheme="im">
+          <div class="mark">✓</div>
+          <div class="tag">IM</div>
+          <div>
+            <h3>IM</h3>
+            <p><code>im:+15555550100</code></p>
+          </div>
+          <button type="button" class="linkish" data-open="im">Open im:</button>
+        </div>
+      </section>
+
+      <p class="progress" id="progress">Checking defaults…</p>
+
+      <div class="actions">
+        <button type="button" class="primary" id="continue" disabled>
+          Continue to sign in
+        </button>
+        <button type="button" class="secondary" id="refresh">Refresh</button>
+        <button type="button" class="secondary" id="open-settings">OS default apps</button>
+        <button type="button" class="secondary" id="open-search">Search Settings</button>
+        <button type="button" class="secondary" id="minimize">Minimize</button>
+        <button type="button" class="ghost" id="skip">Skip for now</button>
+        <div class="status" id="status"></div>
+      </div>
+    </main>
+    <script src="./onboarding-ui.js"></script>
+  </body>
+</html>

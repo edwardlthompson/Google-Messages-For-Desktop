@@ -1156,6 +1156,13 @@
       "read_when": "release",
       "update_when": "milestone_boundary",
       "owner": "maintainer"
+    },
+    {
+      "path": ".github/workflows/release-desktop.yml",
+      "purpose": "Electron multi-platform package (win/mac/linux) on tag or workflow_dispatch",
+      "read_when": "release",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
     }
   ],
   "modules": {

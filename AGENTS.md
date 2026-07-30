@@ -12,14 +12,15 @@
 
 ## Product constraints
 
-- **Maintenance mode** — no new product features; packaging/security/agent-infra only
-- **Windows:** Chromium App Host (`host/windows`) + Chrome/Edge `--app` — **not** Electron/WebView2 (Google blocks login)
-- **mac/linux:** Nativefier wrapper for `https://messages.google.com/web`
+- **Desktop:** Electron app under `electron/` (Windows / macOS / Linux)
+- **Do not** break shared `persist:main` auth modals or reintroduce UA spoofing
+- Legacy Chromium App Host (`host/windows`) and Nativefier scripts are rollback-only
 - Preserve `package.json` build scripts (`mac` / `windows` / `linux` / `release`)
-- Keep **`yarn.lock`**; npm CLI (`npm run …`) remains OK
+- Keep root **`yarn.lock`**; Electron deps use `electron/package-lock.json`
 - Default branch is **`master`** (not `main`)
 - **This Computer only** — no Cursor Cloud Agents / cloud environments for this repo
-- FOSS MIT; dual copyright (Kelvin Nguyen + Edward L. Thompson) in `LICENSE`
+- FOSS MIT; dual copyright in `LICENSE`; credit OrangeDrangon in README; Venmo donate link in Help/About/README
+
 
 ## Coding Style
 

@@ -1,5 +1,28 @@
 # Decision Log
 
+## 2026-07-29 — First-run stages + mac/linux Electron + Venmo
+
+- **Status:** Accepted
+- **Context:** Signed-out users need defaults onboarding without compose; prepare multi-platform Electron releases; add donation link.
+- **Decisions:**
+  - Stages: Defaults (association-only probes) → Sign-in guidance → optional Verify
+  - Suppress compose for onboarding sample number / association-only mode
+  - Ship mac/linux via same `electron/` + electron-builder + `release-desktop.yml` Actions matrix; Nativefier legacy-only
+  - Venmo: `https://venmo.com/code?user_id=1857304970395648420` in README / Help / About
+- **Consequences:** Product version **1.7.0**; mac/linux binaries produced on CI or native OS hosts.
+
+## 2026-07-29 — Windows UI: Electron from OrangeDrangon + protocols
+
+
+- **Status:** Accepted
+- **Context:** User confirmed OrangeDrangon Electron app signs in successfully; requested a Chrome-free UI (option B) while keeping sms/tel compose as differentiator.
+- **Decisions:**
+  - Port OrangeDrangon shell into `electron/` (MIT NOTICE); Electron 41; shared `persist:main` + in-app Google auth modals; no UA spoof
+  - Add `sms`/`tel`/`smsto`/`callto` registration + page compose via `executeJavaScript`
+  - `npm run windows` / `release:windows` → electron-builder; Chromium App Host kept as legacy rollback only
+  - README credits OrangeDrangon and states protocol-handler difference
+- **Consequences:** Shipping Windows path no longer requires Chrome/Edge `--app`; login smoke verified Electron window title `Google Messages` with auth handler present; full Google account sign-in still a HUMAN interactive check.
+
 ## 2026-07-29 — /ship v1.5.0 published
 
 - **Status:** Accepted

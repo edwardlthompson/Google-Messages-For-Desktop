@@ -274,8 +274,15 @@ async function browserMessagesUiReady(debugPort) {
     const tabs = await getJson(`http://127.0.0.1:${debugPort}/json`);
     return tabs.some((t) => {
       if (t.type !== 'page' || !t.url) return false;
-      if (!t.url.includes(SUCCESS_HOST)) return false;
-      if (/accounts\.google\.com/i.test(t.url)) return false;
+      let host = '';
+      try {
+        host = new URL(t.url).hostname.toLowerCase();
+      } catch (_) {
+        return false;
+      }
+      // Exact host or subdomain of messages.google.com (not substring of path/query)
+      if (host !== SUCCESS_HOST && !host.endsWith(`.${SUCCESS_HOST}`)) return false;
+      if (host === 'accounts.google.com' || host.endsWith('.accounts.google.com')) return false;
       if (/\/welcome/i.test(t.url)) return false;
       if (/conversations/i.test(t.url)) return true;
       if (/Conversations/i.test(t.title || '')) return true;

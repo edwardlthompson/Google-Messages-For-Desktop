@@ -5,13 +5,22 @@
 ## Project
 
 - **Repo:** `edwardlthompson/Google-Messages-For-Desktop` (fork of `kelyvin/Google-Messages-For-Desktop`)
-- **Product:** Windows Chromium App Host + mac/linux Nativefier for Google Messages Web (`1.5.0`)
-- **Posture:** Maintenance mode — no new product features
+- **Product:** Electron desktop app for Google Messages Web (`1.7.0` prep); Chromium App Host / Nativefier = legacy
+- **Posture:** Active Electron first-run + multi-platform packaging; bootstrap FOSS alignment retained
 - **Template pin:** `agent-project-bootstrap` **0.15.1** (surgical child)
-- **Stack:** `node` / `foss` — root packaging only; no `examples/`
+- **Stack:** `node` / `foss` — root packaging + `electron/`; no `examples/`
 - **Default branch:** `master`
-- **Lockfile:** `yarn.lock` (npm CLI OK)
+- **Lockfile:** root `yarn.lock`; Electron `electron/package-lock.json`
 - **Compute:** This Computer only — Cloud Agents rejected
+- **Donate:** Venmo `https://venmo.com/code?user_id=1857304970395648420`
+
+## Milestone: R-Audit-2026-07-29c (2026-07-29)
+
+- CODE_REVIEW.md: F-001–F-007 AGENT fixed (openExternal allowlist, SFTA opt-in, sample URL harden, CI unsigned + permissions, TEMPLATE_INDEX)
+- CodeQL host-parse fix for Messages URL checks
+- Gates: validate-bootstrap --quick, watch-agent-gates, hygiene, README health **pass**
+- Dependabot open alerts: **0**; CodeQL had 1 open (incomplete URL sanitization) — fixed locally, needs push/re-scan
+- HUMAN residual: signed binaries, device smoke, confirm CodeQL clears on master
 
 ## Milestone: Phase 0 complete (2026-07-29)
 
