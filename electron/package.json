@@ -42,7 +42,7 @@
     "@types/webpack": "5.28.5",
     "@types/webpack-node-externals": "3.0.4",
     "cross-env": "^7.0.3",
-    "electron": "41.10.1",
+    "electron": "41.10.3",
     "electron-builder": "26.15.3",
     "esbuild": "0.28.1",
     "esbuild-loader": "4.5.0",
