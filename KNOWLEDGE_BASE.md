@@ -37,7 +37,7 @@ Prefer Electron packaging and protocol/onboarding work over rewriting the Messag
 
 ## KB-010 — Electron brace-expansion override (2026-07-29)
 
-Trivy HIGH CVE-2026-14257 on transitive `brace-expansion@2.1.3` via Electron lockfile. Pin with `electron/package.json` `overrides.brace-expansion: 5.0.8` until parents ship a fixed range. Remove override when unused.
+Trivy HIGH on transitive `brace-expansion`. Pin `electron/package.json` `overrides.brace-expansion: 5.0.9` (CVE-2026-14257 + GHSA-rgw5-rvv9-x895 bypass of 5.0.8). Remove override when unused.
 
 ## KB-012 — /ship v1.7.1 regressions (2026-07-30)
 

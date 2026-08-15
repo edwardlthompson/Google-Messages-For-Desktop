@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Session permissions on `persist:main` are allowlisted (notifications, clipboard, fullscreen, media) for `messages.google.com` only
 - Notification outer-catch fallback no longer forwards raw page title/body (hide-content honored in main)
-- Electron **41.10.3** (GHSA-9f4c-93c8-jc8g); pin transitive `fast-uri@3.1.5` and `js-yaml@4.3.1`
+- Electron **41.10.3** (GHSA-9f4c-93c8-jc8g); pin transitive `fast-uri@3.1.5`, `js-yaml@4.3.1`, and `brace-expansion@5.0.9`
 
 ### Changed
 
