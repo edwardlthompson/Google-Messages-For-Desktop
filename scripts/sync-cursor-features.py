@@ -22,6 +22,7 @@ FOSS_ENABLED = [
     "feature_radar",
     "plugin_pack",
     "cli_example",
+    "codex_review_example",
     "mcp_foss_example",
 ]
 
@@ -94,15 +95,16 @@ def patch_initialization_distribution(root: Path, tier: str) -> None:
 def generate_help(root: Path, tier: str) -> None:
     foss_rows = [
         ("Rules (`.mdc`)", "`.cursor/rules/`", "both"),
-        ("Slash commands (26)", "`.cursor/commands/`", "both"),
+        ("Slash commands (27)", "`.cursor/commands/`", "both"),
         ("Hooks", "`.cursor/hooks.json`", "both"),
-        ("Skills (7)", "`.cursor/skills/`", "both"),
+        ("Skills (8)", "`.cursor/skills/`", "both"),
         ("Subagents (3)", "`.cursor/agents/`", "both"),
         ("Worktrees", "`.cursor/worktrees.json`", "both"),
         ("Auto-review permissions", "`.cursor/permissions.json`", "both"),
         ("Sandbox (optional)", "`.cursor/sandbox.json.example`", "both"),
         ("Plugin pack", "`.cursor-plugin/plugin.json` + `scripts/pack-cursor-plugin.*`", "both"),
         ("CLI (opt-in)", "`.github/workflow-examples/cursor-agent.yml`", "both"),
+        ("Codex review (opt-in)", "`docs/CODEX_REVIEW.md` + `/codex-review`", "both"),
         ("GitHub MCP (optional)", "`.cursor/mcp.foss.example`", "foss"),
         ("Feature radar", "`scripts/cursor-feature-radar.sh`", "both"),
     ]

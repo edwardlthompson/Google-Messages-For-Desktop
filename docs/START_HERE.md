@@ -4,8 +4,8 @@
 
 ## What is this?
 
-A desktop wrapper for [Google Messages for Web](https://messages.google.com/web): **Windows, macOS, and Linux** use the Electron app under [`electron/`](../electron/) (shell based on OrangeDrangon/android-messages-desktop) with `sms:`/`tel:`/`im:` protocol compose.  
-Agent/process infrastructure is aligned with [`agent-project-bootstrap`](https://github.com/edwardlthompson/agent-project-bootstrap) **v0.15.1**.
+A desktop wrapper for [Google Messages for Web](https://messages.google.com/web): **Windows, macOS, and Linux** use the Electron app under [`electron/`](../electron/) (shell based on OrangeDrangon/android-messages-desktop) with `sms:`/`tel:`/`im:` protocol compose.
+Agent/process infrastructure is aligned with [`agent-project-bootstrap`](https://github.com/edwardlthompson/agent-project-bootstrap) **v0.17.0**.
 
 ## Read order
 

@@ -9,13 +9,12 @@ A dedicated desktop app for [Google Messages for web](https://messages.google.co
 | **Windows** | NSIS installer, portable EXE, zip |
 | **macOS** | dmg, zip (build on macOS or [GitHub Actions](.github/workflows/release-desktop.yml)) |
 | **Linux** | AppImage, deb, zip (build on Linux or Actions) |
-
-**Downloads:** [GitHub Releases](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases)  
+**Downloads:** [GitHub Releases](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases)
 **Version:** 1.7.0 (see [CHANGELOG](CHANGELOG.md))
 
 ## Support / Donate
 
-Support development on [Venmo](https://venmo.com/code?user_id=1857304970395648420).  
+Support development on [Venmo](https://venmo.com/code?user_id=1857304970395648420).
 In the app: **Help → Donate (Venmo)…** (also linked from About).
 
 ## Credits
@@ -59,15 +58,17 @@ npm run electron:dev
 
 # Windows release artifacts → electron/dist/ and dist/
 npm run release:windows
+
 ```
 
 ```bash
 # macOS or Linux (run on that OS)
 bash scripts/desktop/release-electron.sh
 # or: npm run release:mac   /   npm run release:linux
+
 ```
 
-CI packages all three platforms on tag `v*` or `workflow_dispatch`: [`.github/workflows/release-desktop.yml`](.github/workflows/release-desktop.yml).  
+CI packages all three platforms on tag `v*` or `workflow_dispatch`: [`.github/workflows/release-desktop.yml`](.github/workflows/release-desktop.yml).
 Actions artifacts are **unsigned smoke builds** unless you add signing secrets; prefer signed installers for production.
 
 ### Quick commands
@@ -78,14 +79,12 @@ Actions artifacts are **unsigned smoke builds** unless you add signing secrets; 
 | `npm run windows` / `release:windows` | Package Windows |
 | `npm run mac` / `release:mac` | Package macOS (on macOS) |
 | `npm run linux` / `release:linux` | Package Linux (on Linux) |
-
 ### Legacy (rollback only)
 
 | Command | What it does |
 |---------|----------------|
 | `npm run windows:host` / `release:windows:host-legacy` | Old Chromium App Host (Chrome/Edge `--app`) |
 | `npm run mac:nativefier-legacy` / `linux:nativefier-legacy` | Old Nativefier wrappers |
-
 ## Docs for agents & contributors
 
 - Start: [`docs/START_HERE.md`](docs/START_HERE.md)
@@ -94,4 +93,4 @@ Actions artifacts are **unsigned smoke builds** unless you add signing secrets; 
 - Threat model: [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md)
 - Bootstrap alignment: [`docs/BOOTSTRAP_ALIGNMENT.md`](docs/BOOTSTRAP_ALIGNMENT.md)
 
-This Computer only — no Cursor Cloud Agents. Stack: `node` / FOSS (`agent-project-bootstrap` v0.15.1).
+This Computer only — no Cursor Cloud Agents. Stack: `node` / FOSS (`agent-project-bootstrap` v0.17.0).

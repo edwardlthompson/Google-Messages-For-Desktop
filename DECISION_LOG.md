@@ -1,5 +1,26 @@
 # Decision Log
 
+## 2026-08-14 — R-Audit Dependabot High 71–74
+
+- **Status:** Accepted
+- **Context:** Open Dependabot High on `electron/package-lock.json` after `/audit`.
+- **Decisions:**
+  - Bump Electron **41.10.1 → 41.10.3** (GHSA-9f4c-93c8-jc8g / CVE-2026-70608). Patch line; app already uses `setWindowOpenHandler` for Google auth hosts. HUMAN: signed rebuild after `/push`.
+  - Override transitive `fast-uri` **3.1.4 → 3.1.5** (CVE-2026-18446). Dev-only via electron-builder/ajv; still pin.
+  - Override transitive `js-yaml` **4.3.0 → 4.3.1** (GHSA-5p4m-2wfm-xmqj, 4.x !!omap). Do not jump to 5.x.
+- **Consequences:** Lockfile refresh in `electron/`. Alerts 71–74 should close after `/ship` push + Dependabot re-scan.
+
+## 2026-08-14 — Bootstrap template parity 0.15.1 → 0.17.0
+
+- **Status:** Accepted
+- **Context:** `check-template-updates` reported upstream **v0.17.0** while this child was pinned at 0.15.1.
+- **Decisions:**
+  - Adopt 0.16 agent contract (resolved Critique, `/codex-review`, expanded `/prerelease` + supporting scripts)
+  - Codex stays local FOSS optional; `.github/workflow-examples/codex-review.yml` is not a live workflow
+  - Add product-mapped `branding/` so validate-bootstrap REQUIRED paths pass; do not overwrite product `README.md`
+  - Keep `master`, Electron/`node`, no `examples/`, no Cloud Agents
+- **Consequences:** Template pin **0.17.0** (not product semver). HUMAN: optional Codex CLI smoke; manual `INITIALIZATION_PROMPT.md` merge.
+
 ## 2026-07-30 — Windows OS notifications + tray unread badge
 
 - **Status:** Accepted
@@ -47,7 +68,6 @@
 - **Consequences:** Product version **1.7.0**; mac/linux binaries produced on CI or native OS hosts.
 
 ## 2026-07-29 — Windows UI: Electron from OrangeDrangon + protocols
-
 
 - **Status:** Accepted
 - **Context:** User confirmed OrangeDrangon Electron app signs in successfully; requested a Chrome-free UI (option B) while keeping sms/tel compose as differentiator.

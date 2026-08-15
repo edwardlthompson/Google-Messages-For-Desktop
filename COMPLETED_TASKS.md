@@ -1,5 +1,15 @@
 # Completed Tasks
 
+## R-Audit-2026-08-14 (2026-08-14)
+
+- ✅ [AGENT] F-004 Honor hide-content in Notification outer-catch fallback (`electron/src/bridge.ts`)
+- ✅ [AGENT] F-005 Allowlist session permissions for `messages.google.com` (deny unknown)
+- ✅ [AGENT] F-006 Wire `electron` `test:unit` into `feature-gate.sh` for stack `node`
+- ✅ [AGENT] F-007/F-008/F-009 Stale Nativefier docs + `pre-release-gate` reminder → `release-desktop.yml`
+- ✅ [AGENT] F-010 Bounds-check `focus-conversation` index; add protocol parse unit tests
+- ✅ [AGENT] Triage Dependabot High 71–74 (`electron`, `js-yaml`, `fast-uri`) — override if safe, else document
+- ✅ [AUTO] `watch-agent-gates --once --autofix` + feature-gate (node, 4 stages including electron-unit)
+
 ## Ship v1.8.0 — Windows notify + tray unread (2026-07-30)
 
 - ✅ [AGENT] Windows OS notify + tray unread (session allowlist, main-process toasts, remount-safe observers, tray default on Win)

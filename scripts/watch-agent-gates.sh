@@ -6,9 +6,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-if command -v python3 >/dev/null 2>&1; then PY=python3
-elif command -v python >/dev/null 2>&1; then PY=python
-else PY=python3; fi
+# shellcheck source=lib/pick-python.sh
+. "$(dirname "$0")/lib/pick-python.sh"
 
 ONCE=false
 AUTOFIX=true
@@ -68,7 +67,7 @@ if stack in ("android", "multi"):
         f"examples/android/app/src/main/java/dev/foss/goldenpath/ui/{feature}",
     ]
 if stack in ("node", "multi"):
-    paths += [f"examples/node/src/{feature}"]
+    paths += [f"examples/node/src/{feature}", "electron/src"]
 print(",".join(p for p in paths if Path(root / p).exists() or p.endswith("main.ts")))
 PY
 }
@@ -115,6 +114,10 @@ while [ "$attempt" -lt "$MAX_ATTEMPTS" ]; do
   fi
 
   if [ "$AUTOFIX" = true ]; then
+    # Allowlisted stage → mechanical command (never free-text suggested_fixes)
+    echo "$GATE_JSON" >.cursor/last-feature-gate.json 2>/dev/null || true
+    bash scripts/apply-suggested-gate-fixes.sh --json .cursor/last-feature-gate.json || true
+
     PATHS="$(feature_autofix_paths)"
     if [ -n "$PATHS" ]; then
       bash scripts/feature-autofix.sh --paths "$PATHS" || true

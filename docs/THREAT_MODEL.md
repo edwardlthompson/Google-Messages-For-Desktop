@@ -1,15 +1,14 @@
 # Threat Model — Google Messages for Desktop
 
-> Windows Electron app + mac/linux Nativefier. No first-party backend. Align security tasks in `BUILD_PLAN.md`.
+> Electron app (Windows / macOS / Linux). No first-party backend. Align security tasks in `BUILD_PLAN.md`.
 
 ## Scope
 
 | Item | Value |
 |------|-------|
 | Project | Google Messages for Desktop |
-| Stack | Node tooling; **Windows:** Electron (`electron/`); **mac/linux:** Nativefier |
+| Stack | Node tooling; Electron (`electron/`) on Windows / macOS / Linux |
 | Methodology | STRIDE adapted for a thin desktop web wrapper |
-
 ## Trust Boundaries
 
 ```text
@@ -18,6 +17,7 @@
          tray / sms:tel: / compose in page
                 |
          [Maintainer PC] --> [npm registry / GitHub Actions] (supply chain)
+
 ```
 
 - Message content and auth live in Google's web app / Google account — not in this repo's code.
@@ -34,7 +34,6 @@
 | Information disclosure | Secrets in agent session / `.env` | `.env` gitignored; private vuln reporting | AGENT/HUMAN |
 | Denial of service | N/A at app scale (Google hosts web) | N/A for wrapper; CI rate/minute awareness for Actions | AUTO |
 | Elevation of privilege | Malicious local protocol URL / npm dep | Protocol parse + allowlisted Messages navigation; Dependabot | AGENT/HUMAN/AUTO |
-
 ## Top Abuse Cases
 
 1. Supply-chain compromise via malicious npm dependency (Electron / electron-builder)

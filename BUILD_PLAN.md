@@ -10,7 +10,6 @@
 | `HUMAN` | Human developer | Approvals, credentials, GitHub settings, product decisions |
 | `ADB`   | Human (Android) | N/A for this repo                                          |
 | `AUTO`  | CI/scripts/bots | GitHub Actions, Dependabot, pre-commit, update checker     |
-
 ## Status markers
 
 | Marker | State   | Agent action                                                          |
@@ -18,8 +17,11 @@
 | 🔲     | Open    | Default for new tasks; work or leave queued                           |
 | ✅     | Done    | Replace 🔲 when complete; archive sprint rows to `COMPLETED_TASKS.md` |
 | ❌     | Blocked | Replace 🔲 when blocked; add brief reason after the description       |
-
 **Task format:** `🔲 [OWNER] Description` · done: `✅ [OWNER] Description` · blocked: `❌ [OWNER] Description — reason`
+
+> **Ship v1.8.1** in progress — Electron 41.10.3 + 0.17.0 alignment. Residual HUMAN: sign/smoke.
+
+> **R-Audit-2026-08-14** archived in COMPLETED_TASKS.md (AGENT/AUTO done; HUMAN residual).
 
 > **Ship v1.8.0** tagged + unsigned Electron artifacts on GitHub Release. Residual HUMAN: sign/notarize + toast/tray device smoke.
 
@@ -40,7 +42,21 @@
 | Ship v1.7.0 | 2026-07-29 | Electron multi-platform + unsigned CI artifacts |
 | Ship v1.7.1 | 2026-07-30 | Sign-in auto-complete + package verify + NativeImage |
 | Ship v1.8.0 | 2026-07-30 | Windows OS notify + tray unread |
+| R-Audit-2026-08-14 | 2026-08-14 | AGENT/AUTO done; HUMAN residual |
+---
 
+## R-Audit-2026-08-14 residual HUMAN
+
+### Sequential
+
+1. 🔲 [HUMAN] F-001 Signed rebuild after Electron 41.10.3 lands on `master`; confirm Dependabot 72/73 clear
+2. 🔲 [HUMAN] F-011 Commit/push 0.17.0 alignment + branding so CI `validate-bootstrap` stays green
+
+### Parallel
+
+| Task | Owner | Isolated scope |
+|------|-------|----------------|
+| *None* | — | — |
 ---
 
 ## Post-ship residual HUMAN (v1.8.0)
@@ -59,7 +75,6 @@
 | Task | Owner | Isolated scope |
 |------|-------|----------------|
 | *None — see exception* | — | — |
-
 ### Human & device
 
 1. 🔲 [HUMAN] Optional local `npm run release:windows` for signed Windows builds
@@ -78,6 +93,9 @@
 6. 🔲 [HUMAN] Keep deferred workflows deferred unless explicitly requested
 7. 🔲 [HUMAN] Optional: bump `engines.node` after packaging smoke
 8. 🔲 [DEFERRED] F-009 Wire auto-update publish + signing before enabling launch checks
+9. ✅ [AGENT] Align agent surface to bootstrap v0.17.0 (Critique, Codex opt-in, branding kit, pin)
+10. 🔲 [HUMAN] Optional Codex CLI smoke (`/codex-review`) if `OPENAI_API_KEY` is available locally
+11. 🔲 [HUMAN] Manual merge of `docs/INITIALIZATION_PROMPT.md` vs upstream (never blind overwrite)
 
 ### Parallel
 

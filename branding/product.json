@@ -1,0 +1,38 @@
+{
+  "mode": "product",
+  "name": "Google Messages for Desktop",
+  "short_name": "GMFD",
+  "tagline": "Google Messages for web as a dedicated desktop app",
+  "pitch": "A FOSS Electron wrapper for Google Messages for web on Windows, macOS, and Linux: native window, tray unread badge, OS notifications, and sms:/tel:/im: protocol compose without UA spoofing.",
+  "features": [
+    "Electron shell for messages.google.com/web with persist:main auth",
+    "Windows/macOS/Linux packaging via electron-builder and GitHub Releases",
+    "sms:, tel:, smsto:, callto:, and im: protocol compose",
+    "System tray unread red-dot and unfocused OS toasts on Windows",
+    "FOSS MIT; no Cloud Agents; Venmo donate link in Help/About/README"
+  ],
+  "quick_start": [
+    "Clone the repo and open it in Cursor Desktop (This Computer only).",
+    "Follow docs/START_HERE.md, then npm --prefix electron run dev.",
+    "Pair your phone at messages.google.com/web. Tray icon appears near the clock when Enable Tray Icon is on."
+  ],
+    "install": "Requires Node 20+ for packaging. Windows/macOS/Linux unsigned smoke builds ship on GitHub Releases (v1.8.1+). Prefer HUMAN-signed installers for production.",
+  "usage": "Use /verify before merge and /ship to publish. Product README at repo root is canonical — do not overwrite it with generate-project-readme.py. Branding metadata lives in branding/product.json.",
+  "urls": {
+    "docs": "docs/START_HERE.md",
+    "contributing": "CONTRIBUTING.md",
+    "security": "SECURITY.md",
+    "license": "LICENSE",
+    "design": "docs/DESIGN_GUIDE.md",
+    "branding": "branding/BRANDING.md"
+  },
+  "badge": {
+    "primary": "1A73E8",
+    "secondary": "0B57D0",
+    "license": "2ea043",
+    "foss": "656d76"
+  },
+  "stacks": [
+    "node"
+  ]
+}

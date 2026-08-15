@@ -21,12 +21,11 @@
 - **This Computer only** — no Cursor Cloud Agents / cloud environments for this repo
 - FOSS MIT; dual copyright in `LICENSE`; credit OrangeDrangon in README; Venmo donate link in Help/About/README
 
-
 ## Coding Style
 
 - Conventional Commits for all changes
 - Small, modular changes; read-before-write
-- Cursor mode routing per `docs/CURSOR_MODES.md`; Plan for non-trivial tasks with `### Critique`
+- Cursor mode routing per `docs/CURSOR_MODES.md`; Plan for non-trivial tasks with resolved `### Critique` (Issue→Resolution baked into the plan body)
 
 ## Session Protocol
 
@@ -40,7 +39,7 @@
 
 ## Module Activation
 
-Active stack: **`node`** (Nativefier packaging) — see `modules/node/MODULE.md`.  
+Active stack: **`node`** (Electron packaging under `electron/`) — see `modules/node/MODULE.md`.
 Do **not** vendor `examples/**`.
 
 ## Cursor FOSS integrations
@@ -52,6 +51,7 @@ Do **not** vendor `examples/**`.
 - **Worktrees** — `.cursor/worktrees.json`
 - **Auto-review** — `.cursor/permissions.json`
 - **Plugin pack** — `.cursor-plugin/plugin.json`
+- **Codex review (opt-in)** — `docs/CODEX_REVIEW.md` + `/codex-review` + `.github/workflow-examples/codex-review.yml` (used by expanded `/prerelease` / `/ship`; no live CI job)
 - Commercial cloud/Bugbot/Automations stay **hidden** (`distribution_tier: foss`)
 
 Validate: `python scripts/agent-run.py check-cursor-hooks -- --smoke` (or `python3` on Unix)

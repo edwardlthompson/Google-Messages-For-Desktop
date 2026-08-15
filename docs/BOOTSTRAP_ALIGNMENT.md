@@ -2,6 +2,8 @@
 
 > **Phase 0 deliverable** for aligning `edwardlthompson/google-messages-for-desktop` with upstream [`edwardlthompson/agent-project-bootstrap`](https://github.com/edwardlthompson/agent-project-bootstrap) **v0.15.1** (as of 2026-07-25).
 >
+> **Current pin (2026-08-14):** agent surface brought to **v0.17.0**. This document remains the historical Phase 0 gap analysis.
+>
 > Status: **§8 accepted · Sprint B–D bring-up executed** on **This Computer** (Cursor Desktop). Do **not** use Cursor Cloud Agents for this project.
 >
 > Mode: migration / alignment on a live (maintenance-mode) codebase — not a fresh bootstrap.
@@ -19,6 +21,7 @@ git clone https://github.com/edwardlthompson/Google-Messages-For-Desktop.git
 cd Google-Messages-For-Desktop
 git fetch origin cursor/bootstrap-alignment-378a
 git checkout cursor/bootstrap-alignment-378a
+
 ```
 
 Or, if you already have a clone:
@@ -27,6 +30,7 @@ Or, if you already have a clone:
 git fetch origin
 git checkout cursor/bootstrap-alignment-378a
 git pull origin cursor/bootstrap-alignment-378a
+
 ```
 
 Open the folder in **Cursor Desktop** (not a Cloud Agent). Draft PR: https://github.com/edwardlthompson/Google-Messages-For-Desktop/pull/1
@@ -46,7 +50,6 @@ Open the folder in **Cursor Desktop** (not a Cloud Agent). Draft PR: https://git
 | Commercial cloud hooks / Automations / Bugbot | Keep hidden (`distribution_tier: foss`) |
 | `.cursor/environment.json` cloud environments | Do not add for this project |
 | Cloud-only MCP / remote compute for gates | Prefer local `scripts/agent-run.py` + local terminals |
-
 ### Decision (2026-07-29)
 
 - **Status:** Accepted
@@ -73,7 +76,6 @@ Open the folder in **Cursor Desktop** (not a Cloud Agent). Draft PR: https://git
 | CI / `.github/` | Conservative workflows on **`master`** (ci, security, CodeQL JS, dependency-review) + Dependabot |
 | Security docs | `SECURITY.md` + triage/threat/privacy stubs |
 | Product posture | README states **maintenance mode** — no new features |
-
 ### Tech stack classification
 
 | Dimension | Assessment |
@@ -83,7 +85,6 @@ Open the folder in **Cursor Desktop** (not a Cloud Agent). Draft PR: https://git
 | Closest template module | `modules/node/MODULE.md` (tooling + Dependabot npm) — **not** the Hono API Golden Path |
 | Recommended stack selection | `node` with **no** `examples/node/` copy; `distribution_tier: foss` |
 | Alternative | `none` — agent/process infra only; still wire npm Dependabot for root `package.json` |
-
 **Decision recommendation:** `.cursor/stack-selection.json` → `"stack": "node"`, do **not** vendor `examples/*`. Document Nativefier packaging as the project Golden Path in `modules/node/MODULE.md` (adapted) or a short project-specific note in `KNOWLEDGE_BASE.md`.
 
 ---
@@ -101,7 +102,6 @@ Very little structural overlap. Preserve as-is:
 | `yarn.lock` | Existing lockfile — preserve unless HUMAN approves npm migration |
 | `google-messages-logo.png` | Required Nativefier icon input — keep tracked (hygiene exception; size ~27KB, acceptable) |
 | FOSS / MIT-compatible direction | Compatible with template philosophy |
-
 ---
 
 ## 3. What is missing (relative to v0.15.1)
@@ -159,7 +159,6 @@ Very little structural overlap. Preserve as-is:
 | Nativefier binary builds | Local / release scripts | Template CI builds examples | Do **not** run Nativefier desktop builds in CI by default (heavy, platform-specific); CI = hygiene + validate + npm audit/license |
 | Template `examples/` | N/A | Large Golden Paths | **Never copy** into this repo |
 | Scorecard / Release Please | N/A | Full FOSS template suite | Phase 2 optional; recommend Dependabot + security + CodeQL first; defer Release Please / pages / scorecard until HUMAN opts in |
-
 ---
 
 ## 5. Recommended stack selection
@@ -169,6 +168,7 @@ Very little structural overlap. Preserve as-is:
   "distribution_tier": "foss",
   "stack": "node"
 }
+
 ```
 
 Rationale:
@@ -194,7 +194,6 @@ Rationale:
 | Secret / token workflows (automerge PAT) | **Medium** | Skip automerge PAT setup unless HUMAN provides; ship workflows that work without secrets. |
 | Tracked logo / future `dist/` | **Low** | Logo OK; ensure `dist/` stays gitignored. |
 | Maintenance-mode scope creep | **Medium** | Alignment must not “revive” feature development or replace Nativefier with a new Electron app. |
-
 ---
 
 ## 7. Prioritized alignment plan (Sequential first)
@@ -215,7 +214,6 @@ Use emoji markers only. Labels: `[AGENT]` `[HUMAN]` `[ADB]` `[AUTO]`.
 | Task | Owner | Isolated scope |
 |------|-------|----------------|
 | *Completed with Sequential bring-up* | — | — |
-
 #### Human & device (after automation)
 
 1. ✅ [HUMAN] Open branch locally; §8 accepted in Cursor Desktop
@@ -243,7 +241,6 @@ Use emoji markers only. Labels: `[AGENT]` `[HUMAN]` `[ADB]` `[AUTO]`.
 | Cursor rules + commands + hooks | AGENT | `.cursor/**` |
 | Human-facing agent docs | AGENT | `docs/START_HERE.md`, `docs/CURSOR_MODES.md`, `docs/FOR_AGENTS.md`, `docs/help/**` |
 | Memory + BUILD_PLAN seed | AGENT | `AGENT_MEMORY.md`, `DECISION_LOG.md`, `KNOWLEDGE_BASE.md`, `BUILD_PLAN.md` |
-
 #### Human & device (after automation)
 
 1. 🔲 [HUMAN] Skim `AGENTS.md` + `BUILD_PLAN.md` for product-fit
@@ -269,7 +266,6 @@ Use emoji markers only. Labels: `[AGENT]` `[HUMAN]` `[ADB]` `[AUTO]`.
 | Security docs | AGENT | `SECURITY.md`, `docs/SECURITY_TRIAGE.md`, `docs/THREAT_MODEL.md`, `docs/PRIVACY.md` |
 | Scripts port | AGENT | `scripts/**` |
 | GitHub workflows + Dependabot | AGENT | `.github/**` |
-
 #### Human & device (after automation)
 
 1. 🔲 [HUMAN] Confirm which optional workflows to enable (Scorecard, Release Please, stale, weekly-health, pages)
@@ -311,7 +307,6 @@ Please confirm or amend before Phase 1+ execution:
 | H9 | CODEOWNERS | `* @edwardlthompson` | ✅ |
 | H10 | Run `init-project.sh`? | **No** — surgical file bring-up only | ✅ |
 | H11 | Compute venue | **This Computer only** — no Cursor Cloud Agents | ✅ confirmed 2026-07-29 |
-
 ---
 
 ## 9. Migration notes (draft for humans)
@@ -349,7 +344,6 @@ After Phase 1–4 land, agents and humans should:
 | Version | `0.15.1` (`.template-version`) |
 | Reviewed | 2026-07-29 (shallow clone + tree listing) |
 | Strategy | Surgical cherry-pick per `docs/UPGRADING_FROM_TEMPLATE.md` areas |
-
 ---
 
 *Phase 0 complete. Section 8 confirmed 2026-07-29. Sprint B–D surgical bring-up executed on This Computer.*

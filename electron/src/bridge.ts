@@ -116,8 +116,14 @@ const preload_init = () => {
   ensureConversationObservers();
 };
 
-ipcRenderer.on("focus-conversation", (event, i) => {
-  focusFunctions[i]();
+ipcRenderer.on("focus-conversation", (_event, i) => {
+  if (typeof i !== "number" || !Number.isInteger(i) || i < 0) {
+    return;
+  }
+  const fn = focusFunctions[i];
+  if (typeof fn === "function") {
+    fn();
+  }
 });
 
 contextBridge.exposeInMainWorld("interop", {
@@ -220,10 +226,9 @@ webFrame.executeJavaScript(`
       console.error(e);
       console.trace();
       try {
-        window.interop.os_notify({
-          title: typeof title === "string" ? title : "Google Messages",
-          body: (options && options.body) || "New message",
-        });
+        // Outer catch may have failed before hide-content ran — never
+        // forward raw page title/body. Main process re-sanitizes.
+        window.interop.os_notify({ title: "", body: "" });
         window.interop.flash_main();
       } catch (fallbackErr) {
         console.error("os_notify fallback failed", fallbackErr);

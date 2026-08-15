@@ -6,6 +6,7 @@ import {
   HIDDEN_NOTIFY_BODY,
   HIDDEN_NOTIFY_TITLE,
   dedupeKey,
+  allowSessionPermission,
   isMessagesGoogleHost,
   parseOsNotifyIpc,
   sanitizePayload,
@@ -95,5 +96,33 @@ describe("isMessagesGoogleHost", () => {
     assert.equal(isMessagesGoogleHost("https://evil.com"), false);
     assert.equal(isMessagesGoogleHost("google.com"), false);
     assert.equal(isMessagesGoogleHost("not a url"), false);
+  });
+});
+
+describe("allowSessionPermission", () => {
+  it("allows notifications and clipboard from Messages", () => {
+    assert.equal(
+      allowSessionPermission(
+        "notifications",
+        "https://messages.google.com/web/"
+      ),
+      true
+    );
+    assert.equal(
+      allowSessionPermission("clipboard-read", "messages.google.com"),
+      true
+    );
+  });
+
+  it("denies unknown permissions and other hosts", () => {
+    assert.equal(
+      allowSessionPermission("geolocation", "https://messages.google.com"),
+      false
+    );
+    assert.equal(
+      allowSessionPermission("notifications", "https://evil.com"),
+      false
+    );
+    assert.equal(allowSessionPermission("notifications", ""), false);
   });
 });

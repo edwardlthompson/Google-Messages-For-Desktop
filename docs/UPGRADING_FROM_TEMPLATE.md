@@ -37,7 +37,7 @@ Read the upstream release notes at `github.com/edwardlthompson/agent-project-boo
 | `LICENSE` | Verify MIT still applies | HUMAN |
 | `examples/` | Reference only unless adopting new stack | HUMAN decision |
 | `TEMPLATE_INDEX.json` | Run validate script after merge | AGENT |
-
+| `branding/` | Product-map `product.json` + assets; **do not** overwrite product `README.md` with `generate-project-readme.py` | AGENT |
 ## Version Compatibility
 
 | Upgrade | Notes |
@@ -45,7 +45,6 @@ Read the upstream release notes at `github.com/edwardlthompson/agent-project-boo
 | 0.1.x → 0.1.y | Safe PATCH; cherry-pick freely |
 | 0.1.x → 0.2.0 | Check CHANGELOG for new files/schema changes |
 | 0.x → 1.0.0 | Full review; init prompt structure may have changed |
-
 ## Decision Points
 
 - `[HUMAN]` Approve which upstream changes to adopt

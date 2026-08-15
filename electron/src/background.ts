@@ -27,7 +27,7 @@ import {
   isOnboardingSampleUrl,
 } from "./helpers/onboardingMode";
 import { registerOsNotifyIpc } from "./helpers/osNotification";
-import { isMessagesGoogleHost } from "./helpers/osNotificationLogic";
+import { allowSessionPermission } from "./helpers/osNotificationLogic";
 import { popupContextMenu } from "./menu/contextMenu";
 import fs from "fs";
 
@@ -145,22 +145,14 @@ if (gotTheLock) {
     process.env.MAIN_WINDOW_ID = mainWindow.id.toString();
 
     const session = mainWindow.webContents.session;
-    session.setPermissionCheckHandler((_wc, permission, requestingOrigin) => {
-      if (permission === "notifications") {
-        return isMessagesGoogleHost(requestingOrigin || "");
-      }
-      // Do not tighten unrelated permissions (media, clipboard, etc.).
-      return true;
+    session.setPermissionCheckHandler((wc, permission, requestingOrigin) => {
+      const origin = requestingOrigin || wc?.getURL?.() || "";
+      return allowSessionPermission(permission, origin);
     });
-    session.setPermissionRequestHandler(
-      (_wc, permission, callback, details) => {
-        if (permission === "notifications") {
-          callback(isMessagesGoogleHost(details?.requestingUrl || ""));
-          return;
-        }
-        callback(true);
-      }
-    );
+    session.setPermissionRequestHandler((wc, permission, callback, details) => {
+      const origin = details?.requestingUrl || wc?.getURL?.() || "";
+      callback(allowSessionPermission(permission, origin));
+    });
 
     setUpdateWindow(mainWindow);
     if (checkForUpdateOnLaunchEnabled.value && !IS_DEV) {

@@ -5,14 +5,32 @@
 ## Project
 
 - **Repo:** `edwardlthompson/Google-Messages-For-Desktop` (fork of `kelyvin/Google-Messages-For-Desktop`)
-- **Product:** Electron desktop app for Google Messages Web (**v1.8.0** shipped); Chromium App Host / Nativefier = legacy
+- **Product:** Electron desktop app for Google Messages Web (**v1.8.1** shipped); Chromium App Host / Nativefier = legacy
 - **Posture:** Active Electron first-run + multi-platform packaging; bootstrap FOSS alignment retained
-- **Template pin:** `agent-project-bootstrap` **0.15.1** (surgical child)
+- **Template pin:** `agent-project-bootstrap` **0.17.0** (surgical child; product semver is 1.8.1)
 - **Stack:** `node` / `foss` — root packaging + `electron/`; no `examples/`
 - **Default branch:** `master`
 - **Lockfile:** root `yarn.lock`; Electron `electron/package-lock.json` (+ `brace-expansion@5.0.8` override)
 - **Compute:** This Computer only — Cloud Agents rejected
 - **Donate:** Venmo `https://venmo.com/code?user_id=1857304970395648420`
+
+## Milestone: /ship v1.8.1 (2026-08-14)
+
+- Electron 41.10.3 + `fast-uri@3.1.5` + `js-yaml@4.3.1`; session permission allowlist; hide-content catch
+- Template pin **0.17.0** branding/codex-review surface committed with the product tag
+- HUMAN residual: sign/notarize + toast/tray device smoke
+
+## Milestone: R-Audit-2026-08-14 (2026-08-14)
+
+- CODE_REVIEW: hide-content catch, session permission allowlist, Electron 41.10.3, `fast-uri@3.1.5`, js-yaml 4.3.0 not in CVE range
+- Node feature-gate now runs `electron` `test:unit` (24 tests); gate scripts skip Windows Store `python3`
+- HUMAN residual: `/push` 0.17.0 alignment + branding; signed rebuild after Electron patch lands on `master`
+
+## Milestone: bootstrap parity 0.17.0 (2026-08-14)
+
+- Agent surface: resolved Critique, `/codex-review` (local opt-in), expanded `/prerelease`, branding kit mapped to GMFD
+- Pin `.template-version` / release-please manifest / TEMPLATE_INDEX → **0.17.0**
+- Product README unchanged; Codex CI workflow remains example-only
 
 ## Milestone: /ship v1.8.0 (2026-07-30)
 

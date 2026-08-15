@@ -6,9 +6,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-if command -v python3 >/dev/null 2>&1; then PY=python3
-elif command -v python >/dev/null 2>&1; then PY=python
-else PY=python3; fi
+# shellcheck source=lib/pick-python.sh
+. "$(dirname "$0")/lib/pick-python.sh"
 
 JSON=false
 STRICT=false
@@ -103,6 +102,7 @@ fail_gate() {
     go-test) SUGGESTED=("run go test in examples/go") ;;
     node-lint) SUGGESTED=("fix lint in examples/node") ;;
     node-test) SUGGESTED=("fix tests in examples/node") ;;
+    electron-unit) SUGGESTED=("fix failing electron unit tests" "run npm --prefix electron run test:unit") ;;
     *) SUGGESTED=("run scripts/feature-autofix.sh" "fix errors in active feature scope") ;;
   esac
   emit_json false 1
@@ -228,6 +228,18 @@ if should_run node && [ -f examples/node/package.json ]; then
   else
     run_in_dir examples/node node-lint npm run lint
     run_in_dir examples/node node-test npm test
+  fi
+fi
+
+if should_run node && [ -f electron/package.json ]; then
+  if ! command -v npm >/dev/null 2>&1; then
+    if [ "$STACK" = "node" ]; then
+      block_env "npm not found"
+    else
+      skip_or_block "Skipping electron unit tests (npm not found)"
+    fi
+  else
+    run_in_dir electron electron-unit npm run test:unit
   fi
 fi
 

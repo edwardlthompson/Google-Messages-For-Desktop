@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" role="img" aria-label="Google Messages for Desktop">
+  <rect width="1280" height="640" fill="#0B57D0"/>
+  <circle cx="280" cy="320" r="140" fill="#1A73E8"/>
+  <path fill="#FFFFFF" d="M210 250h140a40 40 0 0 1 40 40v70a40 40 0 0 1-40 40H300l-50 36v-36h-40a40 40 0 0 1-40-40v-70a40 40 0 0 1 40-40z"/>
+  <text x="480" y="300" font-family="Segoe UI, system-ui, sans-serif" font-size="48" font-weight="700" fill="#FFFFFF">Google Messages for Desktop</text>
+  <text x="480" y="360" font-family="Segoe UI, system-ui, sans-serif" font-size="28" fill="#D2E3FC">Windows · macOS · Linux</text>
+</svg>

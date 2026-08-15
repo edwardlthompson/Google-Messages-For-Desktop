@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.1] - 2026-08-14
+
+### Security
+
+- Session permissions on `persist:main` are allowlisted (notifications, clipboard, fullscreen, media) for `messages.google.com` only
+- Notification outer-catch fallback no longer forwards raw page title/body (hide-content honored in main)
+- Electron **41.10.3** (GHSA-9f4c-93c8-jc8g); pin transitive `fast-uri@3.1.5` and `js-yaml@4.3.1`
+
+### Changed
+
+- Agent/process surface aligned to agent-project-bootstrap **v0.17.0** (resolved Critique, `/codex-review`, expanded `/prerelease`, product-mapped `branding/` kit)
+- Node feature-gate runs `electron` `test:unit`
+- Gate scripts pick a real Python via `scripts/lib/pick-python.sh` (skip Windows Store `python3`)
+
 ## [1.8.0] - 2026-07-30
 
 ### Added
@@ -88,7 +102,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - Allowlist `ensureBrowser` / CDP navigate to `https://messages.google.com/` only
-
 
 ## [1.4.2] - prior
 

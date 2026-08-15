@@ -1,5 +1,5 @@
 {
-  "template_version": "0.15.1",
+  "template_version": "0.17.0",
   "entry_points": {
     "bootstrap": "docs/START_HERE.md",
     "reference": "docs/FOR_AGENTS.md",
@@ -39,7 +39,7 @@
     },
     {
       "path": "docs/BATCH_COMMANDS.md",
-      "purpose": "Agent registry for 26 batch slash commands and super chains",
+      "purpose": "Agent registry for 27 batch slash commands and super chains",
       "read_when": "prompt_needed",
       "update_when": "milestone_boundary",
       "owner": "maintainer"
@@ -403,7 +403,7 @@
     },
     {
       "path": ".github/workflows/dependency-review.yml",
-      "purpose": "PR dependency review \u2014 fail on new High/Critical vulnerabilities",
+      "purpose": "PR dependency review — fail on new High/Critical vulnerabilities",
       "read_when": "contributing",
       "update_when": "milestone_boundary",
       "owner": "maintainer"
@@ -1163,6 +1163,83 @@
       "read_when": "release",
       "update_when": "milestone_boundary",
       "owner": "maintainer"
+    },
+    {
+      "path": "docs/CODEX_REVIEW.md",
+      "purpose": "Optional Codex third-party review (local FOSS; no live CI)",
+      "read_when": "audit",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
+    },
+    {
+      "path": ".cursor/commands/codex-review.md",
+      "purpose": "Slash command for optional Codex review",
+      "read_when": "prompt_needed",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
+    },
+    {
+      "path": ".github/workflow-examples/codex-review.yml",
+      "purpose": "Example Codex CI workflow (not enabled live)",
+      "read_when": "cursor_setup",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
+    },
+    {
+      "path": ".github/codex/prompts/review.md",
+      "purpose": "Codex review prompt",
+      "read_when": "audit",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
+    },
+    {
+      "path": ".github/codex/schemas/findings.json",
+      "purpose": "Codex findings JSON schema",
+      "read_when": "audit",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
+    },
+    {
+      "path": "scripts/apply-suggested-gate-fixes.sh",
+      "purpose": "Apply allowlisted mechanical gate fixes from feature-gate JSON",
+      "read_when": "milestone_boundary",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
+    },
+    {
+      "path": "scripts/prerelease-autofix.sh",
+      "purpose": "Mechanical autofix + one watch-agent-gates pass for /prerelease",
+      "read_when": "release",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
+    },
+    {
+      "path": "scripts/run-codex-review.sh",
+      "purpose": "Optional local Codex review wrapper (exit 3 if no key/CLI)",
+      "read_when": "audit",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
+    },
+    {
+      "path": "scripts/generate-project-readme.py",
+      "purpose": "Pitch README generator; preview only in this child (do not overwrite product README)",
+      "read_when": "docs",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
+    },
+    {
+      "path": "branding/BRANDING.md",
+      "purpose": "Product branding kit; root README stays canonical",
+      "read_when": "docs",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
+    },
+    {
+      "path": "branding/product.json",
+      "purpose": "Google Messages for Desktop branding metadata",
+      "read_when": "docs",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
     }
   ],
   "modules": {
@@ -1172,7 +1249,7 @@
     }
   },
   "roadmap": {
-    "active": "BUILD_PLAN.md \u2014 maintenance + human open items",
+    "active": "BUILD_PLAN.md — maintenance + human open items",
     "completed_archive": "COMPLETED_TASKS.md",
     "batch_commands": [
       ".cursor/commands/audit.md",
@@ -1182,6 +1259,7 @@
       ".cursor/commands/dependabot.md",
       ".cursor/commands/push.md",
       ".cursor/commands/prerelease.md",
+      ".cursor/commands/codex-review.md",
       ".cursor/commands/regress.md",
       ".cursor/commands/feature.md",
       ".cursor/commands/fix.md",

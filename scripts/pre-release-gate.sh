@@ -6,9 +6,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-if command -v python3 >/dev/null 2>&1; then PY=python3
-elif command -v python >/dev/null 2>&1; then PY=python
-else PY=python3; fi
+# shellcheck source=lib/pick-python.sh
+. "$(dirname "$0")/lib/pick-python.sh"
 
 ERRORS=0
 VERSION=""
@@ -44,7 +43,7 @@ else
   VERSION="$(tr -d '[:space:]' < .template-version)"
   echo "OK   .template-version = ${VERSION}"
   if [ -f .release-please-manifest.json ]; then
-    MANIFEST_VERSION="$(python3 - <<'PY'
+    MANIFEST_VERSION="$($PY - <<'PY'
 import json
 with open(".release-please-manifest.json", encoding="utf-8") as f:
     print(json.load(f).get(".", "").strip())
@@ -75,7 +74,7 @@ fi
 echo ""
 echo "REMINDER: Before tagging, trigger the Release workflow via workflow_dispatch:"
 echo "  GitHub -> Actions -> Release -> Run workflow"
-echo "  (.github/workflows/release.yml)"
+echo "  (.github/workflows/release-desktop.yml)"
 if [ -n "$VERSION" ]; then
   echo "  Confirm CHANGELOG.md [${VERSION}] section and tag match .template-version"
 fi

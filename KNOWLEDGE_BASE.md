@@ -2,10 +2,14 @@
 
 ## KB-001 — Product shape
 
-**Shipping:** Electron app under `electron/` (Windows / macOS / Linux) — OrangeDrangon-derived shell; `sms:`/`tel:`/`im:` compose.  
+**Shipping:** Electron app under `electron/` (Windows / macOS / Linux) — OrangeDrangon-derived shell; `sms:`/`tel:`/`im:` compose.
 **Legacy:** Chromium App Host (`host/windows`) and Nativefier scripts — rollback only.
 
 **Fork provenance:** GitHub repo is `edwardlthompson/Google-Messages-For-Desktop`. Upstream product origin remains `kelyvin/Google-Messages-For-Desktop`.
+
+## KB-013 — Template pin 0.17.0 (2026-08-14)
+
+Agent/process surface matches `agent-project-bootstrap` **v0.17.0**. Product semver is **1.8.1**. Codex review is local/opt-in; do not enable the example workflow as live CI. Branding kit is metadata + preview only — never overwrite product `README.md`.
 
 ## KB-002 — Yarn lockfile + npm scripts
 
@@ -22,6 +26,14 @@ Template Golden Paths under `examples/**` are intentionally absent. Node module 
 ## KB-005 — Maintenance posture
 
 Prefer Electron packaging and protocol/onboarding work over rewriting the Messages SPA UI.
+
+## KB-014 — R-Audit-2026-08-14 (2026-08-14)
+
+- Session perms: allowlist only (`notifications`, clipboard, fullscreen, `media`/`mediaKeySystem`) for `messages.google.com`
+- Outer Notification catch must send empty title/body (main re-sanitizes); never raw `options.body`
+- Electron pin **41.10.3**; `overrides.fast-uri: 3.1.5`; js-yaml 4.3.0 is outside CVE-2026-59870
+- `feature-gate.sh --stack node` runs `npm --prefix electron run test:unit`
+- Git Bash: skip WindowsApps `python3` via `scripts/lib/pick-python.sh` or gates hang
 
 ## KB-010 — Electron brace-expansion override (2026-07-29)
 

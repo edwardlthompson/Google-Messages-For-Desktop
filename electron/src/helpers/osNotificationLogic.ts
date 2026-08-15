@@ -90,3 +90,27 @@ export function isMessagesGoogleHost(urlOrHost: string): boolean {
     return false;
   }
 }
+
+/** Permissions Messages web may request on persist:main. Unknown names denied. */
+export const ALLOWED_SESSION_PERMISSIONS = new Set([
+  "notifications",
+  "clipboard-read",
+  "clipboard-sanitized-write",
+  "fullscreen",
+  "media",
+  "mediaKeySystem",
+]);
+
+/** Grant only allowlisted perms from messages.google.com (deny empty/unknown). */
+export function allowSessionPermission(
+  permission: string,
+  requestingOriginOrUrl: string
+): boolean {
+  if (
+    typeof permission !== "string" ||
+    !ALLOWED_SESSION_PERMISSIONS.has(permission)
+  ) {
+    return false;
+  }
+  return isMessagesGoogleHost(requestingOriginOrUrl || "");
+}

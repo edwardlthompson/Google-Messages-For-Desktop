@@ -1,0 +1,40 @@
+/* Product brand colors for Google Messages for Desktop.
+   Source: branding/product.json badge + Messages-blue tray iconography.
+   Root README is canonical — this sheet is for docs/marketing aliases. */
+
+:root {
+  --brand-name: "GMFD";
+  --brand-theme-light: #F8FAFF;
+  --brand-theme-dark: #0F172A;
+  --brand-primary: #1A73E8;
+  --brand-primary-dark: #8AB4F8;
+  --brand-on-primary: #FFFFFF;
+  --brand-on-primary-dark: #0F172A;
+  --brand-secondary: #0B57D0;
+  --brand-secondary-dark: #AECBFA;
+  --brand-on-secondary: #FFFFFF;
+  --brand-on-secondary-dark: #0F172A;
+  --brand-background: #FFFFFF;
+  --brand-background-dark: #0B1220;
+  --brand-on-background: #0F172A;
+  --brand-on-background-dark: #E8EEF9;
+  --brand-surface: #F8FAFF;
+  --brand-surface-dark: #0F172A;
+  --brand-on-surface: #0F172A;
+  --brand-on-surface-dark: #E8EEF9;
+  --brand-accent: #1A73E8;
+  --brand-accent-secondary: #0B57D0;
+  --brand-canvas: #FFFFFF;
+  --brand-panel: #F8FAFF;
+  --brand-ink: #0F172A;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --brand-accent: #8AB4F8;
+    --brand-accent-secondary: #AECBFA;
+    --brand-canvas: #0B1220;
+    --brand-panel: #0F172A;
+    --brand-ink: #E8EEF9;
+  }
+}
