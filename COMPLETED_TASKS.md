@@ -1,5 +1,12 @@
 # Completed Tasks
 
+## Ship v1.8.1 — security + template 0.17.0 (2026-08-14)
+
+- ✅ [AGENT] Prepare CHANGELOG/RELEASE_NOTES; bump to 1.8.1; push `master`; tag `v1.8.1`
+- ✅ [AGENT] Pin `brace-expansion@5.0.9` after Trivy HIGH; retag onto `6adf8c6`
+- ✅ [AUTO] CI + Security Scan + CodeQL; `release-desktop.yml` unsigned assets
+- ✅ [HUMAN] F-011 Commit/push 0.17.0 alignment + branding (done in this ship)
+
 ## R-Audit-2026-08-14 (2026-08-14)
 
 - ✅ [AGENT] F-004 Honor hide-content in Notification outer-catch fallback (`electron/src/bridge.ts`)

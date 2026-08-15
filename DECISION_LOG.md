@@ -1,5 +1,15 @@
 # Decision Log
 
+## 2026-08-14 — /ship v1.8.1
+
+- **Status:** Accepted
+- **Context:** Audit + template 0.17.0 + Dependabot High needed a product patch.
+- **Decisions:**
+  - Product **1.8.1** (template pin stays **0.17.0**). Manual tag; no Release Please PR.
+  - Electron **41.10.3**, `fast-uri@3.1.5`, `js-yaml@4.3.1`, then `brace-expansion@5.0.9` after Trivy failed on 5.0.8.
+  - Retag `v1.8.1` onto `6adf8c6` in the same ship (tag was minutes old).
+- **Consequences:** Unsigned CI artifacts on GitHub Release. HUMAN: sign/notarize + device smoke. Close win-unpacked app before local `package:win`.
+
 ## 2026-08-14 — R-Audit Dependabot High 71–74
 
 - **Status:** Accepted

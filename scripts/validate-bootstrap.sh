@@ -105,7 +105,9 @@ fi
 run_check bash scripts/sync-exemplar-config.sh
 
 # Independent read-only checks — use local CPU (BOOTSTRAP_CHECK_JOBS overrides)
-if ! python3 scripts/lib/run_checks_parallel.py \
+# shellcheck source=lib/pick-python.sh
+. "$(dirname "$0")/lib/pick-python.sh"
+if ! "$PY" scripts/lib/run_checks_parallel.py \
   check-file-encoding.sh \
   check-design-cohesion.sh \
   check-markdown-tables.sh \

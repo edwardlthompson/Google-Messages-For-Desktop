@@ -27,7 +27,9 @@ while [ $# -gt 0 ]; do
       ;;
   esac
 done
-python3 "$ROOT/scripts/lib/parallel_scope_cli.py" \
+# shellcheck source=lib/pick-python.sh
+. "$ROOT/scripts/lib/pick-python.sh"
+"$PY" "$ROOT/scripts/lib/parallel_scope_cli.py" \
   --build-plan "$BUILD_PLAN" \
   check-build-plan \
   --min-agents "$MIN_AGENTS"

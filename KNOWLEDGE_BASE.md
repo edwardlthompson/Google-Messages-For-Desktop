@@ -74,6 +74,13 @@ Historical Electron/Windows issue: `app.setAppUserModelId(process.execPath)` ins
 - Unread false→true also sends a generic OS toast (no DOM snippets) through the same dedupe path.
 - Installed NSIS builds with a Start Menu shortcut remain the most reliable Action Center target; `npm run dev` / portable may still be flaky for toasts.
 
+### Regress — /ship v1.8.1 (2026-08-14)
+
+- Pre-release gate **PASS** on `6adf8c6`; CI / Security Scan / CodeQL green
+- First Security Scan on `4efa7ff` failed Trivy HIGH `brace-expansion@5.0.8` (GHSA-rgw5-rvv9-x895); pin **5.0.9** and retag
+- GitHub Release **v1.8.1** has **11** unsigned desktop assets (no SBOM — expected); Pages N/A
+- Close `electron/dist/win-unpacked/GoogleMessages.exe` before `package:win` or electron-builder hits EBUSY
+
 ### Regress — /ship v1.8.0 (2026-07-30)
 
 - Pre-release gate + upgrade simulation **PASS**; CI / Security Scan / CodeQL green on `f298bf5`

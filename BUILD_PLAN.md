@@ -19,7 +19,7 @@
 | ❌     | Blocked | Replace 🔲 when blocked; add brief reason after the description       |
 **Task format:** `🔲 [OWNER] Description` · done: `✅ [OWNER] Description` · blocked: `❌ [OWNER] Description — reason`
 
-> **Ship v1.8.1** in progress — Electron 41.10.3 + 0.17.0 alignment. Residual HUMAN: sign/smoke.
+> **Ship v1.8.1** archived in COMPLETED_TASKS.md @ `6adf8c6`. Residual HUMAN: sign/smoke.
 
 > **R-Audit-2026-08-14** archived in COMPLETED_TASKS.md (AGENT/AUTO done; HUMAN residual).
 
@@ -43,30 +43,16 @@
 | Ship v1.7.1 | 2026-07-30 | Sign-in auto-complete + package verify + NativeImage |
 | Ship v1.8.0 | 2026-07-30 | Windows OS notify + tray unread |
 | R-Audit-2026-08-14 | 2026-08-14 | AGENT/AUTO done; HUMAN residual |
+| Ship v1.8.1 | 2026-08-14 | Electron 41.10.3 + 0.17.0; unsigned CI artifacts |
 ---
 
-## R-Audit-2026-08-14 residual HUMAN
+## Post-ship residual HUMAN (v1.8.1)
 
 ### Sequential
 
-1. 🔲 [HUMAN] F-001 Signed rebuild after Electron 41.10.3 lands on `master`; confirm Dependabot 72/73 clear
-2. 🔲 [HUMAN] F-011 Commit/push 0.17.0 alignment + branding so CI `validate-bootstrap` stays green
-
-### Parallel
-
-| Task | Owner | Isolated scope |
-|------|-------|----------------|
-| *None* | — | — |
----
-
-## Post-ship residual HUMAN (v1.8.0)
-
-### Sequential
-
-1. 🔲 [HUMAN] F-010 Sign/notarize desktop artifacts (replace unsigned Release assets for production)
-2. 🔲 [HUMAN] Confirm CodeQL alert #1 cleared on `master` after host-parse fix
-3. 🔲 [HUMAN] Device smoke: first-run Defaults → Sign in → Verify; `tel:`/`sms:` compose
-4. 🔲 [HUMAN] Smoke: Windows toast + tray unread red-dot (unfocused SMS; Hide Notification Content; notification area near clock)
+1. 🔲 [HUMAN] Sign/notarize desktop artifacts (replace unsigned Release assets for production)
+2. 🔲 [HUMAN] Device smoke: first-run Defaults → Sign in → Verify; `tel:`/`sms:` compose
+3. 🔲 [HUMAN] Smoke: Windows toast + tray unread red-dot (unfocused SMS; Hide Notification Content; notification area near clock)
 
 ### Parallel
 
@@ -75,6 +61,7 @@
 | Task | Owner | Isolated scope |
 |------|-------|----------------|
 | *None — see exception* | — | — |
+
 ### Human & device
 
 1. 🔲 [HUMAN] Optional local `npm run release:windows` for signed Windows builds
