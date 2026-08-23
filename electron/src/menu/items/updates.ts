@@ -1,12 +1,9 @@
 import { MenuItemConstructorOptions } from "electron";
-import { checkForUpdate } from "../../helpers/autoUpdate";
-import { IS_DEV } from "../../helpers/constants";
+import { checkForProductUpdate } from "../../helpers/productUpdateUi";
 
 export const checkForUpdatesMenuItem: MenuItemConstructorOptions = {
   label: "Check for Updates…",
   click: () => {
-    if (!IS_DEV) {
-      checkForUpdate(true);
-    }
+    void checkForProductUpdate(true);
   },
 };

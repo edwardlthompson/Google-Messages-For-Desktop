@@ -1,6 +1,6 @@
 import { MenuItemConstructorOptions, shell } from "electron";
 import { IS_MAC, IS_WINDOWS } from "../helpers/constants";
-import { DONATE_VENMO_URL } from "../helpers/onboarding";
+import { VENMO_DONATE_URL } from "../helpers/donate";
 import { protocolTestLinksPath } from "../helpers/protocols";
 import { aboutMenuItem } from "./items/about";
 import { checkForUpdatesMenuItem } from "./items/updates";
@@ -15,9 +15,9 @@ const submenu: MenuItemConstructorOptions[] = [
     },
   },
   {
-    label: "Donate (Venmo)…",
+    label: "Donate via Venmo",
     click: async (): Promise<void> => {
-      await shell.openExternal(DONATE_VENMO_URL);
+      await shell.openExternal(VENMO_DONATE_URL);
     },
   },
   {

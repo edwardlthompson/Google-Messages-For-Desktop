@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Quiet **Donate via Venmo** in Help, About, and the macOS app menu (no launch nag)
+- Once-per-version optional donate note after an update (“Development is still going”)
+- Daily GitHub installer check (filename versions, not git tags) with **Install** / **Later**
+
+### Changed
+
+- Update prompts open the matching GitHub asset URL instead of electron-updater auto-download
+
 ## [1.8.1] - 2026-08-14
 
 ### Security

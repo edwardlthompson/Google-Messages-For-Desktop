@@ -11,10 +11,10 @@ import {
   setAssociationOnlyMode,
 } from "./onboardingMode";
 import { APP_REG_NAME, PROTOCOL_SCHEMES } from "./protocols";
+import { DONATE_VENMO_URL } from "./donate";
 import { settings } from "./settings";
 
-export const DONATE_VENMO_URL =
-  "https://venmo.com/code?user_id=1857304970395648420";
+export { DONATE_VENMO_URL };
 
 let onboardingWindow: BrowserWindow | null = null;
 let signInWindow: BrowserWindow | null = null;

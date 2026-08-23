@@ -24,5 +24,5 @@ Agent/process infrastructure is aligned with [`agent-project-bootstrap`](https:/
 ## Product notes
 
 - First-run: Defaults → Sign in → optional Verify
-- Donate: Venmo link in README / Help / About
+- Donate: quiet **Donate via Venmo** in Help / About (no launch nag)
 - Shipping: electron-builder; CI workflow `release-desktop.yml`

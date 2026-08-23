@@ -1,0 +1,116 @@
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import os from "node:os";
+import path from "node:path";
+import fs from "node:fs";
+import { MS_DAY } from "./productUpdate.ts";
+import { decideForcedUpdateCheck, decideLaunchPrompt } from "./runAppUpdates.ts";
+import { createFilePrefsStore } from "./updatePrefs.ts";
+
+function tempStore() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "gmfd-update-prefs-"));
+  return { dir, prefs: createFilePrefsStore(dir) };
+}
+
+const newerRelease = async () => ({
+  htmlUrl: "https://example.com/releases",
+  assets: [
+    {
+      name: "Google.Messages-v1.8.2-win-x64.exe",
+      url: "https://example.com/setup.exe",
+    },
+  ],
+});
+
+describe("decideLaunchPrompt", () => {
+  it("records the first-run version and does not donate", async () => {
+    const { prefs } = tempStore();
+    const prompt = await decideLaunchPrompt(
+      "1.8.1",
+      prefs,
+      0,
+      async () => null
+    );
+    assert.equal(prompt, null);
+    assert.equal(prefs.load().lastSeenVersion, "1.8.1");
+  });
+
+  it("nudges donate only after a version change", async () => {
+    const { prefs } = tempStore();
+    prefs.markVersionSeen("1.8.1");
+    const donate = await decideLaunchPrompt(
+      "1.8.2",
+      prefs,
+      0,
+      newerRelease
+    );
+    assert.deepEqual(donate, { kind: "donate" });
+    assert.equal(prefs.load().lastSeenVersion, "1.8.1");
+
+    prefs.markVersionSeen("1.8.2");
+    const again = await decideLaunchPrompt("1.8.2", prefs, 0, newerRelease);
+    assert.notEqual(again?.kind, "donate");
+  });
+
+  it("prompts once for a newer installer and honors Later", async () => {
+    const { prefs } = tempStore();
+    prefs.markVersionSeen("1.8.1");
+    const prompt = await decideLaunchPrompt(
+      "1.8.1",
+      prefs,
+      MS_DAY,
+      newerRelease
+    );
+    assert.deepEqual(prompt, {
+      kind: "update",
+      version: "1.8.2",
+      url: "https://example.com/setup.exe",
+    });
+
+    prefs.markUpdateChecked(MS_DAY, "1.8.2");
+    const dismissed = await decideLaunchPrompt(
+      "1.8.1",
+      prefs,
+      MS_DAY * 3,
+      newerRelease
+    );
+    assert.equal(dismissed, null);
+  });
+
+  it("stays silent inside the daily interval", async () => {
+    const { prefs } = tempStore();
+    prefs.markVersionSeen("1.8.1");
+    prefs.markUpdateChecked(0);
+    const prompt = await decideLaunchPrompt(
+      "1.8.1",
+      prefs,
+      MS_DAY - 1,
+      newerRelease
+    );
+    assert.equal(prompt, null);
+  });
+});
+
+describe("decideForcedUpdateCheck", () => {
+  it("stays silent when the fetch fails", async () => {
+    const { prefs } = tempStore();
+    const result = await decideForcedUpdateCheck(
+      "1.8.1",
+      prefs,
+      0,
+      async () => null
+    );
+    assert.equal(result.kind, "failed");
+  });
+
+  it("reports current when the installer is not newer", async () => {
+    const { prefs } = tempStore();
+    const result = await decideForcedUpdateCheck(
+      "1.8.2",
+      prefs,
+      0,
+      newerRelease
+    );
+    assert.equal(result.kind, "current");
+  });
+});

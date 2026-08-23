@@ -10,8 +10,12 @@ import {
 import { BrowserWindow } from "electron/main";
 import path from "path";
 import process from "process";
-import { checkForUpdate, setUpdateWindow } from "./helpers/autoUpdate";
-import { IS_DEV, IS_MAC, RESOURCES_PATH } from "./helpers/constants";
+import {
+  initProductUpdatePrefs,
+  presentLaunchPrompts,
+  setProductUpdateWindow,
+} from "./helpers/productUpdateUi";
+import { IS_MAC, RESOURCES_PATH } from "./helpers/constants";
 import { MenuManager } from "./helpers/menuManager";
 import { setSettingsFlushEnabled, settings } from "./helpers/settings";
 import { Conversation, TrayManager } from "./helpers/trayManager";
@@ -29,6 +33,7 @@ import {
 import { registerOsNotifyIpc } from "./helpers/osNotification";
 import { allowSessionPermission } from "./helpers/osNotificationLogic";
 import { popupContextMenu } from "./menu/contextMenu";
+import { bindPreferredDisplayMode } from "./helpers/bindDisplayRefresh";
 import fs from "fs";
 
 const {
@@ -36,7 +41,6 @@ const {
   trayEnabled,
   savedWindowSize,
   savedWindowPosition,
-  checkForUpdateOnLaunchEnabled,
   taskbarFlashEnabled,
   spellCheckEnabled,
 } = settings;
@@ -143,6 +147,7 @@ if (gotTheLock) {
     });
 
     process.env.MAIN_WINDOW_ID = mainWindow.id.toString();
+    bindPreferredDisplayMode(mainWindow);
 
     const session = mainWindow.webContents.session;
     session.setPermissionCheckHandler((wc, permission, requestingOrigin) => {
@@ -154,10 +159,9 @@ if (gotTheLock) {
       callback(allowSessionPermission(permission, origin));
     });
 
-    setUpdateWindow(mainWindow);
-    if (checkForUpdateOnLaunchEnabled.value && !IS_DEV) {
-      checkForUpdate(false);
-    }
+    initProductUpdatePrefs(app.getPath("userData"));
+    setProductUpdateWindow(mainWindow);
+    void presentLaunchPrompts();
 
     const blockingOnboarding = maybeShowOnboarding(mainWindow);
     if (

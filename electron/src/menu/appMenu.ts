@@ -1,4 +1,5 @@
-import { app, MenuItemConstructorOptions } from "electron";
+import { app, MenuItemConstructorOptions, shell } from "electron";
+import { VENMO_DONATE_URL } from "../helpers/donate";
 import { aboutMenuItem } from "./items/about";
 import { separator } from "./items/separator";
 import { checkForUpdatesMenuItem } from "./items/updates";
@@ -9,6 +10,12 @@ export const appMenuTemplate: MenuItemConstructorOptions = {
   label: "Google Messages",
   submenu: [
     aboutMenuItem,
+    {
+      label: "Donate via Venmo",
+      click: async (): Promise<void> => {
+        await shell.openExternal(VENMO_DONATE_URL);
+      },
+    },
     checkForUpdatesMenuItem,
     separator,
     {

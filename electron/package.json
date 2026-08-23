@@ -28,7 +28,7 @@
     "package:mac": "npm run build && electron-builder --config electron-builder.config.js --mac --publish never",
     "package:linux": "npm run build && electron-builder --config electron-builder.config.js --linux --publish never",
     "verify:win-unpacked": "node scripts/verify-win-unpacked.mjs",
-    "test:unit": "node --experimental-strip-types --test src/helpers/osNotificationLogic.test.ts src/helpers/protocolParse.test.ts src/preload/unreadDetect.test.ts"
+    "test:unit": "node --experimental-strip-types --test src/helpers/osNotificationLogic.test.ts src/helpers/protocolParse.test.ts src/helpers/displayRefresh.test.ts src/helpers/productUpdate.test.ts src/helpers/githubRelease.test.ts src/helpers/updatePrefs.test.ts src/helpers/runAppUpdates.test.ts src/preload/unreadDetect.test.ts src/preload/highRefreshScroll.test.ts"
   },
   "dependencies": {
     "about-window": "1.15.2",

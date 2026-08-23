@@ -15,7 +15,7 @@ A dedicated desktop app for [Google Messages for web](https://messages.google.co
 ## Support / Donate
 
 Support development on [Venmo](https://venmo.com/code?user_id=1857304970395648420).
-In the app: **Help → Donate (Venmo)…** (also linked from About).
+In the app: **Help → Donate via Venmo** (also linked from About).
 
 ## Credits
 

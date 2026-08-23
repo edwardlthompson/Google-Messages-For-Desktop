@@ -18,7 +18,6 @@ const {
   trayEnabled,
   startInTrayEnabled,
   hideNotificationContentEnabled,
-  checkForUpdateOnLaunchEnabled,
   monochromeIconEnabled,
   showIconsInRecentConversationTrayEnabled,
   trayIconRedDotEnabled,
@@ -132,14 +131,6 @@ export const settingsMenu: MenuItemConstructorOptions = {
         ? "Open Windows Default Apps Settings"
         : "Open OS Default Apps Settings",
       click: (): void => openOsDefaultAppsSettings(),
-    },
-    separator,
-    {
-      id: "checkForUpdateOnLaunchEnabledMenuItem",
-      label: "Check for Update on Launch",
-      type: "checkbox",
-      checked: checkForUpdateOnLaunchEnabled.value,
-      click: (item) => checkForUpdateOnLaunchEnabled.next(item.checked),
     },
   ],
 };

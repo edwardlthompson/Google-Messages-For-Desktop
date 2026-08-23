@@ -11,7 +11,7 @@ const disclaimerText =
 const creditText =
   "<br><br>Electron shell based on <a href=\"https://github.com/OrangeDrangon/android-messages-desktop\">OrangeDrangon/android-messages-desktop</a> (MIT).<br>This app adds <code>sms:</code>/<code>tel:</code>/<code>smsto:</code>/<code>callto:</code>/<code>im:</code> protocol handlers that start a new text.";
 const donateText =
-  '<br><br>Support development: <a href="https://venmo.com/code?user_id=1857304970395648420">Donate on Venmo</a>';
+  '<br><br>Support development: <a href="https://venmo.com/code?user_id=1857304970395648420">Donate via Venmo</a>';
 const licenseText = `<br><br>${productName} is released under the MIT License.`;
 
 let languageCode = "";
