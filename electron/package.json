@@ -1,7 +1,7 @@
 {
   "name": "google-messages-for-desktop",
   "description": "Google Messages for web as a desktop app (Electron shell from OrangeDrangon; sms/tel protocol compose)",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "author": {
     "name": "edwardlthompson",
     "email": "edwardlthompson@users.noreply.github.com"
