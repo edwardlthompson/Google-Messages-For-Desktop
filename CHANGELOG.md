@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update prompts open the matching GitHub asset URL instead of electron-updater auto-download
 
+### Fixed
+
+- Release packaging includes display-refresh helpers required by the main process webpack build
+
 ## [1.8.1] - 2026-08-14
 
 ### Security
