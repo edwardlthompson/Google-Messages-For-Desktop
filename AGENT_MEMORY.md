@@ -5,14 +5,21 @@
 ## Project
 
 - **Repo:** `edwardlthompson/Google-Messages-For-Desktop` (fork of `kelyvin/Google-Messages-For-Desktop`)
-- **Product:** Electron desktop app for Google Messages Web (**v1.8.1** shipped); Chromium App Host / Nativefier = legacy
+- **Product:** Electron desktop app for Google Messages Web (**v1.9.0** shipped); Chromium App Host / Nativefier = legacy
 - **Posture:** Active Electron first-run + multi-platform packaging; bootstrap FOSS alignment retained
-- **Template pin:** `agent-project-bootstrap` **0.17.0** (surgical child; product semver is 1.8.1)
+- **Template pin:** `agent-project-bootstrap` **0.17.0** on the v1.9.0 tag (local tree still has uncommitted 0.21.0 alignment)
 - **Stack:** `node` / `foss` — root packaging + `electron/`; no `examples/`
 - **Default branch:** `master`
 - **Lockfile:** root `yarn.lock`; Electron `electron/package-lock.json` (+ `brace-expansion@5.0.8` override)
 - **Compute:** This Computer only — Cloud Agents rejected
 - **Donate:** Venmo `https://venmo.com/code?user_id=1857304970395648420`
+
+## Milestone: /ship v1.9.0 (2026-08-22)
+
+- Quiet Venmo donate + once-per-version ethical note + daily GitHub installer filename checks
+- Tagged **v1.9.0** @ `73290d1` (first tag missed display-refresh helpers; retagged same ship)
+- Unsigned desktop artifacts on GitHub Release; HUMAN residual: sign/notarize + donate/update device smoke
+- Hard `pre-release-gate.sh` still fails child residuals (About slice / Scorecard / classic branch protection) — use `feature-gate --stack node`
 
 ## Milestone: /ship v1.8.1 (2026-08-14)
 

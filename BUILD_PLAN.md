@@ -19,6 +19,8 @@
 | ❌     | Blocked | Replace 🔲 when blocked; add brief reason after the description       |
 **Task format:** `🔲 [OWNER] Description` · done: `✅ [OWNER] Description` · blocked: `❌ [OWNER] Description — reason`
 
+> **Ship v1.9.0** tagged @ `73290d1`. Residual HUMAN: sign/smoke donate+update.
+
 > **Ship v1.8.1** archived in COMPLETED_TASKS.md @ `6adf8c6`. Residual HUMAN: sign/smoke.
 
 > **R-Audit-2026-08-14** archived in COMPLETED_TASKS.md (AGENT/AUTO done; HUMAN residual).
@@ -44,15 +46,17 @@
 | Ship v1.8.0 | 2026-07-30 | Windows OS notify + tray unread |
 | R-Audit-2026-08-14 | 2026-08-14 | AGENT/AUTO done; HUMAN residual |
 | Ship v1.8.1 | 2026-08-14 | Electron 41.10.3 + 0.17.0; unsigned CI artifacts |
+| Ship v1.9.0 | 2026-08-22 | Donate + GitHub installer checks; unsigned CI artifacts |
 ---
 
-## Post-ship residual HUMAN (v1.8.1)
+## Post-ship residual HUMAN (v1.9.0)
 
 ### Sequential
 
 1. 🔲 [HUMAN] Sign/notarize desktop artifacts (replace unsigned Release assets for production)
 2. 🔲 [HUMAN] Device smoke: first-run Defaults → Sign in → Verify; `tel:`/`sms:` compose
 3. 🔲 [HUMAN] Smoke: Windows toast + tray unread red-dot (unfocused SMS; Hide Notification Content; notification area near clock)
+4. 🔲 [HUMAN] Smoke v1.9.0: first launch has no donate popup; after a version change the ethical note appears once; Help → Donate via Venmo; Check for Updates uses GitHub installer assets
 
 ### Parallel
 

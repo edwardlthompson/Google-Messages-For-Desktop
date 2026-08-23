@@ -74,6 +74,14 @@ Historical Electron/Windows issue: `app.setAppUserModelId(process.execPath)` ins
 - Unread false→true also sends a generic OS toast (no DOM snippets) through the same dedupe path.
 - Installed NSIS builds with a Start Menu shortcut remain the most reliable Action Center target; `npm run dev` / portable may still be flaky for toasts.
 
+### Regress — /ship v1.9.0 (2026-08-22)
+
+- Child gates: `feature-gate --stack node` PASS; license PASS; Dependabot Critical/High = 0
+- Hard `pre-release-gate.sh` FAIL (expected): About slice needs `examples/web`; no Scorecard workflow; classic protection 404 on `master` (KB-009)
+- First `v1.9.0` tag failed `release-desktop` webpack (`Can't resolve './helpers/bindDisplayRefresh'`). Include every file `background.ts` imports before tagging.
+- Retagged **v1.9.0** @ `73290d1`; Release desktop **PASS**; **11** unsigned desktop assets (no SBOM — expected); Pages N/A
+- No live Release Please workflow — product tags stay manual
+
 ### Regress — /ship v1.8.1 (2026-08-14)
 
 - Pre-release gate **PASS** on `6adf8c6`; CI / Security Scan / CodeQL green

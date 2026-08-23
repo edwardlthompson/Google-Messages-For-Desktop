@@ -1,5 +1,12 @@
 # Completed Tasks
 
+## Ship v1.9.0 — donate + GitHub installer checks (2026-08-22)
+
+- ✅ [AGENT] Continuum-style quiet Venmo donate, once-per-version note, daily filename update check
+- ✅ [AGENT] Prepare CHANGELOG/RELEASE_NOTES; bump to 1.9.0; push `master`; tag `v1.9.0`
+- ✅ [AGENT] Include display-refresh helpers; retag after first `release-desktop` webpack miss
+- ✅ [AUTO] CI + Security Scan + CodeQL; `release-desktop.yml` unsigned assets
+
 ## Ship v1.8.1 — security + template 0.17.0 (2026-08-14)
 
 - ✅ [AGENT] Prepare CHANGELOG/RELEASE_NOTES; bump to 1.8.1; push `master`; tag `v1.8.1`

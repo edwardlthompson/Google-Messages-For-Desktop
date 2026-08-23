@@ -1,5 +1,16 @@
 # Decision Log
 
+## 2026-08-22 — /ship v1.9.0
+
+- **Status:** Accepted
+- **Context:** Reuse Continuum Calendar donate + update method on this Electron app.
+- **Decisions:**
+  - Product **1.9.0**. Manual tag; no Release Please workflow on this child.
+  - Compare GitHub installer filenames, not git/template tags. Donate never shares the update dialog.
+  - Prefs stay in device-local `product-update.json`.
+  - Retag `v1.9.0` onto `73290d1` after the first tag failed webpack (`bindDisplayRefresh` was untracked).
+- **Consequences:** Unsigned CI artifacts on GitHub Release. HUMAN: sign/notarize + smoke donate note / Install-Later. Hard pre-release-gate remains template-maintainer-shaped (KB-009).
+
 ## 2026-08-14 — /ship v1.8.1
 
 - **Status:** Accepted
