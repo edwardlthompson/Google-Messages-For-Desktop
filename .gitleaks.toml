@@ -10,4 +10,6 @@ paths = [
   '''^schemas/golden-path/sanitize-fixtures\.json$''',
   '''^examples/web/src/privacy-report/sanitize-fixtures\.json$''',
   '''^examples/android/app/src/test/resources/sanitize-fixtures\.json$''',
+  '''^tests/privacy_report/test_sanitize\.py$''',
+  '''^electron/src/helpers/privacyReport\.test\.ts$''',
 ]

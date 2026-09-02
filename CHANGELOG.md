@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Native toasts on Linux set `urgency: normal` so they match Windows unfocused-message behavior
 - Tray avatars hide when Hide Notification Content is on
 - Pin Electron `fast-uri` 3.1.6 and `@xmldom/xmldom` 0.8.15 (lockfile HIGH/Medium)
+- Allowlist privacy-report sanitizer fixtures in `.gitleaks.toml`; install bootstrap lint CLIs in CI
 
 ## [1.9.0] - 2026-08-22
 

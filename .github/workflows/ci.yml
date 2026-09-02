@@ -32,6 +32,17 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
+      - name: Install bootstrap lint CLIs
+        run: |
+          python -m pip install --user reuse yamllint zizmor
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          npm install -g markdownlint-cli
+          bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          sudo mv -f actionlint /usr/local/bin/actionlint
+          curl -fsSL -o /tmp/hadolint \
+            https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
+          sudo install -m 0755 /tmp/hadolint /usr/local/bin/hadolint
+
       - name: validate-bootstrap --quick
         env:
           BOOTSTRAP_CHECK_JOBS: "2"
