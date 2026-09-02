@@ -12,6 +12,13 @@ DOCKERFILE = Path(".devcontainer") / "Dockerfile"
 
 
 def require_tools() -> bool:
+    if os.environ.get("BOOTSTRAP_OPTIONAL_LINT", "").strip().lower() in {
+        "skip",
+        "0",
+        "false",
+        "no",
+    }:
+        return False
     raw = os.environ.get("REQUIRE_HADOLINT", "").strip().lower()
     return raw in {"1", "true", "yes"} or in_ci()
 

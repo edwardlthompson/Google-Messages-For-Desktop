@@ -25,10 +25,22 @@ class ActionWorkflowsTests(unittest.TestCase):
             self.assertEqual(code, 0)
 
     def test_ci_requires_tools(self) -> None:
-        with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}):
+        env = {
+            k: v
+            for k, v in os.environ.items()
+            if k not in {"BOOTSTRAP_OPTIONAL_LINT"}
+        }
+        env["GITHUB_ACTIONS"] = "true"
+        with patch.dict(os.environ, env, clear=True):
             self.assertTrue(require_tools())
             code = check_action_workflows(ROOT, which=lambda _name: None)
             self.assertEqual(code, 1)
+
+    def test_ci_skip_optional_lint_env(self) -> None:
+        with patch.dict(os.environ, {"GITHUB_ACTIONS": "true", "BOOTSTRAP_OPTIONAL_LINT": "skip"}):
+            self.assertFalse(require_tools())
+            code = check_action_workflows(ROOT, which=lambda _name: None)
+            self.assertEqual(code, 0)
 
     def test_wired_into_quick(self) -> None:
         text = (ROOT / "scripts/validate-bootstrap.sh").read_text(encoding="utf-8")
