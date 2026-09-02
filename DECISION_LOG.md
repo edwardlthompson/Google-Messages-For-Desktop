@@ -8,8 +8,9 @@
   - Product **1.10.0**. Manual tag after CI (no live Release Please workflow).
   - Skip template About-slice gate when `examples/web` is absent.
   - Pin `fast-uri` 3.1.6 and `@xmldom/xmldom` 0.8.15. Do not rewrite `github/codeql-action@v3`.
+  - When `CSC_LINK` is empty, electron-builder mac `identity: null` (unsigned CI). Retag `v1.10.0` onto that fix.
   - F-009 signing stays deferred.
-- **Consequences:** CHANGELOG `[1.10.0]` folded; `[Unreleased]` empty. Local `pre-release-gate --local` passed.
+- **Consequences:** CHANGELOG `[1.10.0]` folded; `[Unreleased]` empty. Local `pre-release-gate --local` passed. GitHub Release **v1.10.0** has 11 unsigned desktop assets. Hard GitHub `pre-release-gate` still fails Scorecard + `main` protection 404 (KB-009).
 
 ## 2026-09-02 — HUMAN_BACKLOG cleared
 

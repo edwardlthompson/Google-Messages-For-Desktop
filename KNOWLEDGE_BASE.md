@@ -76,11 +76,15 @@ Historical Electron/Windows issue: `app.setAppUserModelId(process.execPath)` ins
 
 ### Regress — /ship v1.10.0 (2026-09-02)
 
-- Product tag **v1.10.0** @ `e81c3cc`. CI / Security Scan / CodeQL green after `BOOTSTRAP_OPTIONAL_LINT=skip` (no actionlint/zizmor/hadolint in this child’s Actions image) and gitleaks allowlist for privacy-report sanitizer fixtures
-- `feature-gate --stack node` PASS; local `pre-release-gate --local` PASS; About-slice gate skipped when `examples/web` is absent
+- Product tag **v1.10.0** @ `799ff61` (first tag @ `e81c3cc` failed mac: empty `CSC_LINK` treated as a cert path / `electron not a file`; retagged after `identity: null`)
+- CI / Security Scan / CodeQL green after `BOOTSTRAP_OPTIONAL_LINT=skip` (no actionlint/zizmor/hadolint in this child’s Actions image) and gitleaks allowlist for privacy-report sanitizer fixtures
+- `feature-gate` multi PASS; local `pre-release-gate --local` PASS; About-slice skipped when `examples/web` is absent
+- Hard `pre-release-gate.sh` FAIL (expected, KB-009): no Scorecard workflow; `verify-branch-protection.sh` queries `main` while default branch is `master`
+- Release desktop **PASS**; **11** unsigned Win/mac/linux assets. `wait-release-sbom` FAIL (no CycloneDX/OpenVEX on this workflow — expected)
+- Pages N/A (`check-pages-analytics` PASS). Dependabot open Critical/High = 0
+- `simulate-template-upgrade` FAIL after clone `init-project.sh --stack web`: `check-readme-badges.sh` wants template hero/owner badges. First clone `--quick` passed on the product README
 - No live Release Please workflow — product tags stay manual. Template RP dry-run still thinks 0.17.0→0.18.0 from remote history
-- SBOM/OpenVEX still not attached by `release-desktop.yml` (unsigned Electron artifacts only). Pages N/A
-- Release desktop: Windows + Linux package OK; macOS failed until unsigned `identity: null` (empty `CSC_LINK` was treated as a cert path). Attach-release now runs `if: always()` so Win/Linux still publish.
+- Release Actions annotate Node.js 20 deprecation (non-blocking)
 
 ### Regress — /ship v1.9.0 (2026-08-22)
 

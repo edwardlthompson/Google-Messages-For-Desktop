@@ -4,9 +4,10 @@
 
 ## Milestone: /ship v1.10.0 (2026-09-02)
 
-- Product **1.10.0**: Sprint G desktop backlog + HUMAN device smokes + lockfile pins
-- F-009 auto-update signing still deferred; unsigned CI artifacts until `CSC_LINK`
-- Empty GitHub Release `v1.5.0` deleted (git tag kept)
+- Product **1.10.0** @ `799ff61`; GitHub Release with 11 unsigned Win/mac/linux artifacts
+- First tag @ `e81c3cc` failed mac packaging; retagged after unsigned `identity: null` when `CSC_LINK` is empty
+- F-009 auto-update signing still deferred
+- Empty GitHub Release `v1.5.0` deleted earlier this day (git tag kept)
 
 ## Milestone: HUMAN_BACKLOG + /cleanup (2026-09-02)
 
@@ -19,7 +20,7 @@
 - **Repo:** `edwardlthompson/Google-Messages-For-Desktop` (fork of `kelyvin/Google-Messages-For-Desktop`)
 - **Product:** Electron desktop app for Google Messages Web (**v1.10.0**); Chromium App Host / Nativefier = legacy
 - **Posture:** Active Electron first-run + multi-platform packaging; bootstrap FOSS alignment retained
-- **Template pin:** `agent-project-bootstrap` **0.17.0** on the v1.9.0 tag (local tree still has uncommitted 0.21.0 alignment)
+- **Template pin:** `agent-project-bootstrap` **1.0.0**
 - **Stack:** `node` / `foss` — root packaging + `electron/`; no `examples/`
 - **Default branch:** `master`
 - **Lockfile:** root `yarn.lock`; Electron `electron/package-lock.json` (+ `brace-expansion@5.0.8` override)

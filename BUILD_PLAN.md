@@ -27,6 +27,8 @@
 
 > **HUMAN_BACKLOG device + GitHub** archived in COMPLETED_TASKS.md @ `2338c31` (working tree).
 
+> **Ship v1.10.0** tagged @ `799ff61`. Residual: unsigned until `CSC_LINK` secrets (F-009).
+
 > **Ship v1.9.0** tagged @ `73290d1`. Residual: unsigned until `CSC_LINK` secrets (F-009).
 
 > **Ship v1.8.1** archived in COMPLETED_TASKS.md @ `6adf8c6`. Residual: F-009 signing.
@@ -60,6 +62,7 @@
 | Sprint F — Golden Path on Electron | 2026-09-02 | `COMPLETED_TASKS.md` |
 | Sprint G — Desktop product backlog | 2026-09-02 | `COMPLETED_TASKS.md` |
 | HUMAN_BACKLOG device + GitHub | 2026-09-02 | `COMPLETED_TASKS.md` |
+| Ship v1.10.0 | 2026-09-02 | Unsigned Electron artifacts; F-009 residual |
 ---
 
 ## Sprint E — Ongoing maintenance
