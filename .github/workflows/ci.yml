@@ -36,7 +36,6 @@ jobs:
         run: |
           python -m pip install --user reuse yamllint zizmor
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          npm install -g markdownlint-cli
           bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
           sudo mv -f actionlint /usr/local/bin/actionlint
           curl -fsSL -o /tmp/hadolint \
