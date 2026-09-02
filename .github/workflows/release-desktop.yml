@@ -36,7 +36,12 @@ jobs:
       - name: Install
         run: npm ci
       - name: Build & package
-        run: ${{ matrix.script }}
+        shell: bash
+        run: |
+          if [ -z "${CSC_LINK:-}" ]; then
+            unset CSC_LINK CSC_KEY_PASSWORD
+          fi
+          ${{ matrix.script }}
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
@@ -58,7 +63,7 @@ jobs:
           if-no-files-found: warn
 
   attach-release:
-    if: startsWith(github.ref, 'refs/tags/')
+    if: always() && startsWith(github.ref, 'refs/tags/')
     needs: build
     runs-on: ubuntu-latest
     permissions:

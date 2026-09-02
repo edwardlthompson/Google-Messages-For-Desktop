@@ -74,6 +74,14 @@ Historical Electron/Windows issue: `app.setAppUserModelId(process.execPath)` ins
 - Unread false→true also sends a generic OS toast (no DOM snippets) through the same dedupe path.
 - Installed NSIS builds with a Start Menu shortcut remain the most reliable Action Center target; `npm run dev` / portable may still be flaky for toasts.
 
+### Regress — /ship v1.10.0 (2026-09-02)
+
+- Product tag **v1.10.0** @ `e81c3cc`. CI / Security Scan / CodeQL green after `BOOTSTRAP_OPTIONAL_LINT=skip` (no actionlint/zizmor/hadolint in this child’s Actions image) and gitleaks allowlist for privacy-report sanitizer fixtures
+- `feature-gate --stack node` PASS; local `pre-release-gate --local` PASS; About-slice gate skipped when `examples/web` is absent
+- No live Release Please workflow — product tags stay manual. Template RP dry-run still thinks 0.17.0→0.18.0 from remote history
+- SBOM/OpenVEX still not attached by `release-desktop.yml` (unsigned Electron artifacts only). Pages N/A
+- Release desktop: Windows + Linux package OK; macOS failed until unsigned `identity: null` (empty `CSC_LINK` was treated as a cert path). Attach-release now runs `if: always()` so Win/Linux still publish.
+
 ### Regress — /ship v1.9.0 (2026-08-22)
 
 - Child gates: `feature-gate --stack node` PASS; license PASS; Dependabot Critical/High = 0

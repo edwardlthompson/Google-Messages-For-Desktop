@@ -38,6 +38,7 @@ module.exports = {
     executableName: "GoogleMessages",
   },
   mac: {
+    identity: process.env.CSC_LINK ? undefined : null,
     category: "public.app-category.social-networking",
     target: [
       { target: "dmg", arch: ["universal"] },
