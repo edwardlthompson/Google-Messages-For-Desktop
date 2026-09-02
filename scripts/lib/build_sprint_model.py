@@ -14,6 +14,7 @@ ROW_BULLET = re.compile(
     rf"^- {OPEN} \[(?P<owner>AGENT|AUTO|HUMAN|ADB)\]\s+(?P<task>.+)$"
 )
 SPRINT_HEADER = re.compile(r"^###\s+Sprint\s+", re.I)
+H2_SPRINT_HEADER = re.compile(r"^##\s+Sprint\s+", re.I)
 PARALLEL_HEADER = re.compile(r"^#{3,4}\s+.*Parallel", re.I)
 SEQUENTIAL_HEADER = re.compile(r"^#{3,4}\s+.*Sequential", re.I)
 HUMAN_GROUP_HEADER = re.compile(r"^#{3,4}\s+.*Human.*after automation", re.I)

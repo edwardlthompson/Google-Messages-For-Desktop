@@ -35,7 +35,20 @@ from human_task_rows import (
     automate_use_template,
 )
 
+from human_task_gmfd import GMFD_RULES
+from human_task_gmfd_github import (
+    automate_enable_discussions,
+    automate_enable_issues,
+    automate_funding_about,
+    automate_release_screenshots,
+)
+
 HUMAN_RULES: list[tuple[re.Pattern[str], str, object]] = [
+    *GMFD_RULES,
+    (re.compile(r"FUNDING\.yml|GitHub About blurb", re.I), "human", automate_funding_about),
+    (re.compile(r"Enable GitHub Issues", re.I), "human", automate_enable_issues),
+    (re.compile(r"Enable GitHub Discussions", re.I), "human", automate_enable_discussions),
+    (re.compile(r"Release screenshot set", re.I), "human", automate_release_screenshots),
     (re.compile(r"Use this template", re.I), "human", automate_use_template),
     (re.compile(r"Fill placeholders.*INITIALIZATION_PROMPT", re.I), "human", automate_init_placeholders),
     (re.compile(r"Pick Cursor mode", re.I), "human", lambda r, c: automate_informational(r, c, "cursor-mode")),

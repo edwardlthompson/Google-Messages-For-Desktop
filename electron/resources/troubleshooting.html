@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Google Messages for Desktop — Troubleshooting</title>
+    <style>
+      body {
+        font: 16px/1.45 system-ui, Segoe UI, sans-serif;
+        max-width: 42rem;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Troubleshooting</h1>
+    <h2>Toasts, tray, and taskbar</h2>
+    <p>
+      New-message toasts use the operating system’s notification API, so Focus
+      Assist / Do Not Disturb can hide them. The red unread mark is the
+      <strong>tray</strong> (notification area by the clock), not the taskbar
+      pin.
+    </p>
+    <p>
+      <strong>Hide Notification Content</strong> (on by default for new
+      installs) redacts sender and snippet in toasts and tray tooltips, and
+      hides tray avatars.
+    </p>
+    <h2>What this app stores locally</h2>
+    <p>
+      Under the OS user-data folder: <code>settings.json</code> (preferences),
+      optional <code>product-update.json</code> (update / later), optional
+      <code>main.log</code> only if you enable verbose main-process logging,
+      and crash notes only if you enable Save crash details. Chat history stays in the
+      Chromium <code>persist:main</code> profile for messages.google.com — not
+      uploaded by this wrapper.
+    </p>
+    <p>
+      Optional <code>user.css</code> in the same user-data folder (Settings →
+      Load local user.css). Remote <code>@import</code> URLs are ignored.
+    </p>
+    <p>
+      Do not copy the       Chromium <code>persist:main</code> profile folder to
+      another PC or into a bug report — it holds your Messages session cookies.
+      Work/Personal use <code>persist:profile-work</code> /
+      <code>persist:profile-personal</code>. Guest is in-memory and is wiped on
+      quit.
+    </p>
+    <h2>Certificate errors</h2>
+    <p>
+      This app never ignores a bad TLS certificate. If a host fails HTTPS, you
+      see a local explanation page instead of Messages. Fix the clock, proxy, or
+      TLS inspection, then restart the app.
+    </p>
+    <h2>Compose extras</h2>
+    <p>
+      Paste an image into the Messages compose box with the OS paste shortcut
+      (Ctrl+V / Cmd+V); the web app attaches it when it allows paste. Drag a
+      file onto the window when compose is focused. Settings can save three
+      clipboard snippets and an optional signature appended only to
+      <code>sms:</code>/<code>tel:</code> compose. Protocol links confirm before
+      send when that setting is on.
+    </p>
+    <p>
+      Emoji: use the OS panel (Win+. on Windows, Control-Cmd-Space on macOS).
+      This app does not ship a second picker.
+    </p>
+    <h2>Linux AppImage updates</h2>
+    <p>
+      Help → Check for Updates downloads the installer in your browser. Do not
+      turn electron-updater auto-download back on for AppImage.
+    </p>
+    <h2>macOS Login Item</h2>
+    <p>
+      Settings → Start with the operating system uses a Login Item
+      (<code>app.setLoginItemSettings</code>), not a LaunchAgent plist.
+    </p>
+    <h2>Linux systemd</h2>
+    <p>
+      Prefer the Settings autostart checkbox. A systemd user unit is an
+      alternative only — see <code>docs/SYSTEMD.md</code>. Do not enable both.
+    </p>
+    <h2>Share</h2>
+    <p>
+      Unpackaged builds are not a Windows Share charm target. Use registered
+      <code>sms:</code> / <code>mms:</code> handlers. See
+      <code>docs/WINDOWS_SHARE.md</code>.
+    </p>
+  </body>
+</html>

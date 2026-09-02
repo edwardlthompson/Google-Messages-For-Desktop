@@ -5,6 +5,7 @@ import {
   ipcMain,
   nativeImage,
   powerMonitor,
+  screen,
   shell,
 } from "electron";
 import { BrowserWindow } from "electron/main";
@@ -15,12 +16,11 @@ import {
   presentLaunchPrompts,
   setProductUpdateWindow,
 } from "./helpers/productUpdateUi";
-import { IS_MAC, RESOURCES_PATH } from "./helpers/constants";
+import { IS_DEV, IS_MAC, IS_WINDOWS, RESOURCES_PATH } from "./helpers/constants";
 import { MenuManager } from "./helpers/menuManager";
 import { setSettingsFlushEnabled, settings } from "./helpers/settings";
 import { Conversation, TrayManager } from "./helpers/trayManager";
 import {
-  findProtocolArg,
   handleProtocolUrl,
   registerElectronProtocolClients,
   registerWindowsProtocolHandlers,
@@ -30,10 +30,45 @@ import {
   isAssociationOnlyMode,
   isOnboardingSampleUrl,
 } from "./helpers/onboardingMode";
-import { registerOsNotifyIpc } from "./helpers/osNotification";
+import { registerOsNotifyIpc, setNotifyConversations } from "./helpers/osNotification";
 import { allowSessionPermission } from "./helpers/osNotificationLogic";
+import { isDisplayCapturePermission, isMediaPermission } from "./helpers/mediaPermission";
+import { confirmCallsMedia, confirmCallsScreenShare } from "./helpers/mediaPermissionUi";
+import {
+  allowMainFrameNavigate,
+  allowOpenExternalUrl,
+} from "./helpers/navigationAllowlist";
+import { quietHoursActive } from "./helpers/quietHours";
+import { shouldFlashTaskbar } from "./helpers/a11yMotion";
 import { popupContextMenu } from "./menu/contextMenu";
 import { bindPreferredDisplayMode } from "./helpers/bindDisplayRefresh";
+import {
+  initCrashCapture,
+  presentPendingCrashIfAny,
+} from "./helpers/crashCapture";
+import { bindAppTheme } from "./helpers/settingsThemeUi";
+import { bindAutostart } from "./helpers/autostart";
+import { applyUnreadWindowChrome } from "./helpers/unreadChromeUi";
+import { handleMainWindowClose } from "./helpers/closeBehaviorUi";
+import { bindAlwaysOnTop, bindZoomPersist } from "./helpers/windowPrefsUi";
+import {
+  bindFoundInPage,
+  registerFindInPageIpc,
+} from "./helpers/findInPageUi";
+import { shouldShowOfflineBanner } from "./helpers/loadFail";
+import { clampWindowPosition } from "./helpers/clampWindow";
+import { bindUserCss } from "./helpers/userCssUi";
+import { bindDensityCss } from "./helpers/densityCssUi";
+import { bindWrapperMuteHotkey } from "./helpers/muteHotkeyUi";
+import { bindVerboseMainLog } from "./helpers/verboseLogUi";
+import { bindAppLocale } from "./helpers/i18nUi";
+import { bindRendererCrashReload } from "./helpers/rendererCrashUi";
+import { bindDownloadLocation } from "./helpers/downloadsUi";
+import { bindCertErrorInterstitial } from "./helpers/certErrorUi";
+import { bindGuestSessionWipe, currentSessionPartition } from "./helpers/sessionProfileUi";
+import { bindOsChromeTasks } from "./helpers/jumpListUi";
+import { protocolLaunchFromArgv } from "./helpers/jumpList";
+import { loadManagedPolicy } from "./helpers/managedPolicyUi";
 import fs from "fs";
 
 const {
@@ -56,7 +91,11 @@ function appWindowIcon() {
 
 let mainWindow: BrowserWindow;
 let trayManager: TrayManager;
-let pendingProtocolUrl: string | null = findProtocolArg(process.argv);
+let pendingProtocolUrl: string | null = protocolLaunchFromArgv(process.argv);
+
+if (settings.hardwareAccelerationEnabled.value === false) {
+  app.disableHardwareAcceleration();
+}
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -64,7 +103,7 @@ if (!gotTheLock) {
   app.quit();
 } else {
   app.on("second-instance", (_event, commandLine) => {
-    const proto = findProtocolArg(commandLine);
+    const proto = protocolLaunchFromArgv(commandLine);
     if (proto && (isAssociationOnlyMode() || isOnboardingSampleUrl(proto))) {
       // Defaults onboarding probe — do not steal focus to main / compose.
       console.log("Ignoring second-instance compose for onboarding probe");
@@ -112,11 +151,17 @@ app.on("before-quit", () => {
 });
 
 if (gotTheLock) {
+  initCrashCapture();
   app.on("ready", () =>
     app.setAppUserModelId("com.edwardlthompson.google-messages")
   );
 
   app.on("ready", () => {
+    bindAppLocale();
+    loadManagedPolicy();
+    bindGuestSessionWipe();
+    bindCertErrorInterstitial();
+    void presentPendingCrashIfAny();
     registerElectronProtocolClients();
     registerWindowsProtocolHandlers();
 
@@ -125,7 +170,19 @@ if (gotTheLock) {
     new MenuManager();
 
     const { width, height } = savedWindowSize.value;
-    const { x, y } = savedWindowPosition.value ?? {};
+    let workArea = { x: 0, y: 0, width: 1920, height: 1080 };
+    try {
+      workArea = screen.getPrimaryDisplay().workArea;
+    } catch {
+      /* headless tests */
+    }
+    const clamped = clampWindowPosition(
+      savedWindowPosition.value,
+      { width, height },
+      workArea
+    );
+    const { x, y } = clamped ?? {};
+    const sessionPartition = currentSessionPartition();
 
     mainWindow = new BrowserWindow({
       width,
@@ -137,17 +194,33 @@ if (gotTheLock) {
       show: false,
       icon: appWindowIcon(),
       titleBarStyle: IS_MAC ? "hiddenInset" : "default",
+      ...(IS_WINDOWS && settings.windowsMicaEnabled.value
+        ? { backgroundMaterial: "mica" as const }
+        : {}),
       webPreferences: {
         preload: PRELOAD_BRIDGE,
         contextIsolation: true,
         nodeIntegration: false,
         sandbox: false,
-        partition: "persist:main",
+        partition: sessionPartition,
+        navigateOnDragDrop: false,
+        autoplayPolicy: "user-gesture-required",
       },
     });
 
     process.env.MAIN_WINDOW_ID = mainWindow.id.toString();
     bindPreferredDisplayMode(mainWindow);
+    bindAppTheme(mainWindow);
+    bindAutostart();
+    bindVerboseMainLog();
+    bindRendererCrashReload(mainWindow);
+    bindAlwaysOnTop(mainWindow);
+    bindZoomPersist(mainWindow);
+    bindFoundInPage(mainWindow);
+    bindUserCss(mainWindow);
+    bindDensityCss(mainWindow);
+    bindWrapperMuteHotkey(mainWindow);
+    bindOsChromeTasks(mainWindow);
 
     const session = mainWindow.webContents.session;
     session.setPermissionCheckHandler((wc, permission, requestingOrigin) => {
@@ -156,8 +229,23 @@ if (gotTheLock) {
     });
     session.setPermissionRequestHandler((wc, permission, callback, details) => {
       const origin = details?.requestingUrl || wc?.getURL?.() || "";
-      callback(allowSessionPermission(permission, origin));
+      if (!allowSessionPermission(permission, origin)) {
+        callback(false);
+        return;
+      }
+      if (isMediaPermission(permission)) {
+        void confirmCallsMedia(mainWindow, permission, origin).then(callback);
+        return;
+      }
+      if (isDisplayCapturePermission(permission)) {
+        void confirmCallsScreenShare(mainWindow, permission, origin).then(
+          callback
+        );
+        return;
+      }
+      callback(true);
     });
+    bindDownloadLocation(session);
 
     initProductUpdatePrefs(app.getPath("userData"));
     setProductUpdateWindow(mainWindow);
@@ -191,33 +279,32 @@ if (gotTheLock) {
     );
 
     // Apply the spell-check preference on launch and whenever it is toggled.
-    spellCheckEnabled.subscribe((enabled) =>
-      mainWindow.webContents.session.setSpellCheckerEnabled(enabled)
-    );
+    const applySpellLang = (lang: string): void => {
+      try {
+        mainWindow.webContents.session.setSpellCheckerLanguages([lang]);
+      } catch {
+        /* dictionary not installed on this OS */
+      }
+    };
+    spellCheckEnabled.subscribe((enabled) => {
+      mainWindow.webContents.session.setSpellCheckerEnabled(enabled);
+      if (enabled) applySpellLang(settings.spellCheckLanguage.value);
+    });
+    settings.spellCheckLanguage.subscribe((lang) => {
+      if (spellCheckEnabled.value) applySpellLang(lang);
+    });
 
     let quitViaContext = false;
     app.on("before-quit", () => {
       quitViaContext = true;
     });
 
-    const shouldExitOnMainWindowClosed = () => {
-      if (IS_MAC) {
-        return quitViaContext;
-      }
-
-      if (trayEnabled.value) {
-        return quitViaContext;
-      }
-
-      return true;
-    };
-
     mainWindow.on("close", (event: ElectronEvent) => {
       const { x, y, width, height } = mainWindow.getBounds();
       savedWindowPosition.next({ x, y });
       savedWindowSize.next({ width, height });
 
-      if (!shouldExitOnMainWindowClosed()) {
+      if (handleMainWindowClose(mainWindow, quitViaContext) === "hide") {
         event.preventDefault();
         mainWindow.hide();
         trayManager?.showMinimizeToTrayWarning();
@@ -232,26 +319,7 @@ if (gotTheLock) {
 
     mainWindow.webContents.setWindowOpenHandler((details) => {
       const url = details.url;
-
-      const allowedGoogleHosts = new Set([
-        "accounts.google.com",
-        "google.com",
-        "www.google.com",
-        "messages.google.com",
-      ]);
-      let isGoogleAuthWindow = false;
-      try {
-        const host = new URL(url).hostname.toLowerCase();
-        isGoogleAuthWindow =
-          allowedGoogleHosts.has(host) ||
-          [...allowedGoogleHosts].some(
-            (h) => host === h || host.endsWith(`.${h}`)
-          );
-        // Narrow: only https Google auth/messages hosts
-        if (!url.startsWith("https://")) isGoogleAuthWindow = false;
-      } catch {
-        isGoogleAuthWindow = false;
-      }
+      const isGoogleAuthWindow = allowMainFrameNavigate(url);
 
       if (isGoogleAuthWindow) {
         return {
@@ -268,36 +336,46 @@ if (gotTheLock) {
               contextIsolation: true,
               nodeIntegration: false,
               sandbox: false,
-              partition: "persist:main",
+              partition: sessionPartition,
             },
           },
         };
       }
 
-      // F-001: never open arbitrary schemes from the SPA (file:, javascript:, etc.)
-      try {
-        const parsed = new URL(url);
-        if (parsed.protocol === "https:" || parsed.protocol === "mailto:") {
-          void shell.openExternal(url);
-        } else {
-          console.warn("Blocked openExternal for scheme", parsed.protocol, url);
-        }
-      } catch {
-        console.warn("Blocked openExternal for invalid URL", url);
+      if (allowOpenExternalUrl(url)) {
+        void shell.openExternal(url);
+      } else {
+        console.warn("Blocked openExternal", url);
       }
       return { action: "deny" };
     });
 
+    mainWindow.webContents.on("will-navigate", (event, url) => {
+      if (!allowMainFrameNavigate(url)) {
+        event.preventDefault();
+        console.warn("Blocked navigation", url);
+      }
+    });
+
     mainWindow.webContents.on(
       "did-fail-load",
-      (_event, errorCode, errorDescription, validatedURL) => {
+      (_event, errorCode, errorDescription, validatedURL, isMainFrame) => {
         console.log("did-fail-load", {
           errorCode,
           errorDescription,
           validatedURL,
         });
+        if (shouldShowOfflineBanner(errorCode, isMainFrame, errorDescription)) {
+          mainWindow.webContents.send("show-offline-banner", {
+            message: "Can't reach Google Messages. Check your connection.",
+          });
+        }
       }
     );
+
+    mainWindow.webContents.on("did-finish-load", () => {
+      mainWindow.webContents.send("hide-offline-banner");
+    });
 
     mainWindow.webContents.on(
       "did-redirect-navigation",
@@ -315,6 +393,18 @@ if (gotTheLock) {
     });
 
     mainWindow.webContents.on("context-menu", popupContextMenu);
+
+    if (!IS_DEV) {
+      mainWindow.webContents.on("devtools-opened", () => {
+        mainWindow.webContents.closeDevTools();
+      });
+      mainWindow.webContents.on("before-input-event", (event, input) => {
+        const key = (input.key || "").toLowerCase();
+        if (input.key === "F12" || (input.control && input.shift && key === "i")) {
+          event.preventDefault();
+        }
+      });
+    }
 
     // The Google Messages web app frequently ends up on a blank white screen
     // after the machine resumes from suspend: its connection to the phone is
@@ -342,6 +432,13 @@ if (gotTheLock) {
   });
 
   registerOsNotifyIpc();
+  registerFindInPageIpc();
+
+  ipcMain.on("reload-main-window", () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.reload();
+    }
+  });
 
   ipcMain.on("show-main-window", () => {
     mainWindow.show();
@@ -353,7 +450,22 @@ if (gotTheLock) {
   });
 
   ipcMain.on("flash-main-window-if-not-focused", () => {
-    if (!mainWindow.isFocused() && taskbarFlashEnabled.value) {
+    if (
+      quietHoursActive(
+        new Date(),
+        settings.quietHoursEnabled.value,
+        settings.quietHoursPreset.value
+      )
+    ) {
+      return;
+    }
+    if (
+      !mainWindow.isFocused() &&
+      shouldFlashTaskbar(
+        taskbarFlashEnabled.value,
+        settings.reduceMotionEnabled.value
+      )
+    ) {
       mainWindow.flashFrame(true);
 
       if (IS_MAC) {
@@ -363,11 +475,14 @@ if (gotTheLock) {
   });
 
   ipcMain.on("set-unread-status", (_event, unreadStatus: boolean) => {
-    trayManager.setUnread(unreadStatus);
+    const unread = !!unreadStatus;
+    trayManager.setUnread(unread);
+    applyUnreadWindowChrome(mainWindow, unread);
   });
 
   ipcMain.on("set-recent-conversations", (_event, data: Conversation[]) => {
     trayManager.setRecentConversations(data);
+    setNotifyConversations(data);
   });
 
   ipcMain.handle("get-icon", () => {

@@ -1,6 +1,6 @@
 # Feature: privacy-report
 
-> Shared sanitizer, fingerprint, and markdown builder. No UI and no network.
+> Shared sanitizer, fingerprint, and markdown builder. No network. Electron port plus the existing Python oracle.
 
 ## Acceptance criteria
 
@@ -19,23 +19,23 @@
 
 | Layer | Path |
 |-------|------|
-| Logic | `examples/web/src/privacy-report/`, `examples/android/.../privacyreport/`, `scripts/lib/privacy_report_*.py` |
-| Tests | co-located Vitest/JUnit + `tests/privacy_report/` oracle |
-| Wiring | none |
+| Logic | `electron/src/helpers/privacyReport.ts`, `privacyReportBuild.ts`; `scripts/lib/privacy_report_*.py` |
+| Tests | `electron/src/helpers/privacyReport.test.ts`; `tests/privacy_report/` |
+| Wiring | crash persist + feedback copy/open call sanitize before write |
 ## Tests
 
-- Automated: yes — co-located Vitest/JUnit plus `tests/privacy_report/`
+- Automated: yes — Electron unit tests plus `tests/privacy_report/`
 
 ## Fallback validation
 
-- Why tests are not feasible: N/A (automated tests exist)
-- Command: `python3 scripts/agent-run.py feature-gate --stack <active>`
+- Why tests are not feasible: N/A
+- Command: `python scripts/agent-run.py feature-gate --stack node`
 
 ## Definition of Done
 
-See `docs/FEATURE_MODULES.md`. Fallback: `python3 -m unittest tests.privacy_report.test_sanitize`.
+See `docs/FEATURE_MODULES.md`. Fallback: `python -m unittest tests.privacy_report.test_sanitize`.
 
 ## Notes
 
-- Run sanitize before persist and again before Copy / Open GitHub / `gh issue create`
-- After each AGENT step: `bash scripts/watch-agent-gates.sh --once --autofix`
+- Run sanitize before persist and again before Copy / Open GitHub
+- After each AGENT step: `python scripts/agent-run.py watch-agent-gates --once --autofix --scope auto`

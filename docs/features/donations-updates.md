@@ -7,9 +7,10 @@
 - ✅ Quiet **Donate via Venmo** in About and the app menu; never on the update/install dialog
 - ✅ First run records the installed version with no donate popup
 - ✅ After a later launch where the installed version changed: one optional note (Donate via Venmo | Not now); either button records “seen this version”
-- ✅ Once per 24 hours, fetch `https://api.github.com/repos/OWNER/REPO/releases/latest` (User-Agent + 10s timeout); compare product installer filenames, not git/template tags
-- ✅ Newer matching asset and not dismissed: **Install** | **Later**; Install opens the asset URL (fallback: release page); Later silences that version
-- ✅ Failed fetch, timeout, empty assets, or same version: stay silent; never block the app
+- ✅ Once per 24 hours, fetch GitHub `releases/latest` (User-Agent + 10s timeout); pick the **newest** matching installer filename for this OS; if none match, fall back to `tag_name` + the release page URL
+- ✅ Newer version and not dismissed on launch: **Install** | **Later**; Install opens the URL in the browser and does not write `dismissedVersion`; Later silences that version for launch nag only
+- ✅ Help/File/App **Check for Updates** ignores Later (`ignoreDismissed`) so a postponed version can be offered again; it names current vs latest, the download file, and that install is in the browser
+- ✅ Launch: failed fetch, timeout, or same version stay silent. Interactive check: failed fetch shows Open releases page / Dismiss; same version shows you're up to date
 - ✅ Donate prefs and last-check timestamps are device-local (not peer-synced; Android Auto Backup excludes `gp_updates`)
 - ✅ No dark patterns: no fake close, no guilt copy, no paywalling updates
 - ✅ Offline/error: no network required for donate links or first-run version record
@@ -24,16 +25,18 @@
 
 ## Container map
 
-| Layer | Web | Android |
-|-------|-----|---------|
-| Logic | `examples/web/src/about/productUpdate.ts` | `examples/android/.../about/ProductUpdate.kt` |
-| Fetch/prefs | `githubRelease.ts`, `updatePrefs.ts`, `runAppUpdates.ts` | `GithubRelease.kt`, `UpdateLaunchPrefs.kt` |
-| View | `AppShell.ts`, `AboutPanel.ts`, `launchPrompt.ts` | `ui/GoldenPathScreen.kt`, `ui/about/` |
-| Tests | `productUpdate.test.ts`, `runAppUpdates.test.ts` | `ProductUpdateTest.kt` |
-| Wiring | `appBootstrap.ts` ≤10 lines | `GoldenPathApp.kt` ≤10 lines |
+| Layer | Electron (this product) |
+|-------|-------------------------|
+| Logic | `electron/src/helpers/productUpdate.ts`, `productUpdateCopy.ts` |
+| Fetch/prefs | `githubRelease.ts`, `updatePrefs.ts`, `runAppUpdates.ts` |
+| View | `productUpdateUi.ts` (dialog copy + Later vs Install) |
+| Tests | `productUpdate.test.ts`, `productUpdateCopy.test.ts`, `githubRelease.test.ts`, `runAppUpdates.test.ts` |
+| Wiring | `electron/src/menu/` Check for Updates → `checkForProductUpdate(true)` |
+Do not copy `examples/` over the app.
+
 ## Tests
 
-- Automated: yes — `productUpdate.test.ts`, `runAppUpdates.test.ts`, `ProductUpdateTest.kt`
+- Automated: yes — `electron` `test:unit` (`productUpdate`, `productUpdateCopy`, `githubRelease`, `runAppUpdates`)
 
 ## Fallback validation
 

@@ -2,16 +2,26 @@ import { Notification, app, ipcMain, nativeImage } from "electron";
 import path from "path";
 import { IS_MAC, RESOURCES_PATH } from "./constants";
 import { getMainWindow } from "./getMainWindow";
-import { settings } from "./settings";
+import { conversationIndexForToast } from "./notifyFocus";
 import {
   DedupeState,
   NotifyPayload,
   parseOsNotifyIpc,
   sanitizePayload,
   shouldShowToast,
+  toastGroupTag,
+  isToastTitleMuted,
 } from "./osNotificationLogic";
+import { notificationPlatformOptions, quietHoursActive } from "./quietHours";
+import { settings } from "./settings";
+import type { Conversation } from "./trayManager";
 
 let lastToast: DedupeState | null = null;
+let recentConversations: Conversation[] = [];
+
+export function setNotifyConversations(data: Conversation[]): void {
+  recentConversations = Array.isArray(data) ? data : [];
+}
 
 function notificationIcon() {
   const iconPath = path.resolve(RESOURCES_PATH, "icons", "64x64.png");
@@ -19,7 +29,7 @@ function notificationIcon() {
   return img.isEmpty() ? undefined : img;
 }
 
-function showAndFocusMainWindow(): void {
+export function showAndFocusMainWindow(): void {
   const mainWindow = getMainWindow();
   if (!mainWindow || mainWindow.isDestroyed()) {
     return;
@@ -31,29 +41,60 @@ function showAndFocusMainWindow(): void {
   }
 }
 
+export function focusToastConversation(
+  title: unknown,
+  explicitIndex: number | null = null
+): void {
+  const hideContent = settings.hideNotificationContentEnabled.value;
+  const index =
+    explicitIndex ??
+    conversationIndexForToast(title, recentConversations, hideContent);
+  const mainWindow = getMainWindow();
+  if (
+    index == null ||
+    !mainWindow ||
+    mainWindow.isDestroyed()
+  ) {
+    return;
+  }
+  mainWindow.webContents.send("focus-conversation", index);
+}
+
 /**
  * Show a desktop toast when the main window is unfocused.
- * Applies hide-content, sanitize defaults, and 4s dedupe.
+ * Native Notification is OS-managed (Focus Assist / DND). Quiet hours skip locally.
  */
 export function showMessageNotification(
   rawTitle: unknown,
-  rawBody: unknown
+  rawBody: unknown,
+  conversationIndex: number | null = null
 ): void {
   const mainWindow = getMainWindow();
   if (mainWindow && !mainWindow.isDestroyed() && mainWindow.isFocused()) {
     return;
   }
+  if (
+    quietHoursActive(
+      new Date(),
+      settings.quietHoursEnabled.value,
+      settings.quietHoursPreset.value
+    )
+  ) {
+    return;
+  }
 
   const hideContent = settings.hideNotificationContentEnabled.value;
-  const payload: NotifyPayload = sanitizePayload(
-    rawTitle,
-    rawBody,
-    hideContent
-  );
+  const payload: NotifyPayload = {
+    ...sanitizePayload(rawTitle, rawBody, hideContent),
+    conversationIndex,
+  };
   const now = Date.now();
   const { show, next } = shouldShowToast(lastToast, payload, now);
   lastToast = next;
   if (!show) {
+    return;
+  }
+  if (isToastTitleMuted(payload.title, settings.mutedToastTitles.value)) {
     return;
   }
 
@@ -66,9 +107,15 @@ export function showMessageNotification(
   const notification = new Notification({
     title: payload.title,
     body: payload.body,
+    silent: !settings.notificationSoundEnabled.value,
+    tag: toastGroupTag(payload),
+    ...notificationPlatformOptions(process.platform),
     ...(icon ? { icon } : {}),
   });
-  notification.on("click", () => showAndFocusMainWindow());
+  notification.on("click", () => {
+    showAndFocusMainWindow();
+    focusToastConversation(payload.title, payload.conversationIndex);
+  });
   notification.show();
 }
 
@@ -80,7 +127,15 @@ export function registerOsNotifyIpc(): void {
       console.warn("Ignoring invalid os-notify payload");
       return;
     }
-    showMessageNotification(parsed.title, parsed.body);
+    showMessageNotification(
+      parsed.title,
+      parsed.body,
+      parsed.conversationIndex
+    );
+  });
+  ipcMain.on("focus-toast-conversation", (_event, title: unknown) => {
+    showAndFocusMainWindow();
+    focusToastConversation(typeof title === "string" ? title : "");
   });
 }
 

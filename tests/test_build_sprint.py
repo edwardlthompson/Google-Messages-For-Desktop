@@ -141,6 +141,39 @@ class RepoModeTests(unittest.TestCase):
         self.assertIn("--lane auto", text)
         self.assertIn("build-sprint-status --json --lane auto", text)
 
+    def test_auto_lane_child_h2_product_sprints(self) -> None:
+        plan = """# BUILD_PLAN
+
+## Sprint E — Ongoing maintenance
+
+### Sequential
+
+1. 🔲 [AGENT] Dependabot / security triage
+
+## Sprint F — Golden Path on Electron
+
+### Sequential
+
+1. 🔲 [AGENT] about — port About lego
+"""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "bootstrap.config.json").write_text(
+                json.dumps(
+                    {
+                        "project_name": "Google Messages for Desktop",
+                        "purpose": "Electron wrapper",
+                        "stack": "node",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (root / "BUILD_PLAN.md").write_text(plan, encoding="utf-8")
+            status = build_status(root, lane="auto")
+            self.assertEqual(status["lane"], "child")
+            self.assertIn("Dependabot", status["next_row"]["task"])
+            self.assertIn("Sprint E", status["sprint"])
+
     def test_weekly_auto_markers(self) -> None:
         row = PlanRow(
             owner="AUTO",

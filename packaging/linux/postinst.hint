@@ -1,0 +1,14 @@
+# Debian postinst — Default Apps hint
+
+electron-builder already emits a `.desktop` with `MimeType` for `sms` / `smsto` / `tel` / `callto` / `im` / `mms`. After `apt install`, users may still need to pick the handler once.
+
+Suggested `postinst` snippet (do not run as root against another user's defaults):
+
+```
+xdg-mime default com.edwardlthompson.google-messages.desktop x-scheme-handler/sms || true
+xdg-mime default com.edwardlthompson.google-messages.desktop x-scheme-handler/smsto || true
+xdg-mime default com.edwardlthompson.google-messages.desktop x-scheme-handler/tel || true
+echo "If links still open the browser, set Default Apps in GNOME/KDE Settings."
+```
+
+The first-run Defaults panel is the supported UX; this hint is for distro packages only.

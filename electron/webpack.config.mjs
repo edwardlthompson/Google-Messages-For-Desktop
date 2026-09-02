@@ -70,4 +70,14 @@ const onboardingPreload = merge(base, {
   },
 });
 
-export default [main, preload, onboardingPreload];
+const feedbackPreload = merge(base, {
+  name: "feedback-bridge",
+  target: "electron-preload",
+  entry: "./src/preload/feedback_preload.ts",
+  output: {
+    filename: "feedback-bridge.js",
+    path: path.resolve(__dirname, "app"),
+  },
+});
+
+export default [main, preload, onboardingPreload, feedbackPreload];

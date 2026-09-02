@@ -5,7 +5,7 @@
   const progressEl = document.getElementById("progress");
   const continueBtn = document.getElementById("continue");
   const modeHint = document.getElementById("mode-hint");
-  const schemes = ["sms", "smsto", "tel", "callto", "im"];
+  const schemes = ["sms", "smsto", "tel", "callto", "im", "mms"];
 
   function setStatus(text) {
     if (statusEl) statusEl.textContent = text || "";
@@ -75,6 +75,8 @@
 
   api?.onRefreshDefaults?.(() => void refreshChecklist());
   void refreshChecklist();
+  const firstOpen = document.querySelector("[data-open]");
+  if (firstOpen instanceof HTMLButtonElement) firstOpen.focus();
   window.setInterval(refreshChecklist, 2000);
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") void refreshChecklist();

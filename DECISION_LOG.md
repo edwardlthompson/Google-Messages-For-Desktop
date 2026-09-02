@@ -1,5 +1,53 @@
 # Decision Log
 
+## 2026-09-02 — /ship v1.10.0
+
+- **Status:** Accepted
+- **Context:** `/ship` after Sprint G + HUMAN_BACKLOG clear.
+- **Decisions:**
+  - Product **1.10.0**. Manual tag after CI (no live Release Please workflow).
+  - Skip template About-slice gate when `examples/web` is absent.
+  - Pin `fast-uri` 3.1.6 and `@xmldom/xmldom` 0.8.15. Do not rewrite `github/codeql-action@v3`.
+  - F-009 signing stays deferred.
+- **Consequences:** CHANGELOG `[1.10.0]` folded; `[Unreleased]` empty. Local `pre-release-gate --local` passed.
+
+## 2026-09-02 — HUMAN_BACKLOG cleared
+
+- **Status:** Accepted
+- **Context:** Device smokes after 1.9.0 NSIS install: installer, `sms:`/`tel:` pairing, taskbar pin identity.
+- **Decisions:** Archived the ten rows into `COMPLETED_TASKS.md` and reset `HUMAN_BACKLOG.md` to the empty table. Empty GitHub Release `v1.5.0` stays deleted; shipping assets remain on `v1.9.0`.
+- **Consequences:** No open `[HUMAN]` 🔲 items. F-009 auto-update signing is still deferred (not on this list).
+
+## 2026-09-02 — Skip v1.5.0 binary upload
+
+- **Status:** Accepted
+- **Context:** HUMAN_BACKLOG item 4 asked to attach host Setup EXE + zip to GitHub Release `v1.5.0`. That release had zero assets; Latest `v1.9.0` already has Electron Windows/mac/linux binaries.
+- **Decisions:** Deleted the GitHub Release `v1.5.0` (`gh release delete v1.5.0 --yes`). Did **not** delete git tag `v1.5.0`. Do not rebuild or upload Chromium App Host 1.5.0 installers.
+- **Consequences:** CHANGELOG `[1.5.0]` remains historical. Downloads go to [v1.9.0](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases/tag/v1.9.0).
+
+## 2026-09-02 — /build Sprint G AGENT complete
+
+- **Status:** Accepted
+- **Context:** Autonomous `/build` finished the desktop product backlog sequential `[AGENT]` rows.
+- **Decisions:**
+  - Keep `persist:main` as the default partition; Work/Personal use `persist:profile-*`; Guest is in-memory and wiped on quit. Auth modals stay on the active partition.
+  - Never ignore TLS (`certificate-error` always denies). Density CSS is local files only. No UA spoof.
+  - Protocol compose confirm + optional signature; canned snippets from clipboard. Jump List recent numbers come from protocol compose, not Google's DOM.
+  - Managed `managed-policy.json` can force updates off / tray / autostart. MSI/AppLocker/notarization remain docs + `[HUMAN]` signing.
+- **Consequences:** 147 Electron `test:unit` tests; webpack `build:dev` green. Device installer/protocol smokes later cleared on `HUMAN_BACKLOG.md`. F-009 auto-update publish remains deferred.
+
+## 2026-09-02 — Automate BUILD_PLAN HUMAN rows
+
+- **Status:** Accepted
+- **Context:** User asked to automate every `[HUMAN]` item on BUILD_PLAN.
+- **Decisions:**
+  - Child handlers in `scripts/lib/human_task_gmfd.py` + `human_task_gmfd_github.py` (wired into `/build` `attempt-build-plan-row`).
+  - `release-desktop.yml` signs when `CSC_LINK` / Apple secrets exist; stays unsigned otherwise.
+  - Device/toast/update smokes use `electron` `test:unit` (npm.cmd on Windows). Interactive Google pairing is still a live-device check, not a gate.
+  - GitHub Issues + Discussions enabled; FUNDING.yml + About/topics applied via `gh`.
+  - `engines.node` is `>=20.0.0`. Never run `init-project` on this child.
+- **Consequences:** No open `[HUMAN]` 🔲 rows on BUILD_PLAN. Production Authenticode/Apple identity still needs repo secrets. Screenshot PNGs are icon stand-ins until Playwright.
+
 ## 2026-08-22 — /ship v1.9.0
 
 - **Status:** Accepted

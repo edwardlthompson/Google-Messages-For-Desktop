@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   findProtocolArg,
   normalizeNumber,
+  parseProtocolBody,
   parseProtocolUrl,
 } from "./protocolParse.ts";
 
@@ -25,12 +26,27 @@ describe("parseProtocolUrl", () => {
 
   it("parses sms/tel numbers", () => {
     assert.equal(parseProtocolUrl("sms:+15551212"), "+15551212");
+    assert.equal(parseProtocolUrl("mms:+15551212"), "+15551212");
     assert.equal(parseProtocolUrl("tel:5551212"), "5551212");
   });
 
   it("treats bare im: as open-only", () => {
     assert.equal(parseProtocolUrl("im:"), "");
     assert.equal(parseProtocolUrl("im:open"), "");
+  });
+
+  it("rejects javascript: / file: and oversized payloads", () => {
+    assert.equal(parseProtocolUrl("javascript:alert(1)"), null);
+    assert.equal(parseProtocolUrl("file:///tmp/x"), null);
+    assert.equal(parseProtocolUrl(`sms:+1?body=${"x".repeat(9000)}`), null);
+  });
+});
+
+describe("parseProtocolBody", () => {
+  it("reads sms:?body= and smsto:number:body", () => {
+    assert.equal(parseProtocolBody("sms:+15551212?body=Hello%20there"), "Hello there");
+    assert.equal(parseProtocolBody("smsto:+15551212:saved you a seat"), "saved you a seat");
+    assert.equal(parseProtocolBody("tel:+15551212"), "");
   });
 });
 

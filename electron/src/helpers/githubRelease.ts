@@ -3,14 +3,16 @@ import type { NamedAsset } from "./productUpdate.ts";
 
 export interface GithubRelease {
   htmlUrl: string;
+  tagName: string;
   assets: NamedAsset[];
 }
 
 export function parseGithubRelease(raw: unknown): GithubRelease | null {
   if (!raw || typeof raw !== "object") return null;
-  const obj = raw as { html_url?: unknown; assets?: unknown };
+  const obj = raw as { html_url?: unknown; tag_name?: unknown; assets?: unknown };
   const htmlUrl = typeof obj.html_url === "string" ? obj.html_url : "";
-  if (!Array.isArray(obj.assets)) return { htmlUrl, assets: [] };
+  const tagName = typeof obj.tag_name === "string" ? obj.tag_name : "";
+  if (!Array.isArray(obj.assets)) return { htmlUrl, tagName, assets: [] };
   const assets: NamedAsset[] = [];
   for (const item of obj.assets) {
     if (!item || typeof item !== "object") continue;
@@ -19,7 +21,7 @@ export function parseGithubRelease(raw: unknown): GithubRelease | null {
       assets.push({ name: a.name, url: a.browser_download_url });
     }
   }
-  return { htmlUrl, assets };
+  return { htmlUrl, tagName, assets };
 }
 
 export async function fetchLatestGithubRelease(

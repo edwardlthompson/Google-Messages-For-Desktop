@@ -11,6 +11,9 @@ import {
   parseOsNotifyIpc,
   sanitizePayload,
   shouldShowToast,
+  toastReplyActions,
+  toastGroupTag,
+  isToastTitleMuted,
 } from "./osNotificationLogic.ts";
 
 describe("sanitizePayload", () => {
@@ -18,6 +21,7 @@ describe("sanitizePayload", () => {
     assert.deepEqual(sanitizePayload("", "  ", false), {
       title: DEFAULT_NOTIFY_TITLE,
       body: DEFAULT_NOTIFY_BODY,
+      conversationIndex: null,
     });
   });
 
@@ -25,6 +29,7 @@ describe("sanitizePayload", () => {
     assert.deepEqual(sanitizePayload("Alice", "Hello", false), {
       title: "Alice",
       body: "Hello",
+      conversationIndex: null,
     });
   });
 
@@ -32,6 +37,7 @@ describe("sanitizePayload", () => {
     assert.deepEqual(sanitizePayload("Alice", "Secret", true), {
       title: HIDDEN_NOTIFY_TITLE,
       body: HIDDEN_NOTIFY_BODY,
+      conversationIndex: null,
     });
   });
 
@@ -39,6 +45,7 @@ describe("sanitizePayload", () => {
     assert.deepEqual(sanitizePayload(null, 42, false), {
       title: DEFAULT_NOTIFY_TITLE,
       body: DEFAULT_NOTIFY_BODY,
+      conversationIndex: null,
     });
   });
 });
@@ -75,11 +82,17 @@ describe("parseOsNotifyIpc", () => {
     assert.deepEqual(parseOsNotifyIpc({ title: "Hi", body: "There" }), {
       title: "Hi",
       body: "There",
+      conversationIndex: null,
     });
     assert.deepEqual(parseOsNotifyIpc({ title: 1, body: null }), {
       title: "",
       body: "",
+      conversationIndex: null,
     });
+    assert.deepEqual(
+      parseOsNotifyIpc({ title: "Ada", body: "Hi", conversationIndex: 1 }),
+      { title: "Ada", body: "Hi", conversationIndex: 1 }
+    );
   });
 });
 
@@ -109,7 +122,7 @@ describe("allowSessionPermission", () => {
       true
     );
     assert.equal(
-      allowSessionPermission("clipboard-read", "messages.google.com"),
+      allowSessionPermission("display-capture", "https://messages.google.com/web/"),
       true
     );
   });
@@ -124,5 +137,17 @@ describe("allowSessionPermission", () => {
       false
     );
     assert.equal(allowSessionPermission("notifications", ""), false);
+  });
+});
+
+describe("toast grouping and mute", () => {
+  it("never exposes reply actions and tags by conversation", () => {
+    assert.equal(toastReplyActions(), undefined);
+    assert.equal(
+      toastGroupTag({ title: "Ada", body: "Hi", conversationIndex: 2 }),
+      "gmfd-2"
+    );
+    assert.equal(isToastTitleMuted("Ada", ["ada"]), true);
+    assert.equal(isToastTitleMuted("Ada", []), false);
   });
 });

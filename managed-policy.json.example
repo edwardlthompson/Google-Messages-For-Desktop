@@ -1,0 +1,6 @@
+# managed-policy.json.example
+{
+  "autostart": false,
+  "tray": true,
+  "updatesOff": true
+}

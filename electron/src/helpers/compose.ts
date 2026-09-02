@@ -2,10 +2,12 @@
  * Build a page-context expression that starts a new Google Messages chat.
  * Ported from host/windows/src/compose.js / inject/compose-from-protocol.js.
  */
-export function buildComposeExpression(number: string): string {
+export function buildComposeExpression(number: string, body = ""): string {
   const n = JSON.stringify(number);
+  const b = JSON.stringify(body || "");
   return `(() => {
     const number = ${n};
+    const body = ${b};
     const RETRY_MS = 1500;
     const MAX_ATTEMPTS = 20;
 
@@ -76,12 +78,38 @@ export function buildComposeExpression(number: string): string {
 
     function setInputValue(input, value) {
       input.focus();
-      const proto = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value');
+      const Ctor = input.tagName === 'TEXTAREA' ? window.HTMLTextAreaElement : window.HTMLInputElement;
+      const proto = Object.getOwnPropertyDescriptor(Ctor.prototype, 'value');
       if (proto && proto.set) proto.set.call(input, value);
       else input.value = value;
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
       try { input.dispatchEvent(new InputEvent('input', { bubbles: true, data: value })); } catch (_) {}
+    }
+
+    function findMessageInput() {
+      const selectors = [
+        'textarea[aria-label*="message" i]', 'textarea[aria-label*="RCS" i]',
+        'textarea[placeholder*="message" i]', '[contenteditable="true"][aria-label*="message" i]',
+        'mws-message-compose textarea', 'mw-message-compose textarea',
+      ];
+      for (const sel of selectors) {
+        try { const el = document.querySelector(sel); if (el) return el; } catch (_) {}
+      }
+      return null;
+    }
+
+    function fillBody() {
+      if (!body) return;
+      const el = findMessageInput();
+      if (!el) return;
+      if (el.getAttribute && el.getAttribute('contenteditable') === 'true') {
+        el.focus();
+        el.textContent = body;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        return;
+      }
+      setInputValue(el, body);
     }
 
     function tryCompose() {
@@ -93,6 +121,7 @@ export function buildComposeExpression(number: string): string {
       input.dispatchEvent(new KeyboardEvent('keydown', {
         key: 'Enter', code: 'Enter', keyCode: 13, which: 13, bubbles: true,
       }));
+      fillBody();
       return true;
     }
 

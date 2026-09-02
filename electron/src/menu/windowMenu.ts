@@ -1,6 +1,9 @@
 import { MenuItemConstructorOptions } from "electron";
+import { menuCopy } from "../helpers/menuCopy";
 
-export const windowMenuTemplate: MenuItemConstructorOptions = {
-  label: "&Window",
-  role: "windowMenu",
-};
+export function windowMenuTemplate(): MenuItemConstructorOptions {
+  return {
+    label: menuCopy["menu.window"],
+    role: "windowMenu",
+  };
+}

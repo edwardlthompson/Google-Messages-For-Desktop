@@ -1,36 +1,36 @@
 # Feature: feedback
 
-> About / Help review dialogs for bug and feature reports. Not a donate nag.
+> About / Help review dialogs for bug and feature reports. Not a donate nag. Do not copy `examples/` over the app.
 
 ## Acceptance criteria
 
-- ✅ User-visible behavior: About has Report a bug and Request a feature; review panel shows escaped preview, Copy, Open GitHub, Discard
-- ✅ Offline/error behavior: Copy still works; Open GitHub disabled with i18n reason; search fail-soft
-- ✅ Accessibility: dialog `role="dialog"` with labelled buttons; no Android Toast
-- ✅ i18n: `feedback.*` web / `feedback_*` Android
+- ✅ User-visible behavior: Help (and the macOS app menu next to About) has Report a bug and Request a feature; review panel shows a text preview, Copy, Open GitHub, Discard
+- ✅ Offline/error behavior: Copy still works; Open GitHub disabled with i18n reason; `https` GitHub only
+- ✅ Accessibility: dialog window with labelled buttons; preview `role="region"`
+- ✅ i18n: `feedback.*` in `electron/src/helpers/feedbackCopy.ts`
 
 ## Smoke scenario
 
 1. Given crash-capture is off
-2. When the user opens About and Report a bug, types a description
-3. Then they can copy sanitized markdown; Open GitHub is enabled only when description or stack exists
+2. When the user opens Help → Report a bug and types a description
+3. Then they can copy the report; Open GitHub is enabled only when description exists and the app is online
 
 ## Container map
 
-| Layer | Web | Android |
-|-------|-----|---------|
-| View | `examples/web/src/components/FeedbackPanel.ts` | `examples/android/.../ui/feedback/` |
-| Logic | `examples/web/src/feedback/` | `examples/android/.../feedback/` |
-| Tests | `FeedbackPanel.test.ts`, `preview.test.ts` | `FeedbackPreviewTest.kt` |
-| Wiring | `appBootstrap.ts` / `AppShell.ts` ≤10 lines | `GoldenPathApp.kt` ≤10 lines |
+| Layer | Path |
+|-------|------|
+| View | `electron/src/helpers/feedbackPanelHtml.ts`, `electron/src/menu/items/feedback.ts` |
+| Logic | `electron/src/helpers/feedbackPreview.ts` |
+| Tests | `electron/src/helpers/feedbackPreview.test.ts` |
+| Wiring | Help / app menu items; `electron/src/helpers/feedbackUi.ts` |
 ## Tests
 
-- Automated: yes — `FeedbackPanel.test.ts`, `preview.test.ts`, `FeedbackPreviewTest.kt`
+- Automated: yes — XSS/escape, GitHub URL allowlist, preview uses `textContent`
 
 ## Fallback validation
 
-- Why tests are not feasible: N/A (automated tests exist)
-- Command: `python3 scripts/agent-run.py feature-gate --stack <active>`
+- Why tests are not feasible: N/A (preview logic is unit-tested)
+- Command: `python scripts/agent-run.py feature-gate --stack node`
 
 ## Definition of Done
 
@@ -38,5 +38,7 @@ See `docs/FEATURE_MODULES.md`. XSS test: preview never uses `innerHTML` of repor
 
 ## Notes
 
-- Settings toggle “Save crash details for me to review” defaults off (`feedback.save_crashes`)
+- Settings toggle “Save crash details for me to review” defaults off (`feedback.save_crashes` / `settings.save_crashes`)
 - Discard best-effort clears clipboard text we wrote
+- Duplicate-search / fingerprint titles are `docs/features/github-feedback.md`
+- After each AGENT step: `python scripts/agent-run.py watch-agent-gates --once --autofix --scope auto`

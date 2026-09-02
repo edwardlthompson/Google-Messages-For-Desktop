@@ -1,6 +1,6 @@
 {
   "name": "google-messages-for-desktop",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Google Messages desktop app (Electron). sms/tel/smsto/callto/im protocol compose on Windows, macOS, and Linux.",
   "main": "index.js",
   "scripts": {
@@ -33,7 +33,7 @@
     "url": "git+https://github.com/edwardlthompson/Google-Messages-For-Desktop.git"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "author": "Kelvin Nguyen",
   "license": "MIT",

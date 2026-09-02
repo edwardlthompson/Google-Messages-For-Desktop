@@ -43,7 +43,7 @@ def automate_branch_protection(root: Path, _cfg: dict) -> AttemptResult:
         vcode, vtail = run_cmd(root, bash_script(root, "scripts/verify-branch-protection.sh"))
         if vcode != 0:
             return AttemptResult(1, "branch-protection", vtail or f"verify exit {vcode}", True)
-    return AttemptResult(0, "branch-protection", "Required status checks configured on main", False)
+    return AttemptResult(0, "branch-protection", "Required status checks configured", False)
 
 
 def automate_dependabot_major_merge(root: Path, _cfg: dict) -> AttemptResult:

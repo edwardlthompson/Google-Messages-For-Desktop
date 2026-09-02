@@ -1,0 +1,12 @@
+[Unit]
+Description=Google Messages for Desktop
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/google-messages-for-desktop
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

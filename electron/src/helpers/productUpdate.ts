@@ -72,10 +72,38 @@ export function parseAssetVersion(
 export function selectProductAsset(
   assets: NamedAsset[],
   kind: ProductKind
-): { version: string; url: string } | null {
+): { version: string; url: string; name: string } | null {
+  let best: { version: string; url: string; name: string } | null = null;
   for (const asset of assets) {
     const version = parseAssetVersion(asset.name, kind);
-    if (version && asset.url) return { version, url: asset.url };
+    if (!version || !asset.url) continue;
+    if (!best || isNewerVersion(best.version, version)) {
+      best = { version, url: asset.url, name: asset.name };
+    }
+  }
+  return best;
+}
+
+/** Git tag `v1.9.0` or `1.9.0` — not used when an installer filename matches. */
+export function parseReleaseTag(tag: string | null | undefined): string | null {
+  if (!tag?.trim()) return null;
+  const match = /^v?(\d+\.\d+\.\d+)$/i.exec(tag.trim());
+  return match?.[1] ?? null;
+}
+
+export function resolveLatestInstaller(
+  assets: NamedAsset[],
+  kind: ProductKind,
+  tagName: string | null,
+  htmlUrl: string
+): { version: string; url: string; filename: string | null } | null {
+  const asset = selectProductAsset(assets, kind);
+  if (asset) {
+    return { version: asset.version, url: asset.url, filename: asset.name };
+  }
+  const version = parseReleaseTag(tagName);
+  if (version && htmlUrl) {
+    return { version, url: htmlUrl, filename: null };
   }
   return null;
 }

@@ -8,6 +8,16 @@ import {
   focusFunctions,
   recentThreadObserver,
 } from "./preload/observers";
+import {
+  applyPreferredRefreshHz,
+  startHighRefreshScrollObserver,
+} from "./preload/highRefreshScroll";
+import { bindFindBarIpc } from "./preload/findBar";
+import { bindOfflineBanner } from "./preload/offlineBanner";
+import {
+  GET_PREFERRED_REFRESH_CHANNEL,
+  PREFERRED_REFRESH_CHANNEL,
+} from "./helpers/displayRefresh";
 
 declare global {
   interface Window {
@@ -16,7 +26,12 @@ declare global {
       flash_main: () => void;
       should_hide: () => boolean;
       get_icon: () => Promise<string>;
-      os_notify: (payload: { title?: string; body?: string }) => void;
+      os_notify: (payload: {
+        title?: string;
+        body?: string;
+        conversationIndex?: number;
+      }) => void;
+      focus_toast_conversation: (title: string) => void;
       preload_init: () => void;
     };
   }
@@ -114,7 +129,16 @@ const preload_init = () => {
     childList: true,
   });
   ensureConversationObservers();
+  startHighRefreshScrollObserver();
 };
+
+ipcRenderer.on(PREFERRED_REFRESH_CHANNEL, (_event, hz) => {
+  applyPreferredRefreshHz(document.documentElement, hz);
+});
+void ipcRenderer
+  .invoke(GET_PREFERRED_REFRESH_CHANNEL)
+  .then((hz) => applyPreferredRefreshHz(document.documentElement, hz))
+  .catch(() => undefined);
 
 ipcRenderer.on("focus-conversation", (_event, i) => {
   if (typeof i !== "number" || !Number.isInteger(i) || i < 0) {
@@ -125,6 +149,9 @@ ipcRenderer.on("focus-conversation", (_event, i) => {
     fn();
   }
 });
+
+bindFindBarIpc();
+bindOfflineBanner();
 
 contextBridge.exposeInMainWorld("interop", {
   show_main_window: () => {
@@ -140,8 +167,18 @@ contextBridge.exposeInMainWorld("interop", {
     const data = await ipcRenderer.invoke("get-icon");
     return `data:image/png;base64,${data}`;
   },
-  os_notify: (payload: { title?: string; body?: string }) => {
+  os_notify: (payload: {
+    title?: string;
+    body?: string;
+    conversationIndex?: number;
+  }) => {
     ipcRenderer.send("os-notify", payload ?? {});
+  },
+  focus_toast_conversation: (title: string) => {
+    ipcRenderer.send(
+      "focus-toast-conversation",
+      typeof title === "string" ? title : ""
+    );
   },
   preload_init,
 });
@@ -209,6 +246,7 @@ webFrame.executeJavaScript(`
         const notification = new window.OldNotification(newTitle, notificationOpts);
         notification.addEventListener("click", () => {
           window.interop.show_main_window();
+          window.interop.focus_toast_conversation(newTitle);
           document.dispatchEvent(new Event("focus"));
         });
         window.interop.flash_main();

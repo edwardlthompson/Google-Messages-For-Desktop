@@ -4,7 +4,9 @@ import {
   MS_DAY,
   isNewerVersion,
   parseAssetVersion,
+  parseReleaseTag,
   productKindForPlatform,
+  resolveLatestInstaller,
   selectProductAsset,
   shouldCheckDaily,
   shouldNudgeDonate,
@@ -68,6 +70,59 @@ describe("selectProductAsset", () => {
     assert.deepEqual(picked, {
       version: "1.8.2",
       url: "https://example.com/setup.exe",
+      name: "Google.Messages-v1.8.2-win-x64.exe",
+    });
+  });
+
+  it("picks the newest matching installer, not the first", () => {
+    const picked = selectProductAsset(
+      [
+        {
+          name: "Google.Messages-v1.8.1-win-x64.exe",
+          url: "https://example.com/old.exe",
+        },
+        {
+          name: "Google.Messages-v1.9.0-win-x64.exe",
+          url: "https://example.com/new.exe",
+        },
+      ],
+      "exe"
+    );
+    assert.deepEqual(picked, {
+      version: "1.9.0",
+      url: "https://example.com/new.exe",
+      name: "Google.Messages-v1.9.0-win-x64.exe",
+    });
+  });
+});
+
+describe("parseReleaseTag and resolveLatestInstaller", () => {
+  it("parses v-prefixed tags", () => {
+    assert.equal(parseReleaseTag("v1.9.0"), "1.9.0");
+    assert.equal(parseReleaseTag("1.9.0"), "1.9.0");
+    assert.equal(parseReleaseTag("template-1.0.0"), null);
+  });
+
+  it("falls back to the git tag when assets are only zip or deb", () => {
+    const resolved = resolveLatestInstaller(
+      [
+        {
+          name: "Google.Messages-v1.9.1-linux-amd64.deb",
+          url: "https://example.com/deb",
+        },
+        {
+          name: "Google.Messages-v1.9.1-win-x64.zip",
+          url: "https://example.com/zip",
+        },
+      ],
+      "exe",
+      "v1.9.1",
+      "https://example.com/releases/v1.9.1"
+    );
+    assert.deepEqual(resolved, {
+      version: "1.9.1",
+      url: "https://example.com/releases/v1.9.1",
+      filename: null,
     });
   });
 });

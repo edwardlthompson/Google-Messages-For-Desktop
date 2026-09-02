@@ -7,11 +7,11 @@ import { IS_DEV } from "./constants";
 export class MenuManager {
   private applicationMenu: null | Menu;
   constructor() {
-    const menus = baseMenuTemplate;
+    const menus = baseMenuTemplate();
     if (IS_DEV) {
-      menus.push(devMenuTemplate);
+      menus.push(devMenuTemplate());
     }
-    menus.push(helpMenuTemplate);
+    menus.push(helpMenuTemplate());
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
     this.applicationMenu = Menu.getApplicationMenu();
   }

@@ -5,7 +5,19 @@ import { GITHUB_RELEASES_PAGE, VENMO_DONATE_URL } from "./donate";
 import { RESOURCES_PATH } from "./constants";
 import { fetchLatestGithubRelease } from "./githubRelease";
 import { productKindForPlatform } from "./productUpdate";
+import {
+  updateAvailableDetail,
+  updateAvailableMessage,
+  updateCurrentDetail,
+  updateFailedDetail,
+} from "./productUpdateCopy";
 import { decideForcedUpdateCheck, decideLaunchPrompt } from "./runAppUpdates";
+import { settings } from "./settings";
+import { policyDisablesUpdates } from "./managedPolicy";
+import { getManagedPolicy } from "./managedPolicyUi";
+import { menuCopy } from "./menuCopy";
+import { dialogA11yTitle } from "./dialogA11y";
+import { formatCopy } from "./i18n";
 import { createFilePrefsStore, type UpdatePrefsStore } from "./updatePrefs";
 
 let prefsStore: UpdatePrefsStore | null = null;
@@ -37,19 +49,23 @@ function store(): UpdatePrefsStore {
 function showDialog(
   options: Electron.MessageBoxOptions
 ): Promise<Electron.MessageBoxReturnValue> {
+  const titled = {
+    ...options,
+    title: dialogA11yTitle(options.title, options.message),
+  };
   return promptWindow
-    ? dialog.showMessageBox(promptWindow, options)
-    : dialog.showMessageBox(options);
+    ? dialog.showMessageBox(promptWindow, titled)
+    : dialog.showMessageBox(titled);
 }
 
 async function showDonateNudge(currentVersion: string): Promise<void> {
   const { response } = await showDialog({
     type: "info",
-    buttons: ["Donate via Venmo", "Not now"],
+    buttons: [menuCopy["menu.donate"], menuCopy["donate.not_now"]],
     defaultId: 1,
     cancelId: 1,
-    title: "Development is still going",
-    message: "Development is still going",
+    title: menuCopy["donate.title"],
+    message: menuCopy["donate.title"],
     detail:
       "You just got a new build. If this app helps you, you can support ongoing work on Venmo. This is optional and will not appear again until the next update.",
     icon: icon(),
@@ -60,22 +76,28 @@ async function showDonateNudge(currentVersion: string): Promise<void> {
   }
 }
 
-async function showUpdatePrompt(version: string, url: string): Promise<void> {
+async function showUpdatePrompt(
+  currentVersion: string,
+  latestVersion: string,
+  url: string,
+  filename: string | null
+): Promise<void> {
   const { response } = await showDialog({
     type: "info",
-    buttons: ["Install", "Later"],
+    buttons: [menuCopy["update.install"], menuCopy["update.later"]],
     defaultId: 0,
     cancelId: 1,
-    title: "Update available",
-    message: `Version ${version} is available.`,
-    detail: `You're on ${app.getVersion()}. Install opens the download in your browser.`,
+    title: menuCopy["update.available.title"],
+    message: updateAvailableMessage(latestVersion),
+    detail: updateAvailableDetail(currentVersion, latestVersion, filename),
     icon: icon(),
   });
-  store().markUpdateChecked(Date.now(), version);
   if (response === 0) {
-    const target = url || GITHUB_RELEASES_PAGE;
-    await shell.openExternal(target);
+    store().markUpdateChecked(Date.now());
+    await shell.openExternal(url || GITHUB_RELEASES_PAGE);
+    return;
   }
+  store().markUpdateChecked(Date.now(), latestVersion);
 }
 
 export async function presentLaunchPrompts(): Promise<void> {
@@ -88,12 +110,19 @@ export async function presentLaunchPrompts(): Promise<void> {
       store(),
       Date.now(),
       fetchLatestGithubRelease,
-      productKindForPlatform(process.platform)
+      productKindForPlatform(process.platform),
+      settings.checkForUpdateOnLaunchEnabled.value &&
+        !policyDisablesUpdates(getManagedPolicy())
     );
     if (prompt?.kind === "donate") {
       await showDonateNudge(version);
     } else if (prompt?.kind === "update") {
-      await showUpdatePrompt(prompt.version, prompt.url);
+      await showUpdatePrompt(
+        version,
+        prompt.version,
+        prompt.url,
+        prompt.filename
+      );
     }
   } finally {
     busy = false;
@@ -102,6 +131,7 @@ export async function presentLaunchPrompts(): Promise<void> {
 
 export async function checkForProductUpdate(interactive: boolean): Promise<void> {
   if (busy) return;
+  if (policyDisablesUpdates(getManagedPolicy())) return;
   busy = true;
   try {
     const version = app.getVersion();
@@ -110,21 +140,42 @@ export async function checkForProductUpdate(interactive: boolean): Promise<void>
       store(),
       Date.now(),
       fetchLatestGithubRelease,
-      productKindForPlatform(process.platform)
+      productKindForPlatform(process.platform),
+      true
     );
     if (result.kind === "update") {
-      await showUpdatePrompt(result.version, result.url);
+      await showUpdatePrompt(
+        version,
+        result.version,
+        result.url,
+        result.filename
+      );
     } else if (interactive && result.kind === "current") {
       await showDialog({
         type: "info",
-        title: "No Update Found",
-        message: "You're up to date.",
-        detail: `Google Messages ${version} is the latest version.`,
+        title: menuCopy["update.current.title"],
+        message: formatCopy(menuCopy["update.current.message"], {
+          latest: result.version,
+        }),
+        detail: updateCurrentDetail(version, result.version),
         icon: icon(),
       });
+    } else if (interactive && result.kind === "failed") {
+      const { response } = await showDialog({
+        type: "error",
+        buttons: [menuCopy["update.open_releases"], menuCopy["update.dismiss"]],
+        defaultId: 0,
+        cancelId: 1,
+        title: menuCopy["update.failed.title"],
+        message: menuCopy["update.failed.message"],
+        detail: updateFailedDetail(),
+        icon: icon(),
+      });
+      if (response === 0) {
+        await shell.openExternal(GITHUB_RELEASES_PAGE);
+      }
     }
   } finally {
     busy = false;
   }
 }
-

@@ -26,9 +26,9 @@ function sampleDigits(): string {
  */
 export function isOnboardingSampleUrl(url: string): boolean {
   if (!url || typeof url !== "string") return false;
-  if (!/^(sms|tel|smsto|callto|im):/i.test(url.trim())) return false;
+  if (!/^(sms|tel|smsto|callto|im|mms):/i.test(url.trim())) return false;
   // Strip scheme + query/hash, keep leading + / digits only from the number part
-  let rest = url.trim().replace(/^(sms|tel|smsto|callto|im):/i, "");
+  let rest = url.trim().replace(/^(sms|tel|smsto|callto|im|mms):/i, "");
   rest = rest.split("?")[0].split("#")[0];
   try {
     rest = decodeURIComponent(rest);

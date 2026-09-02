@@ -57,7 +57,7 @@ Trivy HIGH on transitive `brace-expansion`. Pin `electron/package.json` `overrid
 - Pre-release `feature-gate --stack multi` fails without `examples/web` — use stack from `.cursor/stack-selection.json` (`node`).
 - Scorecard deferred (H6): no `scorecard.yml`; security triage must skip when absent.
 - WSL: `gh` lives under `/mnt/c/Program Files/GitHub CLI/gh.exe` (spaces) — use `scripts/lib/resolve_gh.sh`.
-- GitHub Release `v1.5.0` notes published; **binary assets** (Setup EXE / zip) still need HUMAN `npm run release:windows` upload.
+- GitHub Release `v1.5.0` was notes-only (no binaries); deleted 2026-09-02. Git tag `v1.5.0` kept. Current Windows/mac/linux assets ship on `v1.9.0`.
 - Pages demo N/A (not a web stack).
 
 ## KB-006 — Windows notifications quirk

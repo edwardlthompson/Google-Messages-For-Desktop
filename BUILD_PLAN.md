@@ -19,15 +19,23 @@
 | ❌     | Blocked | Replace 🔲 when blocked; add brief reason after the description       |
 **Task format:** `🔲 [OWNER] Description` · done: `✅ [OWNER] Description` · blocked: `❌ [OWNER] Description — reason`
 
-> **Ship v1.9.0** tagged @ `73290d1`. Residual HUMAN: sign/smoke donate+update.
+> **Sprint G — Desktop product backlog** archived in COMPLETED_TASKS.md @ `2338c31`.
 
-> **Ship v1.8.1** archived in COMPLETED_TASKS.md @ `6adf8c6`. Residual HUMAN: sign/smoke.
+> **Sprint F — Golden Path on Electron** archived in COMPLETED_TASKS.md @ `2338c31`.
 
-> **R-Audit-2026-08-14** archived in COMPLETED_TASKS.md (AGENT/AUTO done; HUMAN residual).
+> **HUMAN automation + donations-updates** archived in COMPLETED_TASKS.md @ `2338c31`.
 
-> **Ship v1.8.0** tagged + unsigned Electron artifacts on GitHub Release. Residual HUMAN: sign/notarize + toast/tray device smoke.
+> **HUMAN_BACKLOG device + GitHub** archived in COMPLETED_TASKS.md @ `2338c31` (working tree).
 
-> **R-Audit-2026-07-29c** archived in COMPLETED_TASKS.md (AGENT/AUTO done; HUMAN residual).
+> **Ship v1.9.0** tagged @ `73290d1`. Residual: unsigned until `CSC_LINK` secrets (F-009).
+
+> **Ship v1.8.1** archived in COMPLETED_TASKS.md @ `6adf8c6`. Residual: F-009 signing.
+
+> **R-Audit-2026-08-14** archived in COMPLETED_TASKS.md.
+
+> **Ship v1.8.0** tagged + unsigned Electron artifacts on GitHub Release. Residual: F-009 signing.
+
+> **R-Audit-2026-07-29c** archived in COMPLETED_TASKS.md.
 
 ## Archived Sprints
 
@@ -37,56 +45,28 @@
 | Sprint B — Phase 1 | 2026-07-29 | `COMPLETED_TASKS.md` |
 | Sprint C — Phase 2 | 2026-07-29 | `COMPLETED_TASKS.md` |
 | Sprint D — Phase 3-4 | 2026-07-29 | `COMPLETED_TASKS.md` |
-| R-Audit-2026-07-29 | 2026-07-29 | AGENT/AUTO done; HUMAN residual |
-| R-Audit-2026-07-29b | 2026-07-29 | Windows App Host harden + docs; HUMAN residual |
-| Ship v1.5.0 | 2026-07-29 | Tag + Release notes; binaries HUMAN |
-| R-Audit-2026-07-29c | 2026-07-29 | Electron first-run audit fixes; HUMAN residual |
+| R-Audit-2026-07-29 | 2026-07-29 | AGENT/AUTO done |
+| R-Audit-2026-07-29b | 2026-07-29 | Windows App Host harden + docs |
+| Ship v1.5.0 | 2026-07-29 | Tag kept; empty GitHub Release deleted 2026-09-02 |
+| R-Audit-2026-07-29c | 2026-07-29 | Electron first-run audit fixes |
 | Ship v1.7.0 | 2026-07-29 | Electron multi-platform + unsigned CI artifacts |
 | Ship v1.7.1 | 2026-07-30 | Sign-in auto-complete + package verify + NativeImage |
 | Ship v1.8.0 | 2026-07-30 | Windows OS notify + tray unread |
-| R-Audit-2026-08-14 | 2026-08-14 | AGENT/AUTO done; HUMAN residual |
+| R-Audit-2026-08-14 | 2026-08-14 | AGENT/AUTO done |
 | Ship v1.8.1 | 2026-08-14 | Electron 41.10.3 + 0.17.0; unsigned CI artifacts |
 | Ship v1.9.0 | 2026-08-22 | Donate + GitHub installer checks; unsigned CI artifacts |
----
-
-## Post-ship residual HUMAN (v1.9.0)
-
-### Sequential
-
-1. 🔲 [HUMAN] Sign/notarize desktop artifacts (replace unsigned Release assets for production)
-2. 🔲 [HUMAN] Device smoke: first-run Defaults → Sign in → Verify; `tel:`/`sms:` compose
-3. 🔲 [HUMAN] Smoke: Windows toast + tray unread red-dot (unfocused SMS; Hide Notification Content; notification area near clock)
-4. 🔲 [HUMAN] Smoke v1.9.0: first launch has no donate popup; after a version change the ethical note appears once; Help → Donate via Venmo; Check for Updates uses GitHub installer assets
-
-### Parallel
-
-<!-- parallel_exception: residual HUMAN-only; no AGENT parallel scopes -->
-
-| Task | Owner | Isolated scope |
-|------|-------|----------------|
-| *None — see exception* | — | — |
-
-### Human & device
-
-1. 🔲 [HUMAN] Optional local `npm run release:windows` for signed Windows builds
-
+| HUMAN automation + donations-updates | 2026-09-02 | `COMPLETED_TASKS.md` |
+| Sprint E maintenance AGENT rows | 2026-09-02 | `COMPLETED_TASKS.md` |
+| Sprint F — Golden Path on Electron | 2026-09-02 | `COMPLETED_TASKS.md` |
+| Sprint G — Desktop product backlog | 2026-09-02 | `COMPLETED_TASKS.md` |
+| HUMAN_BACKLOG device + GitHub | 2026-09-02 | `COMPLETED_TASKS.md` |
 ---
 
 ## Sprint E — Ongoing maintenance
 
 ### Sequential
 
-1. 🔲 [AGENT] Dependabot / security triage per `docs/SECURITY_TRIAGE.md` when alerts appear
-2. 🔲 [HUMAN] GitHub Releases when packaging updates are needed (Electron via Actions or local)
-3. 🔲 [AGENT] Template update checks via `scripts/check-template-updates.sh` (stdout)
-4. 🔲 [HUMAN] Skim `AGENTS.md` + `BUILD_PLAN.md` for product-fit
-5. 🔲 [HUMAN] Optional: configure branch protection required checks for CI / CodeQL
-6. 🔲 [HUMAN] Keep deferred workflows deferred unless explicitly requested
-7. 🔲 [HUMAN] Optional: bump `engines.node` after packaging smoke
-8. 🔲 [DEFERRED] F-009 Wire auto-update publish + signing before enabling launch checks
-9. ✅ [AGENT] Align agent surface to bootstrap v0.17.0 (Critique, Codex opt-in, branding kit, pin)
-10. 🔲 [HUMAN] Optional Codex CLI smoke (`/codex-review`) if `OPENAI_API_KEY` is available locally
-11. 🔲 [HUMAN] Manual merge of `docs/INITIALIZATION_PROMPT.md` vs upstream (never blind overwrite)
+1. 🔲 [HUMAN] F-009 Wire auto-update publish + signing before enabling launch checks
 
 ### Parallel
 

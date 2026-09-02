@@ -1,6 +1,6 @@
 module.exports = {
   appId: "com.edwardlthompson.google-messages",
-  artifactName: "${productName}-v${version}-${os}-${arch}.${ext}",
+  artifactName: "Google.Messages-v${version}-${os}-${arch}.${ext}",
   productName: "Google Messages",
   copyright:
     "Copyright Google Messages For Desktop contributors; based on OrangeDrangon/android-messages-desktop (MIT)",
@@ -20,14 +20,16 @@ module.exports = {
       "x-scheme-handler/tel",
       "x-scheme-handler/callto",
       "x-scheme-handler/im",
+      "x-scheme-handler/mms",
     ],
     desktop: {
       entry: {
         Name: "Google Messages",
         Comment: "Google Messages for web with sms/tel/im protocol handlers",
         Categories: "Network;InstantMessaging;",
+        StartupWMClass: "Google Messages",
         MimeType:
-          "x-scheme-handler/sms;x-scheme-handler/smsto;x-scheme-handler/tel;x-scheme-handler/callto;x-scheme-handler/im;",
+          "x-scheme-handler/sms;x-scheme-handler/smsto;x-scheme-handler/tel;x-scheme-handler/callto;x-scheme-handler/im;x-scheme-handler/mms;",
       },
     },
   },
@@ -53,13 +55,13 @@ module.exports = {
         },
         {
           CFBundleURLName: "Instant Message",
-          CFBundleURLSchemes: ["im"],
+          CFBundleURLSchemes: ["im", "mms"],
         },
       ],
     },
   },
   portable: {
-    artifactName: "${productName}-v${version}-${os}-${arch}.portable.${ext}",
+    artifactName: "Google.Messages-v${version}-${os}-${arch}.portable.${ext}",
   },
   nsis: {
     allowToChangeInstallationDirectory: true,

@@ -1,0 +1,25 @@
+id: com.edwardlthompson.google-messages
+runtime: org.freedesktop.Platform
+runtime-version: "24.08"
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: "24.08"
+command: GoogleMessages
+finish-args:
+  - --share=network
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=dri
+  - --filesystem=xdg-download
+  - --talk-name=org.freedesktop.Notifications
+modules:
+  - name: google-messages
+    buildsystem: simple
+    build-commands:
+      - install -D GoogleMessages /app/bin/GoogleMessages
+    sources:
+      - type: file
+        url: https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases/download/v1.10.0/Google.Messages-v1.10.0-linux-x64.AppImage
+        sha256: REPLACE_WITH_SHA256

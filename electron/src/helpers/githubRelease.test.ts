@@ -15,6 +15,7 @@ describe("parseGithubRelease", () => {
   it("keeps named download URLs", () => {
     const parsed = parseGithubRelease({
       html_url: "https://example.com/r",
+      tag_name: "v1.8.2",
       assets: [
         {
           name: "Google.Messages-v1.8.2-win-x64.exe",
@@ -23,6 +24,7 @@ describe("parseGithubRelease", () => {
       ],
     });
     assert.equal(parsed?.htmlUrl, "https://example.com/r");
+    assert.equal(parsed?.tagName, "v1.8.2");
     assert.equal(parsed?.assets[0]?.url, "https://example.com/e");
   });
 });

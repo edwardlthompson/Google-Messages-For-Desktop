@@ -1,0 +1,4 @@
+/* Local density only. No remote @import. Comfortable spacing in the Messages webview. */
+html {
+  zoom: 1.06;
+}

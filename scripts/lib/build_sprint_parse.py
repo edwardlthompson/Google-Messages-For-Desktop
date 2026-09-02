@@ -7,7 +7,6 @@ from build_sprint_model import (
     ROW_BULLET,
     ROW_NUMBERED,
     SEQUENTIAL_HEADER,
-    SPRINT_HEADER,
     PlanRow,
 )
 
@@ -42,38 +41,6 @@ def split_sprint_phases(
         else:
             human.append(line)
     return pre, parallel, post, human
-
-
-def parse_sprint_blocks(text: str) -> list[tuple[str, list[str]]]:
-    blocks: list[tuple[str, list[str]]] = []
-    in_child = False
-    i = 0
-    lines = text.splitlines()
-    while i < len(lines):
-        line = lines[i]
-        if line.strip().startswith("## Child Repo Playbook"):
-            in_child = True
-            i += 1
-            continue
-        if not in_child:
-            i += 1
-            continue
-        if line.startswith("## Ongoing Maintenance"):
-            break
-        if SPRINT_HEADER.match(line):
-            title = line.strip().lstrip("#").strip()
-            block_lines: list[str] = [line]
-            i += 1
-            while i < len(lines) and not (
-                SPRINT_HEADER.match(lines[i])
-                or (lines[i].startswith("## ") and not lines[i].startswith("### "))
-            ):
-                block_lines.append(lines[i])
-                i += 1
-            blocks.append((title, block_lines))
-            continue
-        i += 1
-    return blocks
 
 
 def parse_maintenance_rows(text: str) -> tuple[list[PlanRow], list[PlanRow]]:

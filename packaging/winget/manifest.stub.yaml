@@ -1,0 +1,15 @@
+# Winget manifest stub — fill InstallerSha256 from the GitHub Release exe
+PackageIdentifier: EdwardLThompson.GoogleMessages
+PackageVersion: 1.9.0
+PackageLocale: en-US
+Publisher: edwardlthompson
+PackageName: Google Messages For Desktop
+License: MIT
+ShortDescription: Google Messages for web as a desktop app with sms/tel protocol handlers
+Installers:
+  - Architecture: x64
+    InstallerType: exe
+    InstallerUrl: https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases/download/v1.9.0/Google.Messages-v1.9.0-win-x64.exe
+    InstallerSha256: REPLACE_WITH_SHA256
+ManifestType: singleton
+ManifestVersion: 1.6.0

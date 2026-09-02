@@ -4,18 +4,19 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import { IS_WINDOWS, RESOURCES_PATH } from "./constants";
-import { buildComposeExpression } from "./compose";
+import { executeProtocolCompose } from "./composeExtrasUi";
 import {
   isAssociationOnlyMode,
   isOnboardingSampleUrl,
 } from "./onboardingMode";
-import {
+import { parseProtocolUrl } from "./protocolParse";
+
+export {
   findProtocolArg,
   normalizeNumber,
+  parseProtocolBody,
   parseProtocolUrl,
 } from "./protocolParse";
-
-export { findProtocolArg, normalizeNumber, parseProtocolUrl };
 
 export const PROTOCOL_SCHEMES = [
   "sms",
@@ -23,6 +24,7 @@ export const PROTOCOL_SCHEMES = [
   "smsto",
   "callto",
   "im",
+  "mms",
 ] as const;
 
 export const APP_NAME = "Google Messages";
@@ -34,6 +36,7 @@ export const PROG_IDS: Record<(typeof PROTOCOL_SCHEMES)[number], string> = {
   smsto: "GoogleMessages.smsto",
   callto: "GoogleMessages.callto",
   im: "GoogleMessages.im",
+  mms: "GoogleMessages.mms",
 };
 
 /** Instant Messaging client Capabilities (Win32 Clients\IM). */
@@ -90,12 +93,9 @@ export async function handleProtocolUrl(
   }
 
   try {
-    const result = await win.webContents.executeJavaScript(
-      buildComposeExpression(number),
-      true
-    );
+    const result = await executeProtocolCompose(win, url, number);
     console.log("Compose result", result);
-    return { ok: !!(result && result.ok), number, ...result };
+    return result;
   } catch (err) {
     console.error("Compose executeJavaScript failed", err);
     return { ok: false, number, error: String(err) };

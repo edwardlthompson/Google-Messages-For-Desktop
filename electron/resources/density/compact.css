@@ -1,0 +1,4 @@
+/* Local density only. No remote @import. Compact Messages webview. */
+html {
+  zoom: 0.92;
+}

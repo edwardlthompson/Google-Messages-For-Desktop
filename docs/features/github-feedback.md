@@ -1,11 +1,11 @@
 # Feature: github-feedback
 
-> Compose GitHub issue-form URLs, clipboard fallback, fail-soft duplicate search.
+> Compose GitHub issue-form URLs, clipboard fallback, fail-soft duplicate search. Do not copy `examples/` over the app.
 
 ## Acceptance criteria
 
-- ✅ User-visible behavior: small fields prefill `issues/new?template=...`; large bodies use clipboard + short URL
-- ✅ Offline/error behavior: `OWNER/REPO` never hits the network; 403/timeout/placeholder return `[]`
+- ✅ User-visible behavior: small fields prefill `issues/new?title=...`; large bodies use clipboard + short URL
+- ✅ Offline/error behavior: placeholder `OWNER/REPO` never hits the network; 403/timeout return `[]`
 - ✅ Accessibility: N/A (logic); Open GitHub is `https` only
 - ✅ i18n: N/A in this container (copy lives in `feedback.*`)
 
@@ -17,25 +17,26 @@
 
 ## Container map
 
-| Layer | Web | Android |
-|-------|-----|---------|
-| Logic | `examples/web/src/github-feedback/` | `examples/android/.../githubfeedback/` |
-| Tests | `*.test.ts` | `src/test/.../githubfeedback/` |
-| Wiring | none (Feedback UI calls this) |
+| Layer | Path |
+|-------|------|
+| Logic | `electron/src/helpers/githubFeedback.ts` |
+| Tests | `electron/src/helpers/githubFeedback.test.ts` |
+| Wiring | `electron/src/helpers/feedbackUi.ts` (Open GitHub) |
 ## Tests
 
-- Automated: yes — `*.test.ts` and Android `src/test/.../githubfeedback/`
+- Automated: yes — crash title, 60s search cooldown, 403/timeout/placeholder `[]`
 
 ## Fallback validation
 
-- Why tests are not feasible: N/A (automated tests exist)
-- Command: `python3 scripts/agent-run.py feature-gate --stack web`
+- Why tests are not feasible: N/A (composer logic is unit-tested)
+- Command: `python scripts/agent-run.py feature-gate --stack node`
 
 ## Definition of Done
 
-See `docs/FEATURE_MODULES.md`. Fallback: `cd examples/web && npm test -- github-feedback`.
+See `docs/FEATURE_MODULES.md`. Fallback: `npm --prefix electron run test:unit`.
 
 ## Notes
 
-- Own `isPlaceholderRepo` in this container (do not import About) so About add/remove still passes. Default feedback repo is `release_repo`
+- Own `isPlaceholderRepo` in this container (do not import About). Default feedback repo is `RELEASE_REPO`
 - Share the 60s cooldown with Open GitHub (Search API 10 req/min)
+- After each AGENT step: `python scripts/agent-run.py watch-agent-gates --once --autofix --scope auto`

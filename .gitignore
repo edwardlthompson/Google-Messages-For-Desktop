@@ -51,6 +51,7 @@ playwright-report/
 # Live user configs
 .app-update.json
 donations.json
+managed-policy.json
 
 # Node / tooling
 .turbo/

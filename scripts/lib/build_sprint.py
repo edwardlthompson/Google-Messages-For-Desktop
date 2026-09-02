@@ -12,7 +12,8 @@ from build_sprint_model import (
     next_actionable_row,
     row_action,
 )
-from build_sprint_parse import parse_maintainer_queue, parse_sprint_blocks
+from build_sprint_blocks import parse_sprint_blocks
+from build_sprint_parse import parse_maintainer_queue
 from build_sprint_resolve import resolve_sprint
 from weekly_health import is_recurring_weekly_auto, weekly_health_succeeded_this_week
 

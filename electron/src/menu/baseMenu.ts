@@ -7,17 +7,17 @@ import { settingsMenu } from "./settingsMenu";
 import { viewMenuTemplate } from "./viewMenu";
 import { windowMenuTemplate } from "./windowMenu";
 
-const baseMenuTemplate: MenuItemConstructorOptions[] = [
-  editMenuTemplate,
-  viewMenuTemplate,
-  windowMenuTemplate,
-];
-
-if (IS_MAC) {
-  baseMenuTemplate.unshift(appMenuTemplate);
-} else {
-  baseMenuTemplate.unshift(fileMenuTemplate);
-  baseMenuTemplate.push(settingsMenu);
+export function baseMenuTemplate(): MenuItemConstructorOptions[] {
+  const menus: MenuItemConstructorOptions[] = [
+    editMenuTemplate(),
+    viewMenuTemplate(),
+    windowMenuTemplate(),
+  ];
+  if (IS_MAC) {
+    menus.unshift(appMenuTemplate());
+  } else {
+    menus.unshift(fileMenuTemplate());
+    menus.push(settingsMenu());
+  }
+  return menus;
 }
-
-export { baseMenuTemplate };

@@ -2,10 +2,22 @@
 
 > Update only at milestone boundaries.
 
+## Milestone: /ship v1.10.0 (2026-09-02)
+
+- Product **1.10.0**: Sprint G desktop backlog + HUMAN device smokes + lockfile pins
+- F-009 auto-update signing still deferred; unsigned CI artifacts until `CSC_LINK`
+- Empty GitHub Release `v1.5.0` deleted (git tag kept)
+
+## Milestone: HUMAN_BACKLOG + /cleanup (2026-09-02)
+
+- Device smokes (NSIS 1.9.0 install, `sms:`/`tel:`, taskbar pin) done; empty GitHub Release `v1.5.0` deleted (git tag kept)
+- `HUMAN_BACKLOG.md` reset to empty table; ten rows archived in `COMPLETED_TASKS.md`
+- Active BUILD_PLAN is Sprint E only: **F-009** deferred (auto-update publish + signing)
+
 ## Project
 
 - **Repo:** `edwardlthompson/Google-Messages-For-Desktop` (fork of `kelyvin/Google-Messages-For-Desktop`)
-- **Product:** Electron desktop app for Google Messages Web (**v1.9.0** shipped); Chromium App Host / Nativefier = legacy
+- **Product:** Electron desktop app for Google Messages Web (**v1.10.0**); Chromium App Host / Nativefier = legacy
 - **Posture:** Active Electron first-run + multi-platform packaging; bootstrap FOSS alignment retained
 - **Template pin:** `agent-project-bootstrap` **0.17.0** on the v1.9.0 tag (local tree still has uncommitted 0.21.0 alignment)
 - **Stack:** `node` / `foss` — root packaging + `electron/`; no `examples/`

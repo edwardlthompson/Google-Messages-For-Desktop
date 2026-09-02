@@ -1,6 +1,6 @@
 # Feature: feedback-inbox
 
-> Maintainer inbox for `/audit` (fixes now) and `/ideas` (features after approval).
+> Maintainer inbox for `/audit` (fixes now) and `/ideas` (features after approval). Same CLI on this Electron child as on the template.
 
 ## Acceptance criteria
 
@@ -20,7 +20,7 @@
 | Layer | Path |
 |-------|------|
 | Logic | `scripts/lib/feedback_inbox.py` |
-| CLI | `scripts/feedback-inbox.sh` |
+| CLI | `scripts/feedback-inbox.sh` / `python scripts/agent-run.py feedback-inbox` |
 | Tests | `tests/test_feedback_inbox.py` |
 | Recipes | `.cursor/commands/audit.md`, `ideas.md`, `coach.md`, `docs/help/IDEAS.md` |
 ## Tests
@@ -29,8 +29,8 @@
 
 ## Fallback validation
 
-- Why tests are not feasible: N/A (automated tests exist)
-- Command: `python3 scripts/agent-run.py feature-gate --stack python`
+- Why tests are not feasible: N/A
+- Command: `python scripts/agent-run.py feedback-inbox`
 
 ## Definition of Done
 
@@ -40,3 +40,4 @@ Parse fixtures into `fixes` / `features` / `blocked` / `security_suspect`; skip 
 
 - `--limit 50` + `truncated: true` when more remain
 - `/triage` stays security-only
+- After each AGENT step: `python scripts/agent-run.py watch-agent-gates --once --autofix --scope auto`

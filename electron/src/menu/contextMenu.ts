@@ -1,51 +1,53 @@
-import { ContextMenuParams, Menu, MenuItemConstructorOptions } from "electron";
+import { clipboard, ContextMenuParams, Menu, MenuItemConstructorOptions, shell } from "electron";
 import { getMainWindow } from "../helpers/getMainWindow";
+import { menuCopy } from "../helpers/menuCopy";
+import { allowContextLink } from "../helpers/navigationAllowlist";
 import { separator } from "./items/separator";
 
-// WARNING THIS IS THE ONLY PLACE LEFT WITH FORCE TYPECASTS TO ANY
-// IT HAS NO SIDE EFFECTS
-// I WOULD NOT DO IT BUT I AM NOT POSITIVE HOW TO PROPERLY TYPE IT
+function standardMenuTemplate(): MenuItemConstructorOptions[] {
+  return [
+    {
+      label: menuCopy["menu.copy"],
+      role: "copy",
+    },
+    separator,
+    {
+      label: menuCopy["menu.select_all"],
+      role: "selectAll",
+    },
+  ];
+}
 
-const standardMenuTemplate: MenuItemConstructorOptions[] = [
-  {
-    label: "Copy",
-    role: "copy",
-  },
-  separator,
-  {
-    label: "Select All",
-    role: "selectAll",
-  },
-];
-
-const textMenuTemplate: MenuItemConstructorOptions[] = [
-  {
-    label: "Undo",
-    role: "undo",
-  },
-  {
-    label: "Redo",
-    role: "redo",
-  },
-  separator,
-  {
-    label: "Cut",
-    role: "cut",
-  },
-  {
-    label: "Copy",
-    role: "copy",
-  },
-  {
-    label: "Paste",
-    role: "paste",
-  },
-  separator,
-  {
-    label: "Select All",
-    role: "selectAll",
-  },
-];
+function textMenuTemplate(): MenuItemConstructorOptions[] {
+  return [
+    {
+      label: menuCopy["menu.undo"],
+      role: "undo",
+    },
+    {
+      label: menuCopy["menu.redo"],
+      role: "redo",
+    },
+    separator,
+    {
+      label: menuCopy["menu.cut"],
+      role: "cut",
+    },
+    {
+      label: menuCopy["menu.copy"],
+      role: "copy",
+    },
+    {
+      label: menuCopy["menu.paste"],
+      role: "paste",
+    },
+    separator,
+    {
+      label: menuCopy["menu.select_all"],
+      role: "selectAll",
+    },
+  ];
+}
 
 export const popupContextMenu = (
   _event: Electron.Event,
@@ -53,12 +55,12 @@ export const popupContextMenu = (
 ) => {
   let menu: Menu;
   if (params.mediaType === "none" && params.isEditable) {
-    const textMenuTemplateCopy = [...textMenuTemplate];
+    const textMenuTemplateCopy = textMenuTemplate();
     if (params.misspelledWord) {
       textMenuTemplateCopy.unshift(
         { type: "separator" },
         {
-          label: "Add to Dictionary",
+          label: menuCopy["menu.add_dictionary"],
           click: () =>
             getMainWindow()?.webContents.session.addWordToSpellCheckerDictionary(
               params.misspelledWord
@@ -76,7 +78,22 @@ export const popupContextMenu = (
     }
     menu = Menu.buildFromTemplate(textMenuTemplateCopy);
   } else {
-    menu = Menu.buildFromTemplate(standardMenuTemplate);
+    const items = standardMenuTemplate();
+    const link = params.linkURL;
+    if (link && allowContextLink(link)) {
+      items.unshift(
+        {
+          label: menuCopy["menu.open_link"],
+          click: () => void shell.openExternal(link),
+        },
+        {
+          label: menuCopy["menu.copy_link"],
+          click: () => clipboard.writeText(link),
+        },
+        separator
+      );
+    }
+    menu = Menu.buildFromTemplate(items);
   }
 
   menu?.popup();

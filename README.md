@@ -1,6 +1,5 @@
 # Google Messages for Desktop
 
-
 <p>
   <img src="https://img.shields.io/badge/template-1.0.0-656d76?style=flat-square" alt="template 1.0.0" />
   <img src="https://img.shields.io/badge/license-MIT-2ea043?style=flat-square" alt="MIT" />
@@ -17,18 +16,26 @@ A dedicated desktop app for [Google Messages for web](https://messages.google.co
 
 **Not** an official Google product and not affiliated with Google.
 
+## Pitch
+
+A dedicated Electron window for [Google Messages for web](https://messages.google.com/web), with tray options and OS handlers so `sms:` / `tel:` links open this app instead of a browser.
+
 | Platform | Package |
 |----------|---------|
 | **Windows** | NSIS installer, portable EXE, zip |
 | **macOS** | dmg, zip (build on macOS or [GitHub Actions](.github/workflows/release-desktop.yml)) |
 | **Linux** | AppImage, deb, zip (build on Linux or Actions) |
-**Downloads:** [GitHub Releases](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases)
-**Version:** 1.7.0 (see [CHANGELOG](CHANGELOG.md))
+**Downloads:** [GitHub Releases](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases) — Windows users can install with the NSIS Setup EXE or run the **portable** `.exe` / `.zip` without installing.
+**Version:** 1.10.0 (see [CHANGELOG](CHANGELOG.md))
 
 ## Support / Donate
 
 Support development on [Venmo](https://venmo.com/code?user_id=1857304970395648420).
 In the app: **Help → Donate via Venmo** (also linked from About).
+
+## Check for Updates
+
+**Help → Check for Updates** (also on the File / app menu) asks GitHub for the latest **Release installer** for this OS. If something newer is there, **Install** opens the download page; **Later** dismisses that version until you check again from the menu. The app does **not** silently download or run an updater. Failed checks offer the releases page instead of pretending you are up to date.
 
 ## Credits
 
@@ -45,9 +52,12 @@ Upstream history: [kelyvin/Google-Messages-For-Desktop](https://github.com/kelyv
 - Protocol handlers that compose a **new text** (not a voice call)
 - First-run: **Defaults → Sign in → optional Verify**
 - Tray / start-in-tray (from the OrangeDrangon-derived shell)
+- Windows OS toasts and tray unread red-dot; native toasts on macOS and Linux
+- Quiet **Donate via Venmo** in Help / About (no launch nag)
+- **Help → Check for Updates** looks at GitHub Release installer assets (Later vs Install; no silent download)
 - Windows, macOS, and Linux builds from the same [`electron/`](electron/) app
 
-## First-run (v1.7.0+)
+## First-run (v1.10.0)
 
 1. **Defaults** — Click each sample link (`sms:`, `smsto:`, `tel:`, `callto:`, `im:`) and choose **Google Messages**. These samples only set associations; they do **not** require you to be signed in and do not compose a message.
 2. **Sign in** — In the main window, sign in with Google and pair your phone (QR) if asked.
@@ -61,9 +71,9 @@ Re-open the defaults wizard anytime: **Settings → Set as Default Messaging App
 - Windows does **not** force itself as the default on every launch. Pick Google Messages in the chooser or in **Settings → Apps → Default apps**.
 - Optional advanced: set `GMFD_FORCE_SFTA=1` to force UserChoice via PS-SFTA (enterprise/testing). Details: [`docs/WINDOWS_PROTOCOL_HANDLERS.md`](docs/WINDOWS_PROTOCOL_HANDLERS.md).
 
-## Build locally
+## Quick start
 
-Requires **Node 18+**.
+Requires **Node 20+**.
 
 ```powershell
 # Dev
@@ -107,3 +117,15 @@ Actions artifacts are **unsigned smoke builds** unless you add signing secrets; 
 - Bootstrap alignment: [`docs/BOOTSTRAP_ALIGNMENT.md`](docs/BOOTSTRAP_ALIGNMENT.md)
 
 This Computer only — no Cursor Cloud Agents. Stack: `node` / FOSS (`agent-project-bootstrap` v1.0.0).
+
+## Contributing
+
+Issues and PRs welcome. Humans: [`CONTRIBUTING.md`](CONTRIBUTING.md). Agents: [`docs/START_HERE.md`](docs/START_HERE.md) and [`AGENTS.md`](AGENTS.md).
+
+## Security
+
+Do not file vulnerabilities in public issues. See [`SECURITY.md`](SECURITY.md) and [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md).
+
+## License
+
+MIT. Dual copyright in [`LICENSE`](LICENSE) (Kelvin Nguyen; Edward L. Thompson). Electron shell credit: OrangeDrangon (MIT).

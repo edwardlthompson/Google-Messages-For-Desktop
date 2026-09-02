@@ -8,13 +8,17 @@ import path from "path";
 import { trayMenuTemplate } from "../menu/trayMenu";
 import {
   INITIAL_ICON_IMAGE,
+  IS_LINUX,
   IS_MAC,
   IS_WINDOWS,
   RESOURCES_PATH,
   TRAY_AVATAR_SIZE,
 } from "./constants";
 import { settings } from "./settings";
+import { trayTooltipForUnread } from "./unreadChrome";
 import { separator } from "../menu/items/separator";
+import { isLocalTrayPng } from "./customTrayIcon";
+import { parseUnreadBadgeColor, unreadTrayFilenamePrefix } from "./unreadBadge";
 import { getMainWindow } from "./getMainWindow";
 
 // bring the settings into scoped
@@ -24,6 +28,7 @@ const {
   monochromeIconEnabled,
   showIconsInRecentConversationTrayEnabled,
   trayIconRedDotEnabled,
+  hideNotificationContentEnabled,
 } = settings;
 
 export interface Conversation {
@@ -50,6 +55,15 @@ export class TrayManager {
       const icon = this.getIconImage();
       if (icon) this.tray?.setImage(icon);
     });
+    hideNotificationContentEnabled.subscribe(() => this.refreshTrayMenu());
+    settings.customTrayIconPath.subscribe(() => {
+      const icon = this.getIconImage();
+      if (icon) this.tray?.setImage(icon);
+    });
+    settings.unreadBadgeColor.subscribe(() => {
+      const icon = this.getIconImage();
+      if (icon) this.tray?.setImage(icon);
+    });
   }
 
   public startIfEnabled(): void {
@@ -73,7 +87,7 @@ export class TrayManager {
       return;
     }
 
-    const trayContextMenu = Menu.buildFromTemplate(trayMenuTemplate);
+    const trayContextMenu = Menu.buildFromTemplate(trayMenuTemplate());
     this.tray.setContextMenu(trayContextMenu);
     this.tray.setToolTip("Google Messages");
     this.setupEventListeners();
@@ -91,11 +105,32 @@ export class TrayManager {
     if (icon) {
       this.tray?.setImage(icon);
     }
+    this.tray?.setToolTip(
+      trayTooltipForUnread(
+        val,
+        hideNotificationContentEnabled.value,
+        this.recentConversations[0]?.name ?? null
+      )
+    );
+    if (IS_LINUX) {
+      try {
+        this.tray?.setTitle(val ? "●" : "");
+      } catch {
+        /* AppIndicator title is best-effort */
+      }
+    }
   }
 
   public setRecentConversations(data: Conversation[]): void {
     this.recentConversations = data;
     this.refreshTrayMenu();
+    this.tray?.setToolTip(
+      trayTooltipForUnread(
+        this.messagesAreUnread,
+        hideNotificationContentEnabled.value,
+        this.recentConversations[0]?.name ?? null
+      )
+    );
   }
 
   public refreshTrayMenu() {
@@ -115,7 +150,7 @@ export class TrayManager {
       Menu.buildFromTemplate([
         ...conversationMenuItems,
         separator,
-        ...trayMenuTemplate,
+        ...trayMenuTemplate(),
       ])
     );
   }
@@ -129,6 +164,7 @@ export class TrayManager {
       image == null ||
       image === INITIAL_ICON_IMAGE ||
       !showIconsInRecentConversationTrayEnabled.value ||
+      hideNotificationContentEnabled.value ||
       !image.startsWith("data:image/")
     ) {
       return undefined;
@@ -151,12 +187,19 @@ export class TrayManager {
    * Gets the icon path taking into account all possible states and situations.
    */
   private getIconPath(): string {
+    const custom = settings.customTrayIconPath.value?.trim();
+    if (custom && isLocalTrayPng(custom)) {
+      return custom;
+    }
     let filename: string;
     if (IS_MAC) {
       filename = "icon_macTemplate.png";
     } else {
-      const unread =
-        this.messagesAreUnread && trayIconRedDotEnabled.value ? "unread_" : "";
+      const unread = unreadTrayFilenamePrefix(
+        this.messagesAreUnread,
+        trayIconRedDotEnabled.value,
+        parseUnreadBadgeColor(settings.unreadBadgeColor.value)
+      );
       const mono = monochromeIconEnabled.value ? "_mono" : "";
       filename = `${unread}icon${mono}.png`;
     }
@@ -181,11 +224,18 @@ export class TrayManager {
 
   private setupEventListeners() {
     this.tray?.on("click", this.handleTrayClick);
+    this.tray?.on("double-click", this.handleTrayClick);
+    (
+      this.tray as unknown as { on: (e: string, l: () => void) => void }
+    ).on("middle-click", this.handleTrayClick);
   }
 
   private destroyEventListeners() {
     this.tray?.removeListener("click", this.handleTrayClick);
     this.tray?.removeListener("double-click", this.handleTrayClick);
+    (
+      this.tray as unknown as { removeListener: (e: string, l: () => void) => void }
+    ).removeListener("middle-click", this.handleTrayClick);
   }
 
   private handleTrayClick = () => {

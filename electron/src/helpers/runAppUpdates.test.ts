@@ -14,6 +14,7 @@ function tempStore() {
 
 const newerRelease = async () => ({
   htmlUrl: "https://example.com/releases",
+  tagName: "v1.8.2",
   assets: [
     {
       name: "Google.Messages-v1.8.2-win-x64.exe",
@@ -65,6 +66,7 @@ describe("decideLaunchPrompt", () => {
       kind: "update",
       version: "1.8.2",
       url: "https://example.com/setup.exe",
+      filename: "Google.Messages-v1.8.2-win-x64.exe",
     });
 
     prefs.markUpdateChecked(MS_DAY, "1.8.2");
@@ -89,6 +91,25 @@ describe("decideLaunchPrompt", () => {
     );
     assert.equal(prompt, null);
   });
+
+  it("skips installer fetch when launch checks are off", async () => {
+    const { prefs } = tempStore();
+    prefs.markVersionSeen("1.8.1");
+    let fetched = 0;
+    const prompt = await decideLaunchPrompt(
+      "1.8.1",
+      prefs,
+      MS_DAY,
+      async () => {
+        fetched += 1;
+        return newerRelease();
+      },
+      "exe",
+      false
+    );
+    assert.equal(prompt, null);
+    assert.equal(fetched, 0);
+  });
 });
 
 describe("decideForcedUpdateCheck", () => {
@@ -111,6 +132,58 @@ describe("decideForcedUpdateCheck", () => {
       0,
       newerRelease
     );
-    assert.equal(result.kind, "current");
+    assert.deepEqual(result, { kind: "current", version: "1.8.2" });
+  });
+
+  it("still offers a newer installer after Later when ignoreDismissed", async () => {
+    const { prefs } = tempStore();
+    prefs.markUpdateChecked(0, "1.8.2");
+    const hidden = await decideForcedUpdateCheck(
+      "1.8.1",
+      prefs,
+      0,
+      newerRelease,
+      "exe",
+      false
+    );
+    assert.deepEqual(hidden, { kind: "current", version: "1.8.2" });
+    const offered = await decideForcedUpdateCheck(
+      "1.8.1",
+      prefs,
+      0,
+      newerRelease,
+      "exe",
+      true
+    );
+    assert.equal(offered.kind, "update");
+    if (offered.kind === "update") {
+      assert.equal(offered.version, "1.8.2");
+      assert.equal(offered.url, "https://example.com/setup.exe");
+    }
+  });
+
+  it("uses the git tag when no OS installer filename matches", async () => {
+    const { prefs } = tempStore();
+    const result = await decideForcedUpdateCheck(
+      "1.8.1",
+      prefs,
+      0,
+      async () => ({
+        htmlUrl: "https://example.com/r",
+        tagName: "v1.9.1",
+        assets: [
+          {
+            name: "Google.Messages-v1.9.1-win-x64.zip",
+            url: "https://example.com/zip",
+          },
+        ],
+      })
+    );
+    assert.deepEqual(result, {
+      kind: "update",
+      version: "1.9.1",
+      url: "https://example.com/r",
+      filename: null,
+    });
   });
 });

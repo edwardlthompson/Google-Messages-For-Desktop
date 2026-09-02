@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-09-02
+
+### Added
+
+- Protocol compose honors `sms:?body=` and `smsto:number:body` (capped, rejects `javascript:` / oversized URLs)
+- Settings: **Check for updates on launch** and **Start with the operating system**
+- Help protocol test links include a prefilled message body
+- Clicking an OS toast focuses the matching conversation when the web app list allows it
+- Quiet hours, notification sound, always on top, find in page (Ctrl+F), close-to-tray confirm
+- Help → Troubleshooting (toasts vs tray, Hide Content, local files, paste image, OS emoji)
+- Offline banner with Reload; local `user.css`; export/import/reset settings; spell-check language; Ctrl+P print; download folder
+- Explicit camera/mic prompt the first time Google Calls asks this session
+- Opt-in Settings → **Write verbose main-process log** (`main.log` in user data; off by default, restart to start writing)
+- Electron menus and dialogs follow the OS locale when Spanish (`es*`); other locales stay English
+- High-contrast OS theme uses black/white window chrome; Settings → Reduce motion skips taskbar flash; first-run wizard is Tab/Enter
+- Help → What’s New; packaging recipes (Winget/Homebrew/Flatpak/AUR/Scoop/MSIX)
+- Density presets, custom tray PNG, unread badge red vs accent, optional Windows 11 Mica
+- Calls camera/mic and screen-share prompts; Ctrl+Shift+M mute; download progress + open media; Ctrl+Shift+L focus conversation list
+- Main/Work/Personal Chromium partitions plus Guest (wiped on quit); TLS certificate interstitial (never ignored)
+- Clipboard snippets, optional protocol-only signature, confirm before sms/tel compose
+- Zoom remembered per display scale; Jump List / Dock / thumbnail New message; tray middle-click; systemd user unit recipe
+- Managed `managed-policy.json` (autostart/tray/updates-off); proxy status in Settings; no fake toast Reply
+
+### Changed
+
+- Check for Updates from the menu still offers a newer installer after **Later** (launch checks stay dismissed)
+- New installs default **Hide Notification Content** on (existing `settings.json` is unchanged)
+
+### Fixed
+
+- Native toasts on Linux set `urgency: normal` so they match Windows unfocused-message behavior
+- Tray avatars hide when Hide Notification Content is on
+- Pin Electron `fast-uri` 3.1.6 and `@xmldom/xmldom` 0.8.15 (lockfile HIGH/Medium)
+
 ## [1.9.0] - 2026-08-22
 
 ### Added

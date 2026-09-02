@@ -2,6 +2,18 @@ import { BehaviorSubject } from "rxjs";
 import jetpack from "fs-jetpack";
 import process from "process";
 import { SETTINGS_FILE } from "./constants";
+import { parseCloseAction } from "./closeBehavior";
+import { isQuietHoursPreset } from "./quietHours";
+import { clampZoomFactor } from "./windowPrefs";
+import { parseSpellCheckLanguage } from "./spellcheckLang";
+import { parseDensityPreset } from "./densityCss";
+import { parseUnreadBadgeColor } from "./unreadBadge";
+import { parseThemePref, type ThemePref } from "./settingsTheme";
+import { parseProfileId } from "./sessionProfile";
+import { parseSignature, parseSnippet } from "./composeExtras";
+import { parseZoomByDisplayScale } from "./windowPrefs";
+import { parsePhoneList } from "./jumpList";
+import { parseMutedToastTitles } from "./liveRegion";
 
 // base types in json
 type primative = null | boolean | number | string;
@@ -52,6 +64,38 @@ export interface JsonSettings {
   spellCheckEnabled: boolean;
   /** One-time Windows rollout: force tray on for notify/unread badge feature. */
   windowsTrayRolloutV1: boolean;
+  /** Opt-in local crash queue; default off. See crash-capture. */
+  saveCrashDetailsEnabled: boolean;
+  /** Native chrome theme; Google Messages web keeps its own appearance. */
+  themePreference: ThemePref;
+  /** Open the app when the user signs into the OS. */
+  startWithOsEnabled: boolean;
+  quietHoursEnabled: boolean;
+  quietHoursPreset: string;
+  notificationSoundEnabled: boolean;
+  alwaysOnTopEnabled: boolean;
+  savedZoomFactor: number;
+  closeActionPreference: string;
+  hardwareAccelerationEnabled: boolean;
+  userCssEnabled: boolean;
+  spellCheckLanguage: string;
+  customDownloadsPath: string;
+  verboseMainLogEnabled: boolean;
+  reduceMotionEnabled: boolean;
+  densityPreset: string;
+  customTrayIconPath: string;
+  unreadBadgeColor: string;
+  windowsMicaEnabled: boolean;
+  wrapperMuteHotkeyEnabled: boolean;
+  activeProfileId: string;
+  cannedSnippet1: string;
+  cannedSnippet2: string;
+  cannedSnippet3: string;
+  protocolSignature: string;
+  confirmProtocolCompose: boolean;
+  zoomByDisplayScale: { [key: string]: number };
+  lastProtocolNumbers: string[];
+  mutedToastTitles: string[];
 }
 
 // wraps json settings in the setting type for export
@@ -70,10 +114,10 @@ type WindowPosition = {
 };
 
 // default settings for the app
-const defaultSettings: JsonSettings = {
+export const defaultSettings: JsonSettings = {
   // Windows: tray on by default so unread red-dot works for new installs.
   trayEnabled: process.platform === "win32",
-  hideNotificationContentEnabled: false,
+  hideNotificationContentEnabled: true,
   startInTrayEnabled: false,
   autoHideMenuEnabled: false,
   seenMinimizeToTrayWarning: false,
@@ -89,6 +133,35 @@ const defaultSettings: JsonSettings = {
   trayIconRedDotEnabled: true,
   spellCheckEnabled: true,
   windowsTrayRolloutV1: false,
+  saveCrashDetailsEnabled: false,
+  themePreference: "system",
+  startWithOsEnabled: false,
+  quietHoursEnabled: false,
+  quietHoursPreset: "22-07",
+  notificationSoundEnabled: true,
+  alwaysOnTopEnabled: false,
+  savedZoomFactor: 1,
+  closeActionPreference: "ask",
+  hardwareAccelerationEnabled: true,
+  userCssEnabled: false,
+  spellCheckLanguage: "en-US",
+  customDownloadsPath: "",
+  verboseMainLogEnabled: false,
+  reduceMotionEnabled: false,
+  densityPreset: "default",
+  customTrayIconPath: "",
+  unreadBadgeColor: "red",
+  windowsMicaEnabled: false,
+  wrapperMuteHotkeyEnabled: true,
+  activeProfileId: "main",
+  cannedSnippet1: "",
+  cannedSnippet2: "",
+  cannedSnippet3: "",
+  protocolSignature: "",
+  confirmProtocolCompose: true,
+  zoomByDisplayScale: {},
+  lastProtocolNumbers: [],
+  mutedToastTitles: [],
 };
 
 // create default settings file if it doesnt exist
@@ -136,6 +209,36 @@ for (const name in settings) {
     }
   });
 }
+
+settings.themePreference.next(parseThemePref(settings.themePreference.value));
+settings.savedZoomFactor.next(clampZoomFactor(settings.savedZoomFactor.value));
+settings.closeActionPreference.next(
+  parseCloseAction(settings.closeActionPreference.value)
+);
+if (!isQuietHoursPreset(settings.quietHoursPreset.value)) {
+  settings.quietHoursPreset.next("22-07");
+}
+settings.spellCheckLanguage.next(
+  parseSpellCheckLanguage(settings.spellCheckLanguage.value)
+);
+settings.densityPreset.next(parseDensityPreset(settings.densityPreset.value));
+settings.unreadBadgeColor.next(
+  parseUnreadBadgeColor(settings.unreadBadgeColor.value)
+);
+settings.activeProfileId.next(parseProfileId(settings.activeProfileId.value));
+settings.cannedSnippet1.next(parseSnippet(settings.cannedSnippet1.value));
+settings.cannedSnippet2.next(parseSnippet(settings.cannedSnippet2.value));
+settings.cannedSnippet3.next(parseSnippet(settings.cannedSnippet3.value));
+settings.protocolSignature.next(parseSignature(settings.protocolSignature.value));
+settings.zoomByDisplayScale.next(
+  parseZoomByDisplayScale(settings.zoomByDisplayScale.value)
+);
+settings.lastProtocolNumbers.next(
+  parsePhoneList(settings.lastProtocolNumbers.value)
+);
+settings.mutedToastTitles.next(
+  parseMutedToastTitles(settings.mutedToastTitles.value)
+);
 
 // One-time Windows rollout: existing installs still had trayEnabled=false from
 // before OS notify / unread badge. Force tray + color icon once; users can

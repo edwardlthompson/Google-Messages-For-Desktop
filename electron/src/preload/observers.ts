@@ -7,9 +7,13 @@ import {
   DEFAULT_NOTIFY_BODY,
   DEFAULT_NOTIFY_TITLE,
 } from "../helpers/osNotificationLogic";
+import { liveRegionAnnouncement } from "../helpers/liveRegion";
 import {
   findConversationListRoot,
+  firstUnreadName,
+  focusConversationList,
   isUnreadPresent,
+  markUnreadConversationsRead,
 } from "./unreadDetect";
 
 let lastUnread = false;
@@ -17,16 +21,37 @@ let listRoot: Element | null = null;
 let unreadMutationObserver: MutationObserver | null = null;
 let recentMutationObserver: MutationObserver | null = null;
 
+function announceLive(text: string): void {
+  if (typeof document === "undefined" || typeof document.getElementById !== "function") {
+    return;
+  }
+  let el = document.getElementById("gmfd-live");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "gmfd-live";
+    el.setAttribute("role", "status");
+    el.setAttribute("aria-live", "polite");
+    el.style.cssText =
+      "position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)";
+    (document.body || document.documentElement).appendChild(el);
+  }
+  el.textContent = text;
+}
+
 function unreadObserver() {
   if (listRoot != null && !listRoot.isConnected) {
     return;
   }
   const unread = isUnreadPresent(listRoot ?? document.body);
   if (!lastUnread && unread) {
+    const who = firstUnreadName(listRoot ?? document);
     ipcRenderer.send("os-notify", {
-      title: DEFAULT_NOTIFY_TITLE,
+      title: who || DEFAULT_NOTIFY_TITLE,
       body: DEFAULT_NOTIFY_BODY,
+      conversationIndex: 0,
     });
+    const live = liveRegionAnnouncement(true);
+    if (live && document.hasFocus()) announceLive(live);
   }
   lastUnread = unread;
   ipcRenderer.send("set-unread-status", unread);
@@ -143,6 +168,16 @@ export function recentThreadObserver() {
   });
   ipcRenderer.send("set-recent-conversations", data);
 }
+
+ipcRenderer.on("mark-all-read", () => {
+  markUnreadConversationsRead(listRoot ?? document, (el) => {
+    (el as HTMLElement).click?.();
+  });
+});
+
+ipcRenderer.on("focus-conversation-list", () => {
+  focusConversationList(listRoot ?? document);
+});
 
 export function createRecentThreadObserver(): MutationObserver {
   ensureConversationObservers();
