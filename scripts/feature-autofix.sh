@@ -6,8 +6,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-# shellcheck source=lib/pick-python.sh
-. "$(dirname "$0")/lib/pick-python.sh"
+# shellcheck source=lib/resolve-python.sh
+. "$(cd "$(dirname "$0")" && pwd)/lib/resolve-python.sh"
 
 DRY=false
 PATHS=""

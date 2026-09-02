@@ -1,14 +1,10 @@
-# For Agents — Google Messages for Desktop
-
-Maintenance-mode Nativefier wrapper. Active module: [`modules/node/MODULE.md`](../modules/node/MODULE.md). No `examples/` tree.
+# For Agents
 
 ## Phased Loading
 
-SessionStart -> START_HERE.md -> CURSOR_MODES (pick mode) -> AGENTS.md -> BUILD_PLAN Sequential -> `modules/node/MODULE.md` -> Plan or Agent
+SessionStart -> START_HERE.md -> CURSOR_MODES (pick mode) -> AGENTS.md -> docs/spec.md + docs/plan.md -> BUILD_PLAN Sequential -> Active module -> WEB_PROJECT_LAYOUT (web hosting) -> DESIGN_GUIDE (web/android UI) -> Plan or Agent
 
 Batch slash commands: see [`docs/BATCH_COMMANDS.md`](BATCH_COMMANDS.md) (humans: [`docs/help/BATCH_COMMANDS.md`](help/BATCH_COMMANDS.md)).
-
-Do **not** run `init-project.sh`. Do **not** use Cloud Agents.
 
 ## Cursor mode transitions
 
@@ -41,7 +37,6 @@ Every task row in `BUILD_PLAN.md` and checklist in module docs, PR template, and
 | 🔲 | Open — default for new tasks |
 | ✅ | Done — swap 🔲 when complete; archive sprint to `COMPLETED_TASKS.md` |
 | ❌ | Blocked — swap 🔲 and append reason |
-
 **Format:** `🔲 Description` (or `🔲 [OWNER] Description` on BUILD_PLAN) · do not use `- [ ]` GitHub checkboxes.
 
 ## Repo hygiene
@@ -60,6 +55,7 @@ Every task row in `BUILD_PLAN.md` and checklist in module docs, PR template, and
 ```bash
 bash scripts/plan-parallel-dispatch.sh --require-sequential-clear --json
 bash scripts/check-parallel-scope.sh
+
 ```
 
 Write manifest to `.cursor/parallel-scope-lock.json`. Run `/scope` for auto Task dispatch when `agent_count >= 2`.
@@ -80,12 +76,11 @@ Write manifest to `.cursor/parallel-scope-lock.json`. Run `/scope` for auto Task
 | Human & device (after automation) | `automate_human` / `automate_adb` |
 | Automation exit 0 | Mark row ✅ in BUILD_PLAN |
 | Automation exit 1 | `scripts/build-backlog.sh add` → continue (row stays open in human group) |
-
 Place `[HUMAN]`/`[ADB]` rows only under `#### Human & device (after automation)` (or `### Human (after automation)` in maintenance) so humans can address them as one block after automation.
 
 Config env vars (optional): `BUILD_STACK`, `BUILD_PROJECT_NAME`, `BUILD_PURPOSE`, `GITHUB_REPO`, `BUILD_DONATION_URL`. Fallback: `.cursor/stack-selection.json`, `gh repo view`, folder name.
 
-Status: `bash scripts/build-sprint-status.sh --json --lane child` → `next_row.action` is `automate_human`, `automate_adb`, `execute`, or `parallel_dispatch`. Rows already in `HUMAN_BACKLOG.md` are skipped until a human clears them.
+Status: `bash scripts/build-sprint-status.sh --json --lane auto` → `next_row.action` is `automate_human`, `automate_adb`, `execute`, or `parallel_dispatch`. On this template, auto prefers Template Maintainer 🔲 AGENT rows; on child repos it uses the playbook. Pass `--lane child` to force the playbook. Rows already in `HUMAN_BACKLOG.md` are skipped until a human clears them.
 
 Disable autonomous ADR approval in child repos: add `<!-- no-auto-approve -->` to BUILD_PLAN.
 
@@ -113,7 +108,8 @@ Stack selection from init lives in `.cursor/stack-selection.json`.
 After each `[AGENT]` BUILD_PLAN step in a feature row:
 
 ```bash
-bash scripts/watch-agent-gates.sh --once --autofix
+bash scripts/watch-agent-gates.sh --once --autofix --scope auto
+
 ```
 
 - Exit `0`: proceed to next step
@@ -123,7 +119,8 @@ bash scripts/watch-agent-gates.sh --once --autofix
 Extended sessions:
 
 ```bash
-bash scripts/watch-agent-gates.sh --interval 60 --max-attempts 10 --autofix
+bash scripts/watch-agent-gates.sh --interval 60 --max-attempts 10 --autofix --scope auto
+
 ```
 
 Mechanical fixers run first via `feature-autofix.sh`. Push to remote still requires human approval (`destructive-ops.mdc`).
@@ -132,13 +129,18 @@ See `docs/FEATURE_MODULES.md`.
 
 ## Failure Playbook
 
-Use **Debug Mode** (`docs/CURSOR_MODES.md`, PROMPT_LIBRARY Entry 20) when CI or local gates fail and root cause is unclear.
+Use **Debug Mode** (`docs/CURSOR_MODES.md`, PROMPT_LIBRARY Entry 20, `/debug`) when CI or local gates fail and root cause is unclear.
+
+### Local feature-gate JSON
+
+After `watch-agent-gates` / `feature-gate --json`, read `.cursor/last-feature-gate.json` (`failed_stage`, `exit_code`, `log_tail`, `human_hint`). Read `.cursor/agent-progress.json` `strikes`. If `strikes >= 3`, halt and escalate with that evidence — do not apply a fourth mechanical fix.
 
 ### CI poll after push
 
 ```bash
 bash scripts/check-github-ci.sh --wait 300
 # Windows: pwsh scripts/check-github-ci.ps1 -WaitSeconds 300
+
 ```
 
 Required green workflows: **CI**, **Security Scan**, **CodeQL**.
@@ -167,6 +169,7 @@ Before launching parallel agents:
 
 ```bash
 bash scripts/check-parallel-scope.sh
+
 ```
 
 If overlap is reported, split tasks or serialize the conflicting rows in BUILD_PLAN.

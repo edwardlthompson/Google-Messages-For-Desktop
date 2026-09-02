@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+title: Google Messages for Desktop
+message: If you use this software, please cite it using these metadata.
+type: software
+authors:
+  - name: Edward L. Thompson
+repository-code: https://github.com/edwardlthompson/Google-Messages-For-Desktop
+url: https://github.com/edwardlthompson/Google-Messages-For-Desktop
+abstract: >-
+  Desktop wrapper for Google Messages for Web on Windows, macOS, and Linux
+  (Electron), with sms:/tel:/im: protocol compose.
+keywords:
+  - foss
+  - electron
+  - google-messages
+  - desktop
+license: MIT
+version: 1.0.0
+date-released: 2026-08-28

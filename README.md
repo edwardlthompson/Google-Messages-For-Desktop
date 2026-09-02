@@ -1,5 +1,18 @@
 # Google Messages for Desktop
 
+
+<p>
+  <img src="https://img.shields.io/badge/template-1.0.0-656d76?style=flat-square" alt="template 1.0.0" />
+  <img src="https://img.shields.io/badge/license-MIT-2ea043?style=flat-square" alt="MIT" />
+  <img src="https://img.shields.io/badge/FOSS-no_tracking-656d76?style=flat-square" alt="FOSS" />
+  <a href="https://github.com/edwardlthompson/Google-Messages-For-Desktop/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/edwardlthompson/Google-Messages-For-Desktop/ci.yml?style=flat-square&label=CI" alt="CI" /></a>
+  <img src="https://img.shields.io/badge/node-stack-1A73E8?style=flat-square" alt="node" />
+  <img src="https://img.shields.io/badge/AGENT-2ea043?style=flat-square" alt="AGENT" />
+  <img src="https://img.shields.io/badge/HUMAN-0969da?style=flat-square" alt="HUMAN" />
+  <img src="https://img.shields.io/badge/ADB-bf8700?style=flat-square" alt="ADB" />
+  <img src="https://img.shields.io/badge/AUTO-656d76?style=flat-square" alt="AUTO" />
+</p>
+
 A dedicated desktop app for [Google Messages for web](https://messages.google.com/web) — Electron window, tray options, and OS handlers for messaging links.
 
 **Not** an official Google product and not affiliated with Google.
@@ -93,4 +106,4 @@ Actions artifacts are **unsigned smoke builds** unless you add signing secrets; 
 - Threat model: [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md)
 - Bootstrap alignment: [`docs/BOOTSTRAP_ALIGNMENT.md`](docs/BOOTSTRAP_ALIGNMENT.md)
 
-This Computer only — no Cursor Cloud Agents. Stack: `node` / FOSS (`agent-project-bootstrap` v0.17.0).
+This Computer only — no Cursor Cloud Agents. Stack: `node` / FOSS (`agent-project-bootstrap` v1.0.0).

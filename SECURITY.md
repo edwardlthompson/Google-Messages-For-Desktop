@@ -11,7 +11,7 @@ Supported product line: latest release on default branch **`master`**. Template 
 
 ## Threat Model
 
-See [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md) and [`docs/PRIVACY.md`](docs/PRIVACY.md) for data-boundary expectations.
+See [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md), [`docs/PRIVACY.md`](docs/PRIVACY.md), and [`docs/PACKAGE_ATTESTATION.md`](docs/PACKAGE_ATTESTATION.md) for data-boundary and release-artifact expectations.
 
 ## Reporting a Vulnerability
 

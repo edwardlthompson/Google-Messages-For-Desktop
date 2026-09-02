@@ -7,8 +7,8 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PROGRESS="$ROOT/.cursor/agent-progress.json"
 mkdir -p "$ROOT/.cursor"
 
-# shellcheck source=lib/pick-python.sh
-. "$(dirname "$0")/lib/pick-python.sh"
+# shellcheck source=lib/resolve-python.sh
+. "$(cd "$(dirname "$0")" && pwd)/lib/resolve-python.sh"
 
 $PY - "$ROOT" "$PROGRESS" "$@" << 'PY'
 import json, re, sys

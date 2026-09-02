@@ -20,6 +20,8 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/extensions.json
 *.swp
 .cursor-session-state
 .cursor/agent-progress.json
@@ -81,3 +83,39 @@ win32-x64-template/
 *.tgz
 png-to-ico-*.tgz
 google-messages-logo.ico.large.bak
+
+# Merged from agent-project-bootstrap v1.0.0
+examples/web/dist/
+examples/android/.gradle/
+examples/android/build/
+examples/android/local.properties
+.cursor-session-state.json
+CURSOR_RADAR_SUGGESTIONS.md
+.cursor/gates-status.md
+.cursor/upd-status.md
+.cursor/encoding-strict
+# Cursor plugin pack output (see scripts/pack-cursor-plugin.sh)
+# Live user configs (examples committed; copies from init)
+openvex.json
+examples/web/public/app-update.json
+examples/web/public/donations.json
+examples/android/app/src/main/assets/app-update.json
+examples/android/app/src/main/assets/donations.json
+# Rust / Go
+target/
+examples/rust/target/
+# Python caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+# Android extras
+examples/android/.cxx/
+examples/android/captures/
+*.apk
+*.aab
+# Logs
+# Optional Nix (flake.nix wraps scripts/ only)
+result
+.direnv/
+scratchpad.md
+.cursor/handoff-*.md

@@ -4,27 +4,27 @@
 # Exit 0 prints count to stdout; exit 1 on API/auth error.
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-# shellcheck source=lib/resolve_gh.sh
-. "$ROOT/scripts/lib/resolve_gh.sh"
+if ! command -v gh >/dev/null 2>&1; then
+  echo "ERROR: gh CLI required" >&2
+  exit 1
+fi
 
-REPO="${GITHUB_REPO:-$("$GH_BIN" repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || true)}"
+REPO="${GITHUB_REPO:-$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || true)}"
 if [ -z "$REPO" ]; then
   echo "ERROR: gh auth required" >&2
   exit 1
 fi
 
-# shellcheck source=lib/pick-python.sh
-. "$ROOT/scripts/lib/pick-python.sh"
+# shellcheck source=lib/resolve-python.sh
+. "$(cd "$(dirname "$0")" && pwd)/lib/resolve-python.sh"
 
-COUNT="$("$PY" - "$REPO" "$GH_BIN" << 'PY'
+COUNT="$("$PY" - "$REPO" << 'PY'
 import json, subprocess, sys
 
 repo = sys.argv[1]
-gh = sys.argv[2]
 proc = subprocess.run(
     [
-        gh,
+        "gh",
         "api",
         "--paginate",
         f"repos/{repo}/dependabot/alerts?state=open&per_page=100",
@@ -41,6 +41,7 @@ if not raw:
     print(0)
     raise SystemExit(0)
 
+# --paginate may concatenate JSON arrays; parse objects incrementally
 alerts: list = []
 decoder = json.JSONDecoder()
 idx = 0

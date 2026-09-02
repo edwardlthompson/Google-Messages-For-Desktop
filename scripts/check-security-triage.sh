@@ -63,25 +63,20 @@ fi
 
 echo ""
 echo "=== OpenSSF Scorecard (latest run) ==="
-# Deferred in this product (H6): no scorecard.yml — do not block pre-release.
-if [ ! -f .github/workflows/scorecard.yml ] && [ ! -f .github/workflows/openssf-scorecard.yml ]; then
-  echo "OK   Scorecard deferred (no scorecard workflow in repo)"
-else
-  SCORECARD_CONC="$(gh run list --repo "$REPO" --workflow "OpenSSF Scorecard" --limit 1 \
-    --json conclusion -q '.[0].conclusion' 2>/dev/null || echo "")"
-  if [ -z "$SCORECARD_CONC" ] || [ "$SCORECARD_CONC" = "null" ]; then
-    if [ "$STRICT" = true ]; then
-      echo "FAIL: no Scorecard workflow run found (dispatch scorecard.yml or wait for schedule)"
-      ERRORS=$((ERRORS + 1))
-    else
-      echo "WARN: no Scorecard workflow run found (dispatch scorecard.yml or wait for schedule)"
-    fi
-  elif [ "$SCORECARD_CONC" = "success" ]; then
-    echo "OK   Scorecard workflow: success"
-  else
-    echo "FAIL: Scorecard workflow conclusion=${SCORECARD_CONC}"
+SCORECARD_CONC="$(gh run list --repo "$REPO" --workflow "OpenSSF Scorecard" --limit 1 \
+  --json conclusion -q '.[0].conclusion' 2>/dev/null || echo "")"
+if [ -z "$SCORECARD_CONC" ] || [ "$SCORECARD_CONC" = "null" ]; then
+  if [ "$STRICT" = true ]; then
+    echo "FAIL: no Scorecard workflow run found (dispatch scorecard.yml or wait for schedule)"
     ERRORS=$((ERRORS + 1))
+  else
+    echo "WARN: no Scorecard workflow run found (dispatch scorecard.yml or wait for schedule)"
   fi
+elif [ "$SCORECARD_CONC" = "success" ]; then
+  echo "OK   Scorecard workflow: success"
+else
+  echo "FAIL: Scorecard workflow conclusion=${SCORECARD_CONC}"
+  ERRORS=$((ERRORS + 1))
 fi
 
 if [ "$ERRORS" -gt 0 ]; then

@@ -5,7 +5,7 @@
 ## What is this?
 
 A desktop wrapper for [Google Messages for Web](https://messages.google.com/web): **Windows, macOS, and Linux** use the Electron app under [`electron/`](../electron/) (shell based on OrangeDrangon/android-messages-desktop) with `sms:`/`tel:`/`im:` protocol compose.
-Agent/process infrastructure is aligned with [`agent-project-bootstrap`](https://github.com/edwardlthompson/agent-project-bootstrap) **v0.17.0**.
+Agent/process infrastructure is aligned with [`agent-project-bootstrap`](https://github.com/edwardlthompson/agent-project-bootstrap) **v1.0.0**.
 
 ## Read order
 
@@ -26,3 +26,7 @@ Agent/process infrastructure is aligned with [`agent-project-bootstrap`](https:/
 - First-run: Defaults → Sign in → optional Verify
 - Donate: quiet **Donate via Venmo** in Help / About (no launch nag)
 - Shipping: electron-builder; CI workflow `release-desktop.yml`
+
+## Agent labels
+
+See [`docs/help/GLOSSARY.md`](help/GLOSSARY.md): [**Sacred**](help/GLOSSARY.md#sacred) · [**Canon**](help/GLOSSARY.md#canon) · [**AGENT**](help/GLOSSARY.md#agent) · [**HUMAN**](help/GLOSSARY.md#human) · [**ADB**](help/GLOSSARY.md#adb) · [**AUTO**](help/GLOSSARY.md#auto).

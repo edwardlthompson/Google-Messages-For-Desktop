@@ -12,6 +12,11 @@ This fork is maintained at [`edwardlthompson/Google-Messages-For-Desktop`](https
 | `HUMAN` | Human developer | Approvals, credentials, GitHub settings, releases |
 | `ADB` | — | N/A for this repo |
 | `AUTO` | CI/scripts | GitHub Actions, Dependabot, pre-commit |
+
+## For coding agents
+
+Read [`AGENTS.md`](AGENTS.md) and [`docs/START_HERE.md`](docs/START_HERE.md) before editing. Run `/build` for the next Sequential row, then `python scripts/agent-run.py watch-agent-gates --once --autofix`. Do not `git push` unless a human approved it or the user invoked `/push` or `/ship`. Use Conventional Commits. Do not halt on `[HUMAN]` labels — automate first, then backlog.
+
 ## Product posture
 
 The project is in **maintenance mode** — no new product features. Welcome contributions that improve packaging reliability, security, documentation, or agent/bootstrap alignment. Do **not** ship the Messages UI inside Electron/WebView2 (Google rejects sign-in) unless a HUMAN decision changes posture.

@@ -2,11 +2,12 @@
 
 1. **First read:** `docs/START_HERE.md`
 2. **Cursor modes:** `docs/CURSOR_MODES.md` (Ask / Plan / Agent / Debug routing)
-3. **Maintenance / alignment mode:** `docs/INITIALIZATION_PROMPT.md` (do **not** treat this as a fresh bootstrap)
-4. **Reference mode:** `docs/FOR_AGENTS.md` + `TEMPLATE_INDEX.json`
-5. **Task board:** `BUILD_PLAN.md` (Sequential before Parallel) — status: 🔲 open · ✅ done · ❌ blocked
-6. **Parallel dispatch:** prefer local Task/worktrees/`/best-of-n` — see `.cursor/rules/local-compute.mdc`
-7. **Living memory:** update `AGENT_MEMORY.md` only at milestone boundaries
+3. **Why / coach:** `docs/BEST_PRACTICES.md` · 30-day playbook `docs/FIRST_30_DAYS.md` · `/coach` · backlog `/ideas` (`docs/help/IDEAS.md`) · first-run `/tour` (`docs/help/TOUR.md` in other IDEs) · portability `docs/AGENT_PORTABILITY.md`
+4. **Maintenance / alignment mode:** `docs/INITIALIZATION_PROMPT.md` (do **not** treat this as a fresh bootstrap)
+5. **Reference mode:** `docs/FOR_AGENTS.md` + `TEMPLATE_INDEX.json`
+6. **Task board:** `BUILD_PLAN.md` (Sequential before Parallel) — status: 🔲 open · ✅ done · ❌ blocked
+7. **Parallel dispatch:** prefer local Task/worktrees/`/best-of-n` — see `.cursor/rules/local-compute.mdc`
+8. **Living memory:** update `AGENT_MEMORY.md` only at milestone boundaries
 
 > Legacy `.cursorrules` is deprecated. Use `.cursor/rules/*.mdc` and this file instead.
 
@@ -21,11 +22,34 @@
 - **This Computer only** — no Cursor Cloud Agents / cloud environments for this repo
 - FOSS MIT; dual copyright in `LICENSE`; credit OrangeDrangon in README; Venmo donate link in Help/About/README
 
+## Environment & Dependency Management
+
+| Tool | Role |
+|------|------|
+| Python 3.11+ | Gates, adapters (`scripts/lib/resolve-python.sh`; child also keeps `pick-python.sh`) |
+| Git | Required |
+| Node 22 + npm | Electron packaging under `electron/` |
+Copy `.env.example` → `.env` (never commit `.env`). Manifest: `bootstrap.config.json`.
+
+## Build, Test, and Validation Commands
+
+```bash
+python scripts/agent-run.py verify
+python scripts/agent-run.py validate-bootstrap --quick
+python scripts/agent-run.py feature-gate --stack node
+python scripts/agent-run.py watch-agent-gates --once --autofix
+python scripts/agent-run.py check-repo-hygiene
+
+```
+
+Do not mark a BUILD_PLAN row complete if verify / feature-gate fails.
+
 ## Coding Style
 
 - Conventional Commits for all changes
 - Small, modular changes; read-before-write
 - Cursor mode routing per `docs/CURSOR_MODES.md`; Plan for non-trivial tasks with resolved `### Critique` (Issue→Resolution baked into the plan body)
+- Max 300 lines static data (UI + i18n), 150 lines pure logic
 
 ## Session Protocol
 
@@ -55,3 +79,5 @@ Do **not** vendor `examples/**`.
 - Commercial cloud/Bugbot/Automations stay **hidden** (`distribution_tier: foss`)
 
 Validate: `python scripts/agent-run.py check-cursor-hooks -- --smoke` (or `python3` on Unix)
+
+After editing this file, run `bash scripts/bootstrap-lifecycle.sh --sync-adapters`.

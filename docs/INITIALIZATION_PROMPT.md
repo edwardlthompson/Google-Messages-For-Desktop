@@ -1,7 +1,7 @@
 # Initialization Prompt — Maintenance Alignment (Not Fresh Bootstrap)
 
-> This repository is an **existing product** (Google Messages for Desktop) with surgical agent-project-bootstrap alignment.  
-> **Do not** run `scripts/init-project.sh` / `init-project.ps1`.  
+> This repository is an **existing product** (Google Messages for Desktop) with surgical agent-project-bootstrap alignment.
+> **Do not** run `scripts/init-project.sh` / `init-project.ps1`.
 > **Do not** pretend this is Sprint 0 greenfield.
 
 ## When an agent lands here
@@ -10,7 +10,8 @@
 2. Read `BUILD_PLAN.md` Sequential lane
 3. Respect locked decisions in `docs/BOOTSTRAP_ALIGNMENT.md` §8 and `DECISION_LOG.md`
 4. Stack: `.cursor/stack-selection.json` → `"stack": "node"`, `"distribution_tier": "foss"`
-5. No `examples/**` vendor; Golden Path is **root Nativefier packaging scripts**
+5. No `examples/**` vendor; Golden Path is **Electron under `electron/`**
+6. Agent/process pin: [`agent-project-bootstrap`](https://github.com/edwardlthompson/agent-project-bootstrap) **v1.0.0** (`.template-version`)
 
 ## Locked high-risk defaults
 
@@ -23,7 +24,6 @@
 | Optional workflows | Deferred (Scorecard, Release Please, Pages, stale, weekly-health, automerge PAT) |
 | Compute | This Computer only — no Cloud Agents |
 | Product scope | Alignment/maintenance only — no feature revival |
-
 ## If asked to “bootstrap”
 
 Interpret as: continue alignment/maintenance per `BUILD_PLAN.md`, not template `init-project`.

@@ -6,7 +6,17 @@
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         ".template-version",
-        "TEMPLATE_INDEX.json"
+        "TEMPLATE_INDEX.json",
+        {
+          "type": "yaml",
+          "path": "CITATION.cff",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": ".cursor-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
       ],
       "include-component-in-tag": false,
       "include-v-in-tag": true
@@ -16,8 +26,6 @@
     { "type": "feat", "section": "Added" },
     { "type": "fix", "section": "Fixed" },
     { "type": "perf", "section": "Changed" },
-    { "type": "revert", "section": "Changed" },
-    { "type": "docs", "section": "Documentation" },
-    { "type": "chore", "section": "Changed" }
+    { "type": "revert", "section": "Changed" }
   ]
 }

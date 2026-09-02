@@ -6,7 +6,8 @@
 
 - ✅ User can open a Settings panel/screen from the main navigation
 - ✅ Theme preference (light/dark/system) persists across restarts
-- ✅ Update-check toggle respects opt-in telemetry policy (`docs/PRIVACY.md`)
+- ✅ Optional **Save crash details for me to review** toggle (default off); see `docs/features/feedback.md` and `docs/features/crash-capture.md`
+- ✅ Daily GitHub installer checks are not gated here (see `docs/features/donations-updates.md`)
 - ✅ Offline: settings load last persisted values; no network required for display
 - ✅ i18n: all user-visible strings under `settings.*` keys
 
@@ -24,6 +25,14 @@
 | View | `examples/web/src/components/SettingsPanel.ts` | `examples/android/.../ui/settings/` |
 | Tests | `settings/*.test.ts` | `src/test/.../settings/` |
 | Wiring | `appBootstrap.ts` + `AppShell.ts` | `GoldenPathApp.kt` (composition root) |
+## Tests
+
+- Automated: yes — `examples/web/src/settings/` and Android `src/test/.../settings/`
+
+## Fallback validation
+
+- Why tests are not feasible: N/A (automated tests exist)
+- Command: `python3 scripts/agent-run.py feature-gate --stack <active>`
 
 ## Out of scope (Sprint 2)
 
