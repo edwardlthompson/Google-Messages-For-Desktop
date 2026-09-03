@@ -6,7 +6,7 @@ Source the GitHub Release AppImage or `.deb`. Do not vendor Electron in git.
 
 ```
 pkgname=google-messages-for-desktop-bin
-pkgver=1.10.0
+pkgver=1.10.1
 pkgrel=1
 arch=('x86_64')
 license=('MIT')

@@ -3,7 +3,7 @@
 Publish runbook: [`docs/WINGET.md`](../../docs/WINGET.md).
 
 ```bash
-bash scripts/generate-winget-manifest.sh EdwardLThompson.GoogleMessages 1.10.0 packaging/winget
+bash scripts/generate-winget-manifest.sh EdwardLThompson.GoogleMessages 1.10.1 packaging/winget
 bash scripts/validate-winget-stub.sh packaging/winget/manifest.stub.yaml
 
 ```

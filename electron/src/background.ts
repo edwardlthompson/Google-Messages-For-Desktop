@@ -4,6 +4,7 @@ import {
   Event as ElectronEvent,
   ipcMain,
   nativeImage,
+  nativeTheme,
   powerMonitor,
   screen,
   shell,
@@ -69,6 +70,13 @@ import { bindGuestSessionWipe, currentSessionPartition } from "./helpers/session
 import { bindOsChromeTasks } from "./helpers/jumpListUi";
 import { protocolLaunchFromArgv } from "./helpers/jumpList";
 import { loadManagedPolicy } from "./helpers/managedPolicyUi";
+import { parseThemePref, windowBackgroundForTheme } from "./helpers/settingsTheme";
+import {
+  SPLASH_FALLBACK_MS,
+  shouldOpenSplash,
+  shouldRevealMain,
+} from "./helpers/splash";
+import { dismissLaunchSplash, openLaunchSplash } from "./helpers/splashUi";
 import fs from "fs";
 
 const {
@@ -158,12 +166,15 @@ if (gotTheLock) {
 
   app.on("ready", () => {
     bindAppLocale();
+    const startInTray =
+      settings.trayEnabled.value && settings.startInTrayEnabled.value;
+    const splash = shouldOpenSplash(startInTray) ? openLaunchSplash() : null;
+    setImmediate(() => {
     loadManagedPolicy();
     bindGuestSessionWipe();
     bindCertErrorInterstitial();
     void presentPendingCrashIfAny();
     registerElectronProtocolClients();
-    registerWindowsProtocolHandlers();
 
     trayManager = new TrayManager();
 
@@ -192,6 +203,11 @@ if (gotTheLock) {
       autoHideMenuBar: autoHideMenuEnabled.value,
       title: "Google Messages",
       show: false,
+      backgroundColor: windowBackgroundForTheme(
+        parseThemePref(settings.themePreference.value),
+        nativeTheme.shouldUseDarkColors,
+        nativeTheme.shouldUseHighContrastColors
+      ),
       icon: appWindowIcon(),
       titleBarStyle: IS_MAC ? "hiddenInset" : "default",
       ...(IS_WINDOWS && settings.windowsMicaEnabled.value
@@ -252,14 +268,29 @@ if (gotTheLock) {
     void presentLaunchPrompts();
 
     const blockingOnboarding = maybeShowOnboarding(mainWindow);
-    if (
-      !blockingOnboarding &&
-      !(settings.trayEnabled.value && settings.startInTrayEnabled.value)
-    ) {
-      mainWindow.show();
+    if (blockingOnboarding) {
+      dismissLaunchSplash(splash);
+    } else {
+      let revealed = false;
+      const reveal = (): void => {
+        if (revealed) return;
+        revealed = true;
+        dismissLaunchSplash(splash);
+        if (
+          shouldRevealMain({ blockingOnboarding, startInTray }) &&
+          !mainWindow.isDestroyed()
+        ) {
+          mainWindow.show();
+        }
+      };
+      mainWindow.once("ready-to-show", reveal);
+      setTimeout(reveal, SPLASH_FALLBACK_MS);
     }
 
     mainWindow.loadURL("https://messages.google.com/web/");
+    setImmediate(() => {
+      registerWindowsProtocolHandlers();
+    });
 
     mainWindow.webContents.once("did-finish-load", () => {
       if (pendingProtocolUrl) {
@@ -424,6 +455,7 @@ if (gotTheLock) {
       if (details.reason !== "clean-exit" && !mainWindow.isDestroyed()) {
         mainWindow.webContents.reload();
       }
+    });
     });
   });
 

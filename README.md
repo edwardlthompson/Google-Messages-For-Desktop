@@ -26,7 +26,7 @@ A dedicated Electron window for [Google Messages for web](https://messages.googl
 | **macOS** | dmg, zip (build on macOS or [GitHub Actions](.github/workflows/release-desktop.yml)) |
 | **Linux** | AppImage, deb, zip (build on Linux or Actions) |
 **Downloads:** [GitHub Releases](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases) — Windows users can install with the NSIS Setup EXE or run the **portable** `.exe` / `.zip` without installing.
-**Version:** 1.10.0 (see [CHANGELOG](CHANGELOG.md))
+**Version:** 1.10.1 (see [CHANGELOG](CHANGELOG.md))
 
 ## Support / Donate
 
@@ -57,7 +57,7 @@ Upstream history: [kelyvin/Google-Messages-For-Desktop](https://github.com/kelyv
 - **Help → Check for Updates** looks at GitHub Release installer assets (Later vs Install; no silent download)
 - Windows, macOS, and Linux builds from the same [`electron/`](electron/) app
 
-## First-run (v1.10.0)
+## First-run (v1.10.1)
 
 1. **Defaults** — Click each sample link (`sms:`, `smsto:`, `tel:`, `callto:`, `im:`) and choose **Google Messages**. These samples only set associations; they do **not** require you to be signed in and do not compose a message.
 2. **Sign in** — In the main window, sign in with Google and pair your phone (QR) if asked.

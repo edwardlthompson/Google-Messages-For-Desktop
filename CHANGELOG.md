@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.1] - 2026-09-02
+
+### Added
+
+- Local launch splash so the first window appears before Google Messages for web paints
+
+### Changed
+
+- Windows protocol registry writes run after the first window is shown (they no longer block startup)
+
 ## [1.10.0] - 2026-09-02
 
 ### Added

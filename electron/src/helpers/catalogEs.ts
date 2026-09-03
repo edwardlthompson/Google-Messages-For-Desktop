@@ -139,6 +139,8 @@ export const catalogEs: Catalog = {
   "update.dismiss": "Cerrar",
   "donate.title": "El desarrollo continúa",
   "donate.not_now": "Ahora no",
+  "splash.heading": "Google Messages",
+  "splash.lede": "Abriendo conversaciones…",
   "about.tagline": "Messages para la web, como aplicación de escritorio.",
   "about.foss": "FOSS con licencia MIT. Este contenedor no rastrea.",
   "about.disclaimer": "No afiliado a Google. Android es una marca de Google LLC.",

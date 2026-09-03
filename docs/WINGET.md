@@ -11,7 +11,7 @@ Package identity for [microsoft/winget-pkgs](https://github.com/microsoft/winget
 ## Generate / refresh the stub
 
 ```bash
-bash scripts/generate-winget-manifest.sh EdwardLThompson.GoogleMessages 1.10.0 packaging/winget
+bash scripts/generate-winget-manifest.sh EdwardLThompson.GoogleMessages 1.10.1 packaging/winget
 
 ```
 
