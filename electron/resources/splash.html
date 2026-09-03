@@ -8,50 +8,43 @@
     />
     <title>Google Messages</title>
     <style>
-      :root {
-        --ink: #102033;
-        --muted: #4a5d73;
-        --paper: #f7f9fc;
-        --accent: #1a73e8;
-      }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --ink: #e8eaed;
-          --muted: #9aa0a6;
-          --paper: #1f1f1f;
-          --accent: #8ab4f8;
-        }
-      }
       * { box-sizing: border-box; }
       html, body {
         margin: 0;
         height: 100%;
         font-family: "Segoe UI", "Candara", "Gill Sans", sans-serif;
-        background: var(--paper);
-        color: var(--ink);
+        background: #070b12;
+        color: #e8eaed;
       }
-      main {
+      .stage {
+        position: relative;
         height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
-        text-align: center;
+        overflow: hidden;
       }
-      img {
-        width: 72px;
-        height: 72px;
-        margin-bottom: 16px;
+      .hero {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .copy {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 28px 24px 22px;
+        text-align: center;
+        background: linear-gradient(transparent, rgba(7, 11, 18, 0.88) 42%);
       }
       h1 {
-        margin: 0 0 8px;
-        font-size: 1.35rem;
+        margin: 0 0 6px;
+        font-size: 1.25rem;
         font-weight: 700;
+        letter-spacing: 0.01em;
       }
       p {
         margin: 0;
-        color: var(--muted);
+        color: #9aa0a6;
         font-size: 0.95rem;
       }
       .pulse {
@@ -66,11 +59,20 @@
     </style>
   </head>
   <body>
-    <main>
-      <img src="icons/256x256.png" alt="" width="72" height="72" />
-      <h1 id="heading">Google Messages</h1>
-      <p id="lede" class="pulse">Opening conversations…</p>
-    </main>
+    <div class="stage">
+      <img
+        class="hero"
+        id="hero"
+        src="splash-hero.jpg"
+        alt=""
+        width="1280"
+        height="720"
+      />
+      <div class="copy">
+        <h1 id="heading">Google Messages</h1>
+        <p id="lede" class="pulse">Opening conversations…</p>
+      </div>
+    </div>
     <script src="splash-ui.js"></script>
   </body>
 </html>

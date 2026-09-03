@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Photorealistic neon-on-wet-pavement logo hero on the README and launch splash
+
+### Fixed
+
+- Launch splash no longer keeps the Messages webview hidden during load (blank `about:blank` screen on 1.10.1). Retry once if the webview is still blank after 4s.
+
 ## [1.10.1] - 2026-09-02
 
 ### Added

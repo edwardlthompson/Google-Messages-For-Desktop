@@ -16,3 +16,11 @@ export function shouldShowOfflineBanner(
   if (isCertificateFailure(errorCode, errorDescription)) return false;
   return true;
 }
+
+/** Retry loadURL when the webview never left a blank/error document. */
+export function shouldRetryMessagesLoad(url: unknown): boolean {
+  if (typeof url !== "string" || !url.trim()) return true;
+  const u = url.trim().toLowerCase();
+  if (u === "about:blank") return true;
+  return u.startsWith("chrome-error:");
+}

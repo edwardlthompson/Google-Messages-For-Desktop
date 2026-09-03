@@ -56,7 +56,7 @@ import {
   bindFoundInPage,
   registerFindInPageIpc,
 } from "./helpers/findInPageUi";
-import { shouldShowOfflineBanner } from "./helpers/loadFail";
+import { shouldRetryMessagesLoad, shouldShowOfflineBanner } from "./helpers/loadFail";
 import { clampWindowPosition } from "./helpers/clampWindow";
 import { bindUserCss } from "./helpers/userCssUi";
 import { bindDensityCss } from "./helpers/densityCssUi";
@@ -73,8 +73,9 @@ import { loadManagedPolicy } from "./helpers/managedPolicyUi";
 import { parseThemePref, windowBackgroundForTheme } from "./helpers/settingsTheme";
 import {
   SPLASH_FALLBACK_MS,
+  SPLASH_MIN_VISIBLE_MS,
   shouldOpenSplash,
-  shouldRevealMain,
+  shouldShowMainBeforeLoad,
 } from "./helpers/splash";
 import { dismissLaunchSplash, openLaunchSplash } from "./helpers/splashUi";
 import fs from "fs";
@@ -221,6 +222,7 @@ if (gotTheLock) {
         partition: sessionPartition,
         navigateOnDragDrop: false,
         autoplayPolicy: "user-gesture-required",
+        backgroundThrottling: false,
       },
     });
 
@@ -272,22 +274,54 @@ if (gotTheLock) {
       dismissLaunchSplash(splash);
     } else {
       let revealed = false;
+      let splashVisibleAt = 0;
+      splash?.once("show", () => {
+        splashVisibleAt = Date.now();
+      });
+      if (splash?.isVisible()) splashVisibleAt = Date.now();
       const reveal = (): void => {
         if (revealed) return;
-        revealed = true;
-        dismissLaunchSplash(splash);
-        if (
-          shouldRevealMain({ blockingOnboarding, startInTray }) &&
-          !mainWindow.isDestroyed()
-        ) {
-          mainWindow.show();
-        }
+        const origin = splashVisibleAt || Date.now();
+        const wait = Math.max(
+          0,
+          SPLASH_MIN_VISIBLE_MS - (Date.now() - origin)
+        );
+        const dismiss = (): void => {
+          if (revealed) return;
+          revealed = true;
+          dismissLaunchSplash(splash);
+        };
+        if (wait > 0) setTimeout(dismiss, wait);
+        else dismiss();
       };
-      mainWindow.once("ready-to-show", reveal);
+      // Show before loadURL (1.10.0). Hiding until ready-to-show left the
+      // webview on about:blank because Messages never booted while hidden.
+      if (
+        shouldShowMainBeforeLoad({ blockingOnboarding, startInTray }) &&
+        !mainWindow.isDestroyed()
+      ) {
+        mainWindow.webContents.setBackgroundThrottling(false);
+        mainWindow.show();
+      }
+      mainWindow.webContents.on("did-finish-load", () => {
+        if (mainWindow.isDestroyed()) return;
+        const url = mainWindow.webContents.getURL();
+        if (/messages\.google\.com/i.test(url)) {
+          reveal();
+        }
+      });
       setTimeout(reveal, SPLASH_FALLBACK_MS);
     }
 
     mainWindow.loadURL("https://messages.google.com/web/");
+    setTimeout(() => {
+      if (mainWindow.isDestroyed()) return;
+      const url = mainWindow.webContents.getURL();
+      if (shouldRetryMessagesLoad(url)) {
+        console.warn("Retrying Messages load; webview was", url);
+        void mainWindow.loadURL("https://messages.google.com/web/");
+      }
+    }, 4_000);
     setImmediate(() => {
       registerWindowsProtocolHandlers();
     });

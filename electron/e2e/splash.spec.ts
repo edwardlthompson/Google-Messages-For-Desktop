@@ -12,4 +12,7 @@ test("launch splash shows branded loading copy", async ({ page }) => {
   );
   await expect(page.getByRole("heading", { name: "Google Messages" })).toBeVisible();
   await expect(page.locator("#lede")).toHaveText("Opening conversations…");
+  const hero = page.locator("#hero");
+  await expect(hero).toBeVisible();
+  await expect.poll(async () => hero.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(100);
 });

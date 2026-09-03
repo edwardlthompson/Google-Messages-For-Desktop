@@ -23,7 +23,8 @@ Official color stylesheet (generated): [`official-colors.css`](official-colors.c
 | `assets/logo-lockup.svg` | Mark + wordmark |
 | `assets/favicon.svg` | Browser tab |
 | `assets/app-icon-512.svg` | Export to store `icon.png` 512×512 (`[HUMAN]`/`[ADB]`) |
-| `assets/readme-hero.svg` | README banner |
+| `assets/readme-hero.svg` | README banner (vector fallback) |
+| `assets/readme-hero-neon.png` | Photorealistic README hero (wet pavement, neon glow). Splash uses a JPEG derivative at `electron/resources/splash-hero.jpg` |
 | `assets/social-preview.svg` | GitHub / OG 1280×640 (upload PNG export in repo Settings → Social preview) |
 
 ## Clear space & contrast

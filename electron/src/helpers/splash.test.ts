@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -7,7 +7,12 @@ import {
   shouldDismissSplash,
   shouldOpenSplash,
   shouldRevealMain,
+  shouldShowMainBeforeLoad,
+  SPLASH_BACKGROUND,
   SPLASH_FALLBACK_MS,
+  SPLASH_HEIGHT,
+  SPLASH_MIN_VISIBLE_MS,
+  SPLASH_WIDTH,
 } from "./splash.ts";
 
 const resources = join(
@@ -39,8 +44,27 @@ describe("shouldRevealMain", () => {
   });
 });
 
+describe("shouldShowMainBeforeLoad", () => {
+  it("matches reveal so the SPA is not throttled while the splash covers it", () => {
+    assert.equal(
+      shouldShowMainBeforeLoad({
+        blockingOnboarding: false,
+        startInTray: false,
+      }),
+      true
+    );
+    assert.equal(
+      shouldShowMainBeforeLoad({
+        blockingOnboarding: false,
+        startInTray: true,
+      }),
+      false
+    );
+  });
+});
+
 describe("shouldDismissSplash", () => {
-  it("dismisses on first paint, onboarding, or the fallback timer", () => {
+  it("dismisses when the messages document loaded, onboarding, or the fallback timer", () => {
     assert.equal(SPLASH_FALLBACK_MS, 15_000);
     assert.equal(
       shouldDismissSplash({
@@ -78,11 +102,20 @@ describe("shouldDismissSplash", () => {
 });
 
 describe("splash.html", () => {
-  it("ships a local branded loading page", () => {
+  it("ships a local branded loading page with the neon hero", () => {
     const html = readFileSync(join(resources, "splash.html"), "utf8");
     assert.match(html, /id="heading"/);
     assert.match(html, /id="lede"/);
+    assert.match(html, /id="hero"/);
+    assert.match(html, /splash-hero\.jpg/);
     assert.match(html, /splash-ui\.js/);
     assert.match(html, /prefers-reduced-motion/);
+    const hero = join(resources, "splash-hero.jpg");
+    assert.equal(existsSync(hero), true);
+    assert.ok(statSync(hero).size > 50_000);
+    assert.equal(SPLASH_WIDTH, 720);
+    assert.equal(SPLASH_HEIGHT, 405);
+    assert.equal(SPLASH_BACKGROUND, "#070b12");
+    assert.equal(SPLASH_MIN_VISIBLE_MS, 1_200);
   });
 });

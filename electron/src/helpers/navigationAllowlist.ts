@@ -22,6 +22,9 @@ export function allowMainFrameNavigate(url: unknown): boolean {
     if (parsed.protocol === "about:") {
       return parsed.pathname === "blank" || parsed.href === "about:blank";
     }
+    if (parsed.protocol === "chrome-error:") {
+      return true;
+    }
     if (parsed.protocol !== "https:") return false;
     return hostAllowed(parsed.hostname);
   } catch {

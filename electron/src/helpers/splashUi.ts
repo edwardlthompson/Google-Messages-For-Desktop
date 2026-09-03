@@ -1,17 +1,13 @@
-import { BrowserWindow, nativeImage, nativeTheme } from "electron";
+import { BrowserWindow, nativeImage } from "electron";
 import path from "path";
 import { RESOURCES_PATH } from "./constants";
-import { settings } from "./settings";
-import { parseThemePref, windowBackgroundForTheme } from "./settingsTheme";
+import {
+  SPLASH_BACKGROUND,
+  SPLASH_HEIGHT,
+  SPLASH_SHOW_FALLBACK_MS,
+  SPLASH_WIDTH,
+} from "./splash";
 import { splashCopy } from "./splashCopy";
-
-function splashBackground(): string {
-  return windowBackgroundForTheme(
-    parseThemePref(settings.themePreference.value),
-    nativeTheme.shouldUseDarkColors,
-    nativeTheme.shouldUseHighContrastColors
-  );
-}
 
 function splashIcon() {
   const iconPath = path.resolve(RESOURCES_PATH, "icons", "256x256.png");
@@ -21,24 +17,30 @@ function splashIcon() {
 
 export function openLaunchSplash(): BrowserWindow {
   const win = new BrowserWindow({
-    width: 420,
-    height: 280,
+    width: SPLASH_WIDTH,
+    height: SPLASH_HEIGHT,
     show: true,
     frame: false,
     resizable: false,
     maximizable: false,
     fullscreenable: false,
     autoHideMenuBar: true,
-    backgroundColor: splashBackground(),
+    backgroundColor: SPLASH_BACKGROUND,
     title: splashCopy["splash.heading"],
     icon: splashIcon(),
     center: true,
+    alwaysOnTop: true,
+    skipTaskbar: true,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: true,
+      sandbox: false,
     },
   });
+  const show = (): void => {
+    if (!win.isDestroyed() && !win.isVisible()) win.show();
+  };
+  win.once("ready-to-show", show);
   const html = path.resolve(RESOURCES_PATH, "splash.html");
   void win.loadFile(html, {
     query: {
@@ -46,6 +48,7 @@ export function openLaunchSplash(): BrowserWindow {
       lede: splashCopy["splash.lede"],
     },
   });
+  setTimeout(show, SPLASH_SHOW_FALLBACK_MS);
   return win;
 }
 

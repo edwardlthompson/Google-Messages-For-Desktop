@@ -1,5 +1,9 @@
 # Google Messages for Desktop
 
+<p align="center">
+  <img src="branding/assets/readme-hero-neon.png" alt="Google Messages for Desktop mark on wet pavement with a neon glow" width="960" />
+</p>
+
 <p>
   <img src="https://img.shields.io/badge/template-1.0.0-656d76?style=flat-square" alt="template 1.0.0" />
   <img src="https://img.shields.io/badge/license-MIT-2ea043?style=flat-square" alt="MIT" />
