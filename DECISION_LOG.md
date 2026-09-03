@@ -1,5 +1,16 @@
 # Decision Log
 
+## 2026-09-02 — /ship v1.10.1
+
+- **Status:** Accepted
+- **Context:** `/ship` after splash/startup work on installed 1.10.0 (14.5s to first HWND).
+- **Decisions:**
+  - Product **1.10.1**. Manual tag after CI (no live Release Please workflow; do not merge template RP 1.1.0).
+  - Show a local splash immediately; defer `registerWindowsProtocolHandlers` off the first-paint path.
+  - Do not rewrite `github/codeql-action@v3`.
+  - F-009 signing stays deferred.
+- **Consequences:** GitHub Release **v1.10.1** has 11 unsigned desktop assets. Hard GitHub `pre-release-gate` still fails Scorecard + `main` protection 404 (KB-009).
+
 ## 2026-09-02 — /ship v1.10.0
 
 - **Status:** Accepted
