@@ -1,5 +1,9 @@
 # Google Messages for Desktop
 
+<p align="center">
+  <img src="branding/assets/readme-hero.svg" alt="Google Messages for Desktop mark" width="960" />
+</p>
+
 <p>
   <img src="https://img.shields.io/badge/template-1.0.0-656d76?style=flat-square" alt="template 1.0.0" />
   <img src="https://img.shields.io/badge/license-MIT-2ea043?style=flat-square" alt="MIT" />
@@ -51,7 +55,7 @@ Upstream history: [kelyvin/Google-Messages-For-Desktop](https://github.com/kelyv
 - Google sign-in in-app (shared session + auth modals)
 - Protocol handlers that compose a **new text** (not a voice call)
 - First-run: **Defaults → Sign in → optional Verify**
-- Tray / start-in-tray (from the OrangeDrangon-derived shell)
+- Tray / start-in-tray (from the OrangeDrangon-derived shell) — **minimize to tray** keeps the process warm so reopen skips the long cold Google web load (no local message caching); new installs default close-to-tray
 - Windows OS toasts and tray unread red-dot; native toasts on macOS and Linux
 - Quiet **Donate via Venmo** in Help / About (no launch nag)
 - **Help → Check for Updates** looks at GitHub Release installer assets (Later vs Install; no silent download)

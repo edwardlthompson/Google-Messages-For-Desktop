@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.2] - 2026-09-04
+
+### Added
+
+- Splash stage bar: **App Loaded ✅** then **Google Messages loading…** → green check when `mw-app` mounts
+- Optional boot timing marks (`GMFD_BOOT_TIMING=1` → `%TEMP%\gmfd-boot-timing.json`)
+- Photorealistic neon splash hero JPEG (`electron/resources/splash-hero.jpg`)
+
+### Changed
+
+- Splash HTML + stage bar `loadFile` before the main window is created; splash is parented/raised over the loading shell
+- Splash / boot-done waits for `mw-app` (not a large shell HTML alone)
+- Boot: `loadURL` before menus/tray chrome; CDP blank retries only for `about:blank` / `chrome-error:`; launch dialogs after SPA ready; drop renderer console forwarding; SPA poll 500ms after first load
+- New installs default close action to minimize-to-tray; tray tooltip / README note for warm reopen
+
+### Fixed
+
+- Gray/blank splash (broken hero paint + main window raised over splash)
+- Cold-start path: fast-path `loadURL` to `/web/conversations`; ignore `ERR_ABORTED (-3)` in the local crash queue
+
+### Notes
+
+- Cold-start timing: splash chrome ready ~0.5–1s then `loadURL`; `hasMw` is still tens of seconds (Google SPA / phone link). Tray minimize remains the warm instant path.
+
 ## [1.10.1] - 2026-09-02
 
 ### Added

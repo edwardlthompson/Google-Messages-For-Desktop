@@ -37,7 +37,7 @@ const settingsCopyEn = {
   "settings.tray": "Enable Tray Icon",
   "settings.tray_mac": "Enable Menu Bar Icon",
   "settings.tray_tooltip":
-    "Shows Google Messages in the notification area (system tray), near the clock — not the taskbar pin.",
+    "Shows Google Messages in the notification area (system tray), near the clock — not the taskbar pin. Minimize to tray to keep the app warm so reopen skips the long cold web load.",
   "settings.start_in_tray": "Start In Tray",
   "settings.start_hidden": "Start Hidden",
   "settings.mono_tray": "Use Monochrome Tray Icon",
@@ -56,7 +56,8 @@ const settingsCopyEn = {
   "settings.close_ask": "Ask every time",
   "settings.close_tray": "Minimize to tray",
   "settings.close_quit": "Quit the app",
-  "settings.hw_accel": "Hardware acceleration (restart required)",
+  "settings.hw_accel":
+    "Hardware acceleration (restart required) — keep on; turning it off slows Google Messages a lot",
   "settings.reset_window": "Reset window size and position",
   "settings.taskbar_flash": "Taskbar Flash on New Message",
   "settings.spellcheck": "Enable Spell Checking",

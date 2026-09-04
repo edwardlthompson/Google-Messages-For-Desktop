@@ -75,6 +75,7 @@ RELEASE_NOTES.md
 electron/node_modules/
 electron/app/
 electron/dist/
+electron/dist-*/
 
 # Local smoke / packaging leftovers
 .tmp/

@@ -10,7 +10,6 @@ Replaceable product identity for projects bootstrapped from **agent-project-boot
 | Logos / favicon / heroes | [`branding/assets/`](assets/) | `python3 scripts/sync-design-tokens.py` |
 | Name, pitch, README copy | [`branding/product.json`](product.json) | `python3 scripts/generate-project-readme.py` |
 | Voice guidelines | [`branding/voice.md`](voice.md) | (docs only) |
-
 Official color stylesheet (generated): [`official-colors.css`](official-colors.css).
 
 ## Asset inventory
@@ -24,8 +23,8 @@ Official color stylesheet (generated): [`official-colors.css`](official-colors.c
 | `assets/favicon.svg` | Browser tab |
 | `assets/app-icon-512.svg` | Export to store `icon.png` 512×512 (`[HUMAN]`/`[ADB]`) |
 | `assets/readme-hero.svg` | README banner |
+| `assets/readme-hero-neon.png` | Local photorealistic README hero (too large for git; splash JPEG is `electron/resources/splash-hero.jpg`) |
 | `assets/social-preview.svg` | GitHub / OG 1280×640 (upload PNG export in repo Settings → Social preview) |
-
 ## Clear space & contrast
 
 - Keep at least 1/8 of the mark’s width as padding around the mark.

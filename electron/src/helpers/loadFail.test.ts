@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { shouldShowOfflineBanner } from "./loadFail.ts";
+import { shouldRetryMessagesLoad, shouldShowOfflineBanner } from "./loadFail.ts";
 
 describe("shouldShowOfflineBanner", () => {
   it("shows for main-frame network errors and skips aborted/subframes", () => {
@@ -11,5 +11,17 @@ describe("shouldShowOfflineBanner", () => {
     assert.equal(shouldShowOfflineBanner(-106, false), false);
     assert.equal(shouldShowOfflineBanner(0, true), false);
     assert.equal(shouldShowOfflineBanner("nope", true), false);
+  });
+});
+
+describe("shouldRetryMessagesLoad", () => {
+  it("retries blank and chrome-error, not a live Messages URL", () => {
+    assert.equal(shouldRetryMessagesLoad(""), true);
+    assert.equal(shouldRetryMessagesLoad("about:blank"), true);
+    assert.equal(shouldRetryMessagesLoad("chrome-error://chromewebdata/"), true);
+    assert.equal(
+      shouldRetryMessagesLoad("https://messages.google.com/web/"),
+      false
+    );
   });
 });

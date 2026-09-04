@@ -5,7 +5,18 @@ import {
   nextPendingCrash,
   parseStoredCrash,
   sanitizeCrash,
+  shouldIgnoreCrash,
 } from "./pendingCrash.ts";
+
+describe("shouldIgnoreCrash", () => {
+  it("ignores navigation aborts during boot retries", () => {
+    assert.equal(
+      shouldIgnoreCrash(new Error("ERR_ABORTED (-3) loading 'https://messages.google.com/web/'")),
+      true
+    );
+    assert.equal(shouldIgnoreCrash(new Error("boom")), false);
+  });
+});
 
 describe("sanitizeCrash", () => {
   it("returns null for empty input and strips paths", () => {

@@ -16,6 +16,10 @@ describe("navigation allowlist", () => {
     assert.equal(allowMainFrameNavigate("file:///tmp/x"), false);
     assert.equal(allowMainFrameNavigate("javascript:alert(1)"), false);
     assert.equal(allowMainFrameNavigate("https://evil.example/"), false);
+    assert.equal(
+      allowMainFrameNavigate("chrome-error://chromewebdata/"),
+      true
+    );
   });
 
   it("allows mailto and support HTTPS for openExternal", () => {

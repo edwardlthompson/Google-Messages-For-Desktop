@@ -57,6 +57,10 @@ import {
   registerFindInPageIpc,
 } from "./helpers/findInPageUi";
 import { shouldShowOfflineBanner } from "./helpers/loadFail";
+import {
+  bindMessagesWebBoot,
+  loadMessagesWeb,
+} from "./helpers/messagesBootUi";
 import { clampWindowPosition } from "./helpers/clampWindow";
 import { bindUserCss } from "./helpers/userCssUi";
 import { bindDensityCss } from "./helpers/densityCssUi";
@@ -72,11 +76,16 @@ import { protocolLaunchFromArgv } from "./helpers/jumpList";
 import { loadManagedPolicy } from "./helpers/managedPolicyUi";
 import { parseThemePref, windowBackgroundForTheme } from "./helpers/settingsTheme";
 import {
-  SPLASH_FALLBACK_MS,
   shouldOpenSplash,
-  shouldRevealMain,
+  shouldShowMainBeforeLoad,
 } from "./helpers/splash";
-import { dismissLaunchSplash, openLaunchSplash } from "./helpers/splashUi";
+import {
+  dismissLaunchSplash,
+  openLaunchSplash,
+  whenSplashChromeReady,
+  attachSplashToMain,
+} from "./helpers/splashUi";
+import { bootMark } from "./helpers/bootTiming";
 import fs from "fs";
 
 const {
@@ -98,12 +107,16 @@ function appWindowIcon() {
 }
 
 let mainWindow: BrowserWindow;
-let trayManager: TrayManager;
+let trayManager: TrayManager | undefined;
 let pendingProtocolUrl: string | null = protocolLaunchFromArgv(process.argv);
 
 if (settings.hardwareAccelerationEnabled.value === false) {
   app.disableHardwareAcceleration();
 }
+
+app.commandLine.appendSwitch("disable-renderer-backgrounding");
+app.commandLine.appendSwitch("disable-backgrounding-occluded-windows");
+app.commandLine.appendSwitch("disable-background-timer-throttling");
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -165,20 +178,16 @@ if (gotTheLock) {
   );
 
   app.on("ready", () => {
+    bootMark("app_ready");
     bindAppLocale();
     const startInTray =
       settings.trayEnabled.value && settings.startInTrayEnabled.value;
     const splash = shouldOpenSplash(startInTray) ? openLaunchSplash() : null;
-    setImmediate(() => {
+    void whenSplashChromeReady(splash).then(() => {
     loadManagedPolicy();
     bindGuestSessionWipe();
     bindCertErrorInterstitial();
-    void presentPendingCrashIfAny();
     registerElectronProtocolClients();
-
-    trayManager = new TrayManager();
-
-    new MenuManager();
 
     const { width, height } = savedWindowSize.value;
     let workArea = { x: 0, y: 0, width: 1920, height: 1080 };
@@ -221,22 +230,17 @@ if (gotTheLock) {
         partition: sessionPartition,
         navigateOnDragDrop: false,
         autoplayPolicy: "user-gesture-required",
+        backgroundThrottling: false,
       },
     });
 
     process.env.MAIN_WINDOW_ID = mainWindow.id.toString();
+
+    // Critical path first: theme/crash + session, then Messages loadURL.
     bindPreferredDisplayMode(mainWindow);
     bindAppTheme(mainWindow);
-    bindAutostart();
     bindVerboseMainLog();
     bindRendererCrashReload(mainWindow);
-    bindAlwaysOnTop(mainWindow);
-    bindZoomPersist(mainWindow);
-    bindFoundInPage(mainWindow);
-    bindUserCss(mainWindow);
-    bindDensityCss(mainWindow);
-    bindWrapperMuteHotkey(mainWindow);
-    bindOsChromeTasks(mainWindow);
 
     const session = mainWindow.webContents.session;
     session.setPermissionCheckHandler((wc, permission, requestingOrigin) => {
@@ -263,32 +267,51 @@ if (gotTheLock) {
     });
     bindDownloadLocation(session);
 
-    initProductUpdatePrefs(app.getPath("userData"));
-    setProductUpdateWindow(mainWindow);
-    void presentLaunchPrompts();
-
     const blockingOnboarding = maybeShowOnboarding(mainWindow);
     if (blockingOnboarding) {
       dismissLaunchSplash(splash);
-    } else {
-      let revealed = false;
-      const reveal = (): void => {
-        if (revealed) return;
-        revealed = true;
-        dismissLaunchSplash(splash);
-        if (
-          shouldRevealMain({ blockingOnboarding, startInTray }) &&
-          !mainWindow.isDestroyed()
-        ) {
-          mainWindow.show();
-        }
-      };
-      mainWindow.once("ready-to-show", reveal);
-      setTimeout(reveal, SPLASH_FALLBACK_MS);
     }
 
-    mainWindow.loadURL("https://messages.google.com/web/");
+    const revealMain = shouldShowMainBeforeLoad({
+      blockingOnboarding,
+      startInTray,
+    });
+    let launchDialogsArmed = false;
+    const armLaunchDialogs = (): void => {
+      if (launchDialogsArmed) return;
+      launchDialogsArmed = true;
+      void presentPendingCrashIfAny();
+      void presentLaunchPrompts();
+    };
+    bindMessagesWebBoot(mainWindow, {
+      splash,
+      onBootDone: () => {
+        setTimeout(armLaunchDialogs, 750);
+      },
+    });
+    loadMessagesWeb(mainWindow, { reveal: revealMain, splash });
+    attachSplashToMain(splash, mainWindow);
+    // Safety: if SPA never mounts, still show dialogs after splash fallback window.
+    setTimeout(armLaunchDialogs, 50_000);
+
+    // Defer chrome that is not needed for first navigation.
     setImmediate(() => {
+      trayManager = new TrayManager();
+      new MenuManager();
+      bindAutostart();
+      bindAlwaysOnTop(mainWindow);
+      bindZoomPersist(mainWindow);
+      bindFoundInPage(mainWindow);
+      bindUserCss(mainWindow);
+      bindDensityCss(mainWindow);
+      bindWrapperMuteHotkey(mainWindow);
+      bindOsChromeTasks(mainWindow);
+      initProductUpdatePrefs(app.getPath("userData"));
+      setProductUpdateWindow(mainWindow);
+      trayManager.startIfEnabled();
+      settings.showIconsInRecentConversationTrayEnabled.subscribe(() =>
+        trayManager.refreshTrayMenu()
+      );
       registerWindowsProtocolHandlers();
     });
 
@@ -303,11 +326,6 @@ if (gotTheLock) {
         void handleProtocolUrl(mainWindow, url);
       }
     });
-
-    trayManager.startIfEnabled();
-    settings.showIconsInRecentConversationTrayEnabled.subscribe(() =>
-      trayManager.refreshTrayMenu()
-    );
 
     // Apply the spell-check preference on launch and whenever it is toggled.
     const applySpellLang = (lang: string): void => {
@@ -408,21 +426,6 @@ if (gotTheLock) {
       mainWindow.webContents.send("hide-offline-banner");
     });
 
-    mainWindow.webContents.on(
-      "did-redirect-navigation",
-      (_event, url, isInPlace, isMainFrame) => {
-        console.log("did-redirect-navigation", {
-          url,
-          isInPlace,
-          isMainFrame,
-        });
-      }
-    );
-
-    mainWindow.webContents.on("console-message", (_event, level, message) => {
-      console.log("renderer console:", level, message);
-    });
-
     mainWindow.webContents.on("context-menu", popupContextMenu);
 
     if (!IS_DEV) {
@@ -508,12 +511,12 @@ if (gotTheLock) {
 
   ipcMain.on("set-unread-status", (_event, unreadStatus: boolean) => {
     const unread = !!unreadStatus;
-    trayManager.setUnread(unread);
+    trayManager?.setUnread(unread);
     applyUnreadWindowChrome(mainWindow, unread);
   });
 
   ipcMain.on("set-recent-conversations", (_event, data: Conversation[]) => {
-    trayManager.setRecentConversations(data);
+    trayManager?.setRecentConversations(data);
     setNotifyConversations(data);
   });
 

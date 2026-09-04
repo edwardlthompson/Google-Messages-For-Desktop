@@ -18,7 +18,21 @@ function scrub(text: string): string {
   return sanitizeReportText(text).replace(/\s+/g, " ").trim();
 }
 
+/** Navigation aborts and debugger timeouts are expected during boot retries. */
+export function shouldIgnoreCrash(raw: unknown): boolean {
+  const msg =
+    raw instanceof Error
+      ? raw.message
+      : typeof raw === "string"
+        ? raw
+        : String(raw ?? "");
+  if (/ERR_ABORTED\s*\(-3\)/i.test(msg)) return true;
+  if (/debugger timeout:/i.test(msg)) return true;
+  return false;
+}
+
 export function sanitizeCrash(raw: unknown): PendingCrash | null {
+  if (shouldIgnoreCrash(raw)) return null;
   if (raw == null) return null;
   if (typeof raw === "string" && !raw.trim()) return null;
   const err = raw instanceof Error ? raw : new Error(String(raw));

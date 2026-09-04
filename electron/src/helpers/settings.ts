@@ -141,7 +141,7 @@ export const defaultSettings: JsonSettings = {
   notificationSoundEnabled: true,
   alwaysOnTopEnabled: false,
   savedZoomFactor: 1,
-  closeActionPreference: "ask",
+  closeActionPreference: "tray",
   hardwareAccelerationEnabled: true,
   userCssEnabled: false,
   spellCheckLanguage: "en-US",
