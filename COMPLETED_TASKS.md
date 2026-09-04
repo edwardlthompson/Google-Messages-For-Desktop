@@ -1,5 +1,11 @@
 # Completed Tasks
 
+## Ship v1.10.2 (2026-09-04)
+
+- ✅ [AGENT] Splash-first boot: HTML + stage bar before Messages; parent/raise over gray shell
+- ✅ [AGENT] Fold `[Unreleased]` into CHANGELOG `[1.10.2]`; tag `v1.10.2` @ `96b4bac`
+- ✅ [AUTO] CI / Security Scan / CodeQL green; Release desktop 11 unsigned assets
+
 ## HUMAN_BACKLOG — device + GitHub (2026-09-02)
 
 - ✅ [HUMAN] Run `npm run build:installer` (Inno 7 detected) to produce Setup EXE; smoke-test install

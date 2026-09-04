@@ -1,5 +1,17 @@
 # Decision Log
 
+## 2026-09-04 — /ship v1.10.2
+
+- **Status:** Accepted
+- **Context:** `/ship` after splash-first / gray-splash work on local 1.10.2 installs.
+- **Decisions:**
+  - Product **1.10.2**. Manual tag after CI (no live Release Please workflow; do not merge template RP 1.1.0).
+  - Splash `loadFile` + stage bar before creating the main window; parent/raise splash over the inactive Messages shell.
+  - Do not rewrite `github/codeql-action@v3`. Applied ruff-pre-commit v0.16.6 only.
+  - README stays on `readme-hero.svg` (neon PNG is 1.9MB, over the 500KB tracked-file gate).
+  - F-009 signing stays deferred.
+- **Consequences:** GitHub Release **v1.10.2** has 11 unsigned desktop assets. Hard GitHub `pre-release-gate` still fails Scorecard + `main` protection 404 (KB-009).
+
 ## 2026-09-02 — /ship v1.10.1
 
 - **Status:** Accepted

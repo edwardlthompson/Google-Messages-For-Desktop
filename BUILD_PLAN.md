@@ -27,6 +27,8 @@
 
 > **HUMAN_BACKLOG device + GitHub** archived in COMPLETED_TASKS.md @ `2338c31` (working tree).
 
+> **Ship v1.10.2** tagged @ `96b4bac`. Residual: unsigned until `CSC_LINK` secrets (F-009).
+
 > **Ship v1.10.1** tagged @ `083c43c`. Residual: unsigned until `CSC_LINK` secrets (F-009).
 
 > **Ship v1.10.0** tagged @ `799ff61`. Residual: unsigned until `CSC_LINK` secrets (F-009).
@@ -66,6 +68,7 @@
 | HUMAN_BACKLOG device + GitHub | 2026-09-02 | `COMPLETED_TASKS.md` |
 | Ship v1.10.0 | 2026-09-02 | Unsigned Electron artifacts; F-009 residual |
 | Ship v1.10.1 | 2026-09-02 | Splash + deferred protocol reg; unsigned artifacts |
+| Ship v1.10.2 | 2026-09-04 | Splash-first + stage bar; unsigned artifacts |
 ---
 
 ## Sprint E — Ongoing maintenance
