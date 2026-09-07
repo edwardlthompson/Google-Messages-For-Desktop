@@ -30,7 +30,7 @@ A dedicated Electron window for [Google Messages for web](https://messages.googl
 | **macOS** | dmg, zip (build on macOS or [GitHub Actions](.github/workflows/release-desktop.yml)) |
 | **Linux** | AppImage, deb, zip (build on Linux or Actions) |
 **Downloads:** [GitHub Releases](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases) — Windows users can install with the NSIS Setup EXE or run the **portable** `.exe` / `.zip` without installing.
-**Version:** 1.10.1 (see [CHANGELOG](CHANGELOG.md))
+**Version:** 1.10.3 (see [CHANGELOG](CHANGELOG.md))
 
 ## Support / Donate
 
@@ -106,6 +106,7 @@ Actions artifacts are **unsigned smoke builds** unless you add signing secrets; 
 | `npm run windows` / `release:windows` | Package Windows |
 | `npm run mac` / `release:mac` | Package macOS (on macOS) |
 | `npm run linux` / `release:linux` | Package Linux (on Linux) |
+| `npm run linux:install-smoke` | Install newest local `.deb` + process/desktop smoke (sudo; see `docs/WAYLAND.md`) |
 ### Legacy (rollback only)
 
 | Command | What it does |

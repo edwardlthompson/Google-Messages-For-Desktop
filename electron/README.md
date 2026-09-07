@@ -10,6 +10,7 @@ Electron shell derived from [OrangeDrangon/android-messages-desktop](https://git
 cd electron
 npm install
 npm run dev
+
 ```
 
 ## Package
@@ -18,6 +19,7 @@ npm run dev
 npm run package:win     # Windows
 npm run package:mac     # macOS host
 npm run package:linux   # Linux host
+
 ```
 
 Repo root: `npm run release:windows` / `release:mac` / `release:linux`.
@@ -25,7 +27,7 @@ Repo root: `npm run release:windows` / `release:mac` / `release:linux`.
 ## Auth pattern (do not break)
 
 - `partition: "persist:main"`
-- `setWindowOpenHandler` allows Google auth URLs as modal windows on the same partition
+- `setWindowOpenHandler` allows Google auth URLs as same-partition windows (not parented/modal — device-bound pairing cookies must be first-party)
 - Do **not** reintroduce user-agent spoofing
 
 ## First-run

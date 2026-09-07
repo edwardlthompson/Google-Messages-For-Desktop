@@ -75,7 +75,9 @@
 
 ### Sequential
 
-1. 🔲 [HUMAN] F-009 Wire auto-update publish + signing before enabling launch checks
+1. ✅ [AGENT] Local Linux .deb build + `verify:linux-unpacked` + `install-and-smoke-linux-deb.sh` on this device (process/desktop smoke; leave package installed)
+2. 🔲 [HUMAN] F-009 Wire auto-update publish + signing before enabling launch checks
+3. ✅ [HUMAN] Retry QR / emoji pairing after Electron DBSC/cookie pairing fix (unpair old desktop sessions on the phone first)
 
 ### Parallel
 

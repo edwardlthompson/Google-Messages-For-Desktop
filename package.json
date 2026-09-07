@@ -1,6 +1,6 @@
 {
   "name": "google-messages-for-desktop",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "description": "Google Messages desktop app (Electron). sms/tel/smsto/callto/im protocol compose on Windows, macOS, and Linux.",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "package:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/release-electron.ps1 -SkipInstall",
     "package:mac": "bash scripts/desktop/release-electron.sh --skip-install",
     "package:linux": "bash scripts/desktop/release-electron.sh --skip-install",
+    "linux:install-smoke": "bash scripts/desktop/install-and-smoke-linux-deb.sh",
     "clean:dist": "node -e \"try{require('fs').rmSync('dist',{recursive:true,force:true})}catch(e){};try{require('fs').rmSync('electron/dist',{recursive:true,force:true})}catch(e){}\"",
     "release:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/release-electron.ps1",
     "release:mac": "bash scripts/desktop/release-electron.sh",

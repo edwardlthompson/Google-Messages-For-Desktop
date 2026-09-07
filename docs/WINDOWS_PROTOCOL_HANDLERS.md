@@ -15,16 +15,16 @@ Windows builds ship an **Electron** app under [`electron/`](../electron/) (shell
 | Piece | Role |
 |--------|------|
 | Electron main (`background.ts`) | Window, tray, single-instance, protocol compose |
-| Renderer | Loads `https://messages.google.com/web/` in `partition: "persist:main"` |
-| Auth | `setWindowOpenHandler` opens Google auth URLs as modal windows on the **same** partition |
+| Renderer | Loads `https://messages.google.com/web/` in `partition: "persist:main"` (boot URL; Google routes to conversations when paired) |
+| Auth | `setWindowOpenHandler` opens Google auth URLs on the **same** `persist:main` partition (top-level windows; not parented/modal) |
 | Protocols | `sms:` / `tel:` / `smsto:` / `callto:` / `im:` → open app; phone forms also compose |
 | Windows client type | Registered under `Software\Clients\IM\GoogleMessages` (Instant Messaging) |
-
 **Differentiator vs OrangeDrangon:** they do not register phone-number / IM protocols; we do.
 
 ```text
 tel:/sms:/im: → Google Messages (Electron)
                   → focus window (+ compose script when a number is present)
+
 ```
 
 Both `sms:` and `tel:` mean **new text** (not voice). Bare `im:` opens/focuses the app. Test page: Help → **Protocol Test Links…** (`electron/resources/protocol-test-links.html`).
@@ -52,6 +52,7 @@ Implementation: [`electron/src/helpers/protocols.ts`](../electron/src/helpers/pr
 ```powershell
 npm run electron:dev
 npm run release:windows
+
 ```
 
 See [`electron/README.md`](../electron/README.md).

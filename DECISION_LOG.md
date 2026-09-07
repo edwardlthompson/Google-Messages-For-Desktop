@@ -1,5 +1,39 @@
 # Decision Log
 
+## 2026-09-07 — /ship v1.10.3
+
+- **Status:** Accepted
+- **Context:** `/ship` after Linux pairing loop (emoji confirm dropped to login) was fixed and verified on this device. Windows Electron shares the same main process; Chrome `--app` host flags aligned.
+- **Decisions:**
+  - Product **1.10.3**. Manual tag after CI (do not merge template Release Please 1.1.0).
+  - Keep `github/codeql-action@v3` (upd false-positive bundle tag skipped).
+  - F-009 signing stays deferred.
+- **Consequences:** GitHub Release **v1.10.3** will have unsigned Win/mac/linux artifacts. Pairing fix is in Electron for all three OS packages.
+
+## 2026-09-07 — Pairing token loop on Linux Electron
+
+- **Status:** Accepted
+- **Context:** After Google sign-in, phone emoji/desktop-icon confirm bounced the Linux app back to welcome/login. Account SID/OSID cookies were present; pairing never stuck. Welcome reloaded ~every 15s. Windows Chrome `--app` already passes `DeviceBoundSessions` kills.
+- **Decisions:**
+  - Electron `disable-features=DeviceBoundSessions,DeviceBoundSessionCredentials,ThirdPartyCookiePhaseout,TrackingProtection3pcd` (not UA spoofing).
+  - Boot `loadURL` uses `/web/` (`messagesBootUrl`) instead of `/conversations`.
+  - Auth popups keep `persist:main` but are not parented/modal (avoid cross-site cookie ancestor).
+  - Allow `storage-access` from Messages and accounts.google.com.
+- **Consequences:** Local `.deb` must be rebuilt for the installed app. HUMAN retries QR/emoji after restart; unpair old desktop sessions on the phone first.
+
+## 2026-09-07 — Local Linux .deb build + install smoke
+
+- **Status:** Accepted
+- **Context:** Create a Linux package on this device, automate `.deb` install, and smoke process + desktop metadata (no Google login).
+- **Decisions:**
+  - Use nvm Node **22** locally (Electron 41 engines); do not use Ubuntu apt Node 12.
+  - Add `electron/scripts/verify-linux-unpacked.mjs` (mirror of win-unpacked) and `scripts/desktop/install-and-smoke-linux-deb.sh` (+ root `linux:install-smoke`).
+  - Smoke = `apt` install + binary + `.desktop` MimeType/`StartupWMClass` + brief launch under `$DISPLAY`; leave package installed for HUMAN sign-in.
+  - F-009 signing stays deferred.
+- **Consequences:** Local `Google.Messages-v1.10.2-linux-amd64.deb` build path documented in `docs/WAYLAND.md`. Interactive QR pairing remains `[HUMAN]`.
+
+## 2026-09-07 — Pairing token loop on Linux Electron
+
 ## 2026-09-04 — /ship v1.10.2
 
 - **Status:** Accepted

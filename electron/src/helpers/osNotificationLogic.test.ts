@@ -7,6 +7,7 @@ import {
   HIDDEN_NOTIFY_TITLE,
   dedupeKey,
   allowSessionPermission,
+  isGoogleSessionHost,
   isMessagesGoogleHost,
   parseOsNotifyIpc,
   sanitizePayload,
@@ -112,6 +113,24 @@ describe("isMessagesGoogleHost", () => {
   });
 });
 
+describe("isGoogleSessionHost", () => {
+  it("allows Messages and Google account hosts", () => {
+    assert.equal(
+      isGoogleSessionHost("https://messages.google.com/web/"),
+      true
+    );
+    assert.equal(
+      isGoogleSessionHost("https://accounts.google.com/signin"),
+      true
+    );
+    assert.equal(isGoogleSessionHost("https://www.google.com/"), true);
+  });
+
+  it("rejects unrelated hosts", () => {
+    assert.equal(isGoogleSessionHost("https://evil.com"), false);
+  });
+});
+
 describe("allowSessionPermission", () => {
   it("allows notifications and clipboard from Messages", () => {
     assert.equal(
@@ -123,6 +142,16 @@ describe("allowSessionPermission", () => {
     );
     assert.equal(
       allowSessionPermission("display-capture", "https://messages.google.com/web/"),
+      true
+    );
+  });
+
+  it("allows storage-access from Google accounts", () => {
+    assert.equal(
+      allowSessionPermission(
+        "storage-access",
+        "https://accounts.google.com/"
+      ),
       true
     );
   });

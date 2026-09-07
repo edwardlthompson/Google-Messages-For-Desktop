@@ -18,6 +18,7 @@ import {
   setProductUpdateWindow,
 } from "./helpers/productUpdateUi";
 import { IS_DEV, IS_MAC, IS_WINDOWS, RESOURCES_PATH } from "./helpers/constants";
+import { CHROMIUM_DISABLE_FEATURES } from "./helpers/chromiumFlags";
 import { MenuManager } from "./helpers/menuManager";
 import { setSettingsFlushEnabled, settings } from "./helpers/settings";
 import { Conversation, TrayManager } from "./helpers/trayManager";
@@ -117,6 +118,7 @@ if (settings.hardwareAccelerationEnabled.value === false) {
 app.commandLine.appendSwitch("disable-renderer-backgrounding");
 app.commandLine.appendSwitch("disable-backgrounding-occluded-windows");
 app.commandLine.appendSwitch("disable-background-timer-throttling");
+app.commandLine.appendSwitch("disable-features", CHROMIUM_DISABLE_FEATURES);
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -250,6 +252,7 @@ if (gotTheLock) {
     session.setPermissionRequestHandler((wc, permission, callback, details) => {
       const origin = details?.requestingUrl || wc?.getURL?.() || "";
       if (!allowSessionPermission(permission, origin)) {
+        console.warn("Denied session permission", permission, origin);
         callback(false);
         return;
       }
@@ -376,8 +379,6 @@ if (gotTheLock) {
           overrideBrowserWindowOptions: {
             width: 500,
             height: 700,
-            parent: mainWindow,
-            modal: true,
             autoHideMenuBar: true,
             titleBarStyle: "default",
             webPreferences: {

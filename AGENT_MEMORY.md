@@ -2,6 +2,19 @@
 
 > Update only at milestone boundaries.
 
+## Milestone: /ship v1.10.3 (2026-09-07)
+
+- Product **1.10.3** pairing fix: Chromium DBSC/3PCD flags, `/web/` boot, persist:main auth popups not parented
+- Linux pairing verified on-device; Windows Electron uses the same `background.ts`; host `--app` flags mirrored
+- F-009 auto-update signing still deferred
+
+## Milestone: Local Linux .deb install smoke (2026-09-07)
+
+- Built `Google.Messages-v1.10.2-linux-amd64.deb` on this host (nvm Node 22)
+- Added `verify:linux-unpacked` + `scripts/desktop/install-and-smoke-linux-deb.sh` / `npm run linux:install-smoke`
+- Package **google-messages-for-desktop** 1.10.2 installed; process/desktop smoke passed; Google QR pairing still `[HUMAN]`
+- F-009 auto-update signing still deferred
+
 ## Milestone: /ship v1.10.2 (2026-09-04)
 
 - Product **1.10.2** @ `96b4bac`; GitHub Release with 11 unsigned Win/mac/linux artifacts

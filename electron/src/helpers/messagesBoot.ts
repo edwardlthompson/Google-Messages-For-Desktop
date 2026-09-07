@@ -4,6 +4,11 @@ export const MESSAGES_WEB_URL = "https://messages.google.com/web/conversations";
 /** Entry URL when no session exists (QR / sign-in). */
 export const MESSAGES_WEB_ENTRY_URL = "https://messages.google.com/web/";
 
+/** First loadURL — let Google route unpaired clients to welcome/pair. */
+export function messagesBootUrl(): string {
+  return MESSAGES_WEB_ENTRY_URL;
+}
+
 export function isMessagesGoogleUrl(url: unknown): boolean {
   if (typeof url !== "string" || !url.trim()) return false;
   try {

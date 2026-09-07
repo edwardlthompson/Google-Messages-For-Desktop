@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.3] - 2026-09-07
+
+### Fixed
+
+- Linux/Windows Electron: Google phone pairing (emoji / desktop icon) no longer drops back to login — disable Chromium device-bound sessions and third-party cookie phaseout (same flags as the Windows Chrome `--app` host), boot at `/web/` instead of `/conversations`, keep auth popups on `persist:main` without parenting them as modals, allow `storage-access` for Messages and accounts.google.com
+
+### Changed
+
+- Patch `uuid` 14.0.1 → 14.0.2 (Electron lockfile)
+
 ## [1.10.2] - 2026-09-04
 
 ### Added

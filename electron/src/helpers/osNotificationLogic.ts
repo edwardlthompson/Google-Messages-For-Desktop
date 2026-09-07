@@ -126,9 +126,28 @@ export const ALLOWED_SESSION_PERMISSIONS = new Set([
   "media",
   "mediaKeySystem",
   "display-capture",
+  "storage-access",
 ]);
 
-/** Grant only allowlisted perms from messages.google.com (deny empty/unknown). */
+/** Auth and Messages hosts that may request persist:main session permissions. */
+export function isGoogleSessionHost(urlOrHost: string): boolean {
+  if (isMessagesGoogleHost(urlOrHost)) return true;
+  try {
+    const host = urlOrHost.includes("://")
+      ? new URL(urlOrHost).hostname.toLowerCase()
+      : urlOrHost.toLowerCase();
+    return (
+      host === "accounts.google.com" ||
+      host.endsWith(".accounts.google.com") ||
+      host === "google.com" ||
+      host === "www.google.com"
+    );
+  } catch {
+    return false;
+  }
+}
+
+/** Grant only allowlisted perms from Messages / Google auth (deny empty/unknown). */
 export function allowSessionPermission(
   permission: string,
   requestingOriginOrUrl: string
@@ -139,5 +158,5 @@ export function allowSessionPermission(
   ) {
     return false;
   }
-  return isMessagesGoogleHost(requestingOriginOrUrl || "");
+  return isGoogleSessionHost(requestingOriginOrUrl || "");
 }

@@ -8,7 +8,7 @@ import {
   isMessagesGoogleUrl,
   MESSAGES_BLANK_RETRY_MS,
   MESSAGES_SPA_PROBE_JS,
-  MESSAGES_WEB_URL,
+  messagesBootUrl,
   messagesLoadUrlOptions,
   spaProbeShowsBlank,
   spaProbeShowsReady,
@@ -83,7 +83,7 @@ function writeBootProbe(result: unknown): void {
 async function loadMessagesUrl(win: BrowserWindow): Promise<void> {
   if (win.isDestroyed()) return;
   bootMark("loadURL_start");
-  await win.loadURL(MESSAGES_WEB_URL, messagesLoadUrlOptions()).catch(() => {});
+  await win.loadURL(messagesBootUrl(), messagesLoadUrlOptions()).catch(() => {});
 }
 
 export function bindMessagesWebBoot(
@@ -207,7 +207,7 @@ export function bindMessagesWebBoot(
         console.warn("Messages lifecycle navigate:", reason);
         const ok = await navigateMessagesWithLifecycle(
           win.webContents,
-          MESSAGES_WEB_URL
+          messagesBootUrl()
         );
         if (!ok && !win.isDestroyed()) {
           await loadMessagesUrl(win);

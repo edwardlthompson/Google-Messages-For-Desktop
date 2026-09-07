@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   isMessagesGoogleUrl,
+  messagesBootUrl,
   messagesLoadUrlOptions,
   MESSAGES_WEB_ENTRY_URL,
   MESSAGES_WEB_URL,
@@ -19,6 +20,13 @@ describe("isMessagesGoogleUrl", () => {
     );
     assert.equal(isMessagesGoogleUrl("about:blank"), false);
     assert.equal(isMessagesGoogleUrl("https://google.com/"), false);
+  });
+});
+
+describe("messagesBootUrl", () => {
+  it("starts at /web/ so unpaired clients can pair", () => {
+    assert.equal(messagesBootUrl(), MESSAGES_WEB_ENTRY_URL);
+    assert.notEqual(messagesBootUrl(), MESSAGES_WEB_URL);
   });
 });
 

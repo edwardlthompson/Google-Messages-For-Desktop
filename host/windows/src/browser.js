@@ -116,7 +116,7 @@ function chromeArgs(url, identity, cdpPort) {
     '--no-first-run',
     '--no-default-browser-check',
     '--disable-extensions',
-    '--disable-features=DeviceBoundSessions,DeviceBoundSessionCredentials',
+    '--disable-features=DeviceBoundSessions,DeviceBoundSessionCredentials,ThirdPartyCookiePhaseout,TrackingProtection3pcd',
   ];
   const appId = identity && identity.appId;
   if (appId) {

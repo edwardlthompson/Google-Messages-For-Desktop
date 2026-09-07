@@ -15,7 +15,18 @@ Unsigned AppImage / deb on GNOME or KDE Wayland:
 | 125% | First-run buttons still ≥44px; zoom restore matches this scale |
 | 150% | Jump List still readable; no clipped tray |
 | 200% | Overlay unread badge on the taskbar/dock still visible |
-
 This is a smoke checklist, not an automated gate.
 
-This is a smoke checklist, not an automated gate.
+## Local Linux .deb (automated process smoke)
+
+On a Linux host with Node ≥20 (prefer 22 for Electron 41) and `$DISPLAY` set:
+
+```bash
+cd electron && npm ci && npm run package:linux && npm run verify:linux-unpacked
+# from repo root — prompts for sudo once:
+npm run linux:install-smoke
+# or: bash scripts/desktop/install-and-smoke-linux-deb.sh
+
+```
+
+That installs the newest `Google.Messages-v*-linux-*.deb`, checks `.desktop` `StartupWMClass` + sms/tel/im MimeTypes, launches briefly, then quits. It does **not** cover Google sign-in or the Wayland checklist above. Pass `--uninstall` to remove the package after smoke.

@@ -316,7 +316,7 @@ function openChromeApp(app, log, url = MESSAGES_URL) {
     `--user-data-dir=${profileDir}`,
     '--no-first-run',
     '--no-default-browser-check',
-    '--disable-features=DeviceBoundSessions,DeviceBoundSessionCredentials',
+    '--disable-features=DeviceBoundSessions,DeviceBoundSessionCredentials,ThirdPartyCookiePhaseout,TrackingProtection3pcd',
     `--app=${url}`,
   ];
   log.info('Opening Chrome app shell for Messages', { browserPath, url });
@@ -404,7 +404,7 @@ async function startBrowserSignIn(opts) {
     `--user-data-dir=${profileDir}`,
     '--no-first-run',
     '--no-default-browser-check',
-    '--disable-features=DeviceBoundSessions,DeviceBoundSessionCredentials',
+    '--disable-features=DeviceBoundSessions,DeviceBoundSessionCredentials,ThirdPartyCookiePhaseout,TrackingProtection3pcd',
     LOGIN_URL,
   ];
 
