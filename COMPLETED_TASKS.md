@@ -1,5 +1,13 @@
 # Completed Tasks
 
+## Ship v1.10.3 (2026-09-07)
+
+- ✅ [AGENT] Electron pairing persist: DBSC/3PCD flags, `/web/` boot, persist:main auth popups not parented; Windows host flags mirrored
+- ✅ [AGENT] Linux `.deb` install+smoke script; `verify:linux-unpacked`
+- ✅ [HUMAN] QR / emoji pairing verified on Linux after the fix
+- ✅ [AGENT] Fold `[Unreleased]` into CHANGELOG `[1.10.3]`; tag `v1.10.3` @ `a1a5fbe`
+- ✅ [AUTO] CI / Security Scan / CodeQL green; Release desktop 11 unsigned assets
+
 ## Ship v1.10.2 (2026-09-04)
 
 - ✅ [AGENT] Splash-first boot: HTML + stage bar before Messages; parent/raise over gray shell

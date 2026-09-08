@@ -43,7 +43,7 @@
 ## Project
 
 - **Repo:** `edwardlthompson/Google-Messages-For-Desktop` (fork of `kelyvin/Google-Messages-For-Desktop`)
-- **Product:** Electron desktop app for Google Messages Web (**v1.10.2**); Chromium App Host / Nativefier = legacy
+- **Product:** Electron desktop app for Google Messages Web (**v1.10.3**); Chromium App Host / Nativefier = legacy
 - **Posture:** Active Electron first-run + multi-platform packaging; bootstrap FOSS alignment retained
 - **Template pin:** `agent-project-bootstrap` **1.0.0**
 - **Stack:** `node` / `foss` — root packaging + `electron/`; no `examples/`
