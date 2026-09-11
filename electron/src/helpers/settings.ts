@@ -14,6 +14,7 @@ import { parseSignature, parseSnippet } from "./composeExtras";
 import { parseZoomByDisplayScale } from "./windowPrefs";
 import { parsePhoneList } from "./jumpList";
 import { parseMutedToastTitles } from "./liveRegion";
+import { applyColorfulTrayRollout } from "./desktopChromeRollout";
 
 // base types in json
 type primative = null | boolean | number | string;
@@ -64,6 +65,8 @@ export interface JsonSettings {
   spellCheckEnabled: boolean;
   /** One-time Windows rollout: force tray on for notify/unread badge feature. */
   windowsTrayRolloutV1: boolean;
+  /** One-time: color tray + tray on for Linux/mac (and leftover mono). */
+  colorfulTrayRolloutV1: boolean;
   /** Opt-in local crash queue; default off. See crash-capture. */
   saveCrashDetailsEnabled: boolean;
   /** Native chrome theme; Google Messages web keeps its own appearance. */
@@ -115,8 +118,8 @@ type WindowPosition = {
 
 // default settings for the app
 export const defaultSettings: JsonSettings = {
-  // Windows: tray on by default so unread red-dot works for new installs.
-  trayEnabled: process.platform === "win32",
+  // Tray on so the color icon is visible; unread red-dot works on all OSes.
+  trayEnabled: true,
   hideNotificationContentEnabled: true,
   startInTrayEnabled: false,
   autoHideMenuEnabled: false,
@@ -126,13 +129,13 @@ export const defaultSettings: JsonSettings = {
   savedWindowSize: { width: 1100, height: 800 },
   savedWindowPosition: null,
   checkForUpdateOnLaunchEnabled: false,
-  // Color icon is far more visible in the Windows notification area.
-  monochromeIconEnabled: process.platform !== "win32",
+  monochromeIconEnabled: false,
   showIconsInRecentConversationTrayEnabled: true,
   taskbarFlashEnabled: true,
   trayIconRedDotEnabled: true,
   spellCheckEnabled: true,
   windowsTrayRolloutV1: false,
+  colorfulTrayRolloutV1: false,
   saveCrashDetailsEnabled: false,
   themePreference: "system",
   startWithOsEnabled: false,
@@ -240,9 +243,20 @@ settings.mutedToastTitles.next(
   parseMutedToastTitles(settings.mutedToastTitles.value)
 );
 
+const colorful = applyColorfulTrayRollout({
+  colorfulDone: settings.colorfulTrayRolloutV1.value,
+  trayEnabled: settings.trayEnabled.value,
+  monochromeIconEnabled: settings.monochromeIconEnabled.value,
+});
+if (colorful) {
+  settings.trayEnabled.next(colorful.trayEnabled);
+  settings.monochromeIconEnabled.next(colorful.monochromeIconEnabled);
+  settings.colorfulTrayRolloutV1.next(true);
+}
+
 // One-time Windows rollout: existing installs still had trayEnabled=false from
 // before OS notify / unread badge. Force tray + color icon once; users can
-// disable again via Settings → Enable Tray Icon.
+// disable again via Settings → Tray icon → Enable Tray Icon.
 if (
   process.platform === "win32" &&
   !settings.windowsTrayRolloutV1.value

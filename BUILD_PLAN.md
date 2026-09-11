@@ -27,6 +27,8 @@
 
 > **HUMAN_BACKLOG device + GitHub** archived in COMPLETED_TASKS.md @ `2338c31` (working tree).
 
+> **Ship v1.11.0** tagged after CI. Residual: unsigned until `CSC_LINK` secrets (F-009).
+
 > **Ship v1.10.3** tagged @ `a1a5fbe`. Residual: unsigned until `CSC_LINK` secrets (F-009).
 
 > **Ship v1.10.2** tagged @ `96b4bac`. Residual: unsigned until `CSC_LINK` secrets (F-009).
@@ -70,6 +72,7 @@
 | HUMAN_BACKLOG device + GitHub | 2026-09-02 | `COMPLETED_TASKS.md` |
 | Ship v1.10.0 | 2026-09-02 | Unsigned Electron artifacts; F-009 residual |
 | Ship v1.10.1 | 2026-09-02 | Splash + deferred protocol reg; unsigned artifacts |
+| Ship v1.11.0 | 2026-09-10 | Nested Settings, Pixel-style chime, color tray, Linux XDG autostart |
 | Ship v1.10.3 | 2026-09-07 | Pairing DBSC/cookie fix; unsigned artifacts |
 | Ship v1.10.2 | 2026-09-04 | Splash-first + stage bar; unsigned artifacts |
 ---

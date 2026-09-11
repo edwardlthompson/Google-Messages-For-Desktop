@@ -2,6 +2,12 @@
 
 > Update only at milestone boundaries.
 
+## Milestone: /ship v1.11.0 (2026-09-10)
+
+- Product **1.11.0**: nested Settings menus, Pixel-style notify chime (on by default), color tray default, Linux XDG autostart written immediately
+- `js-yaml` override **4.3.2** (CVE-2026-84375); ruff-pre-commit v0.16.7
+- F-009 auto-update signing still deferred
+
 ## Milestone: /ship v1.10.3 (2026-09-07)
 
 - Product **1.10.3** pairing fix: Chromium DBSC/3PCD flags, `/web/` boot, persist:main auth popups not parented

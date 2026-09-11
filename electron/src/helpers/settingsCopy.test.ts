@@ -17,5 +17,15 @@ describe("settingsCopy", () => {
     assert.match(settingsCopy["settings.user_css"], /user\.css/i);
     assert.match(settingsCopy["settings.verbose_log"], /main\.log/i);
     assert.match(settingsCopy["settings.title"], /Settings/);
+    assert.equal(settingsCopy["settings.section.tray"], "Tray icon");
+    assert.equal(
+      settingsCopy["settings.section.notifications"],
+      "Notifications"
+    );
+    assert.match(settingsCopy["settings.section.window"], /Window/);
+    assert.equal(settingsCopy["settings.section.messaging"], "Messaging");
+    assert.match(settingsCopy["settings.section.spell_files"], /Spell check/);
+    assert.match(settingsCopy["settings.section.data"], /Data/);
+    assert.equal(settingsCopy["settings.section.advanced"], "Advanced");
   });
 });

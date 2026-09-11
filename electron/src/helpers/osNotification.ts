@@ -13,6 +13,7 @@ import {
   isToastTitleMuted,
 } from "./osNotificationLogic";
 import { notificationPlatformOptions, quietHoursActive } from "./quietHours";
+import { playBundledNotifyChime } from "./notifySoundUi";
 import { settings } from "./settings";
 import type { Conversation } from "./trayManager";
 
@@ -104,10 +105,12 @@ export function showMessageNotification(
   }
 
   const icon = notificationIcon();
+  const wantSound = settings.notificationSoundEnabled.value;
+  const playedChime = wantSound ? playBundledNotifyChime() : false;
   const notification = new Notification({
     title: payload.title,
     body: payload.body,
-    silent: !settings.notificationSoundEnabled.value,
+    silent: playedChime || !wantSound,
     tag: toastGroupTag(payload),
     ...notificationPlatformOptions(process.platform),
     ...(icon ? { icon } : {}),

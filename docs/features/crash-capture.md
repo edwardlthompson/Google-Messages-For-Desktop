@@ -40,5 +40,5 @@ Unit tests for queue-at-most-one, sanitize-before-persist, opt-in false, no re-e
 ## Notes
 
 - Persist `pending-crash.json` under Electron `userData` (`message` + `stack` only)
-- Settings → **Save crash details for me to review** defaults off (`feedback.save_crashes`)
+- Settings → **Advanced → Save crash details for me to review** defaults off (`feedback.save_crashes`)
 - After each AGENT step: `python scripts/agent-run.py watch-agent-gates --once --autofix --scope auto`

@@ -7,7 +7,8 @@
 - ✅ Clicking a toast focuses the matching conversation when the sender is in the recent-thread list (`focus-conversation`); otherwise the window is raised
 - ✅ Native `Notification` only (Focus Assist / DND is OS-enforced; no BrowserWindow toast)
 - ✅ Quiet hours presets skip toasts and taskbar flash (device-local clock)
-- ✅ Notification sound checkbox maps to `Notification({ silent })`
+- ✅ Notification sound checkbox plays the bundled Pixel-style chime (`resources/sounds/notify-chime.wav`) and falls back to `Notification({ silent })` if no player is available
+- ✅ New installs default notification sound **on**
 - ✅ New installs default **Hide Notification Content** on
 - ✅ Tray **Mark all as read** clicks unread rows when the web app exposes them
 - ✅ Hide Content also hides tray avatars
@@ -30,9 +31,8 @@
 |-------|------|
 | Logic | `electron/src/helpers/notifyFocus.ts`, `quietHours.ts`, `osNotificationLogic.ts` |
 | View | Settings menu + tray; OS toast chrome |
-| Tests | `notifyFocus.test.ts`, `quietHours.test.ts`, `osNotificationLogic.test.ts`, `nativeNotifyPath.test.ts`, `unreadDetect.test.ts` |
-| Wiring | `osNotification.ts`, `observers.ts`, `bridge.ts`, `background.ts` |
-
+| Tests | `notifyFocus.test.ts`, `quietHours.test.ts`, `osNotificationLogic.test.ts`, `nativeNotifyPath.test.ts`, `notifySound.test.ts`, `unreadDetect.test.ts` |
+| Wiring | `osNotification.ts`, `notifySoundUi.ts`, `observers.ts`, `bridge.ts`, `background.ts` |
 ## Tests
 
 - Automated: yes — matcher, quiet hours, sanitize, native-path guard, unread click helper

@@ -4,6 +4,13 @@ import { localizedCatalog } from "./i18n.ts";
 const settingsCopyEn = {
   "settings.title": "&Settings",
   "settings.title_mac": "&Preferences",
+  "settings.section.tray": "Tray icon",
+  "settings.section.notifications": "Notifications",
+  "settings.section.window": "Window & startup",
+  "settings.section.messaging": "Messaging",
+  "settings.section.spell_files": "Spell check & files",
+  "settings.section.data": "Data & privacy",
+  "settings.section.advanced": "Advanced",
   "settings.theme": "Appearance",
   "settings.theme.system": "System",
   "settings.theme.light": "Light",

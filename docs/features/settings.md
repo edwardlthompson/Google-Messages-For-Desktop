@@ -19,20 +19,22 @@
 ## Smoke scenario
 
 1. Given the app is running with default (system) appearance
-2. When the user opens Settings and switches Appearance to Dark
+2. When the user opens Settings → Appearance and switches to Dark
 3. Then native window chrome uses dark immediately and still uses dark after a cold restart
+
+Tray and related toggles live under **Settings → Tray icon** (not the flat root menu).
 
 ## Container map
 
 | Layer | Path |
 |-------|------|
 | Logic | `electron/src/helpers/settingsTheme.ts` |
-| View | `electron/src/menu/settingsMenu.ts` |
+| View | `electron/src/menu/settingsMenu.ts`, `settingsMenuSections.ts` |
 | Tests | `electron/src/helpers/settingsTheme.test.ts`, `settingsCopy.test.ts` |
 | Wiring | `electron/src/background.ts` `bindAppTheme(mainWindow)` |
 ## Tests
 
-- Automated: yes — theme parse/persist colors; settings copy keys
+- Automated: yes — theme parse/persist colors; settings copy keys; nested Settings menu structure
 
 ## Fallback validation
 

@@ -4,6 +4,13 @@ import type { Catalog } from "./i18n";
 export const catalogEs: Catalog = {
   "settings.title": "&Ajustes",
   "settings.title_mac": "&Preferencias",
+  "settings.section.tray": "Icono de bandeja",
+  "settings.section.notifications": "Notificaciones",
+  "settings.section.window": "Ventana e inicio",
+  "settings.section.messaging": "Mensajería",
+  "settings.section.spell_files": "Corrector y archivos",
+  "settings.section.data": "Datos y privacidad",
+  "settings.section.advanced": "Avanzado",
   "settings.theme": "Apariencia",
   "settings.theme.system": "Sistema",
   "settings.theme.light": "Claro",

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-09-10
+
+### Added
+
+- Nested Settings menus (Tray icon, Notifications, Window & startup, Messaging, Spell check & files, Data & privacy, Advanced) so the menu fits laptop screens
+- Bundled Pixel-style notification chime (`notify-chime.wav`) with sound on by default
+- Linux **Start with the operating system** writes `~/.config/autostart/com.edwardlthompson.google-messages.desktop` immediately (quoted Exec; no reboot to register)
+
+### Changed
+
+- Tray on and color icon by default (`colorfulTrayRolloutV1`); Linux/mac no longer default to monochrome
+- Pin `js-yaml` 4.3.2 (CVE-2026-84375); ruff-pre-commit v0.16.6 → v0.16.7
+
 ## [1.10.3] - 2026-09-07
 
 ### Fixed

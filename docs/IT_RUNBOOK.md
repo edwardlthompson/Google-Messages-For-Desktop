@@ -10,9 +10,8 @@ Windows file locks (`EBUSY`) happen if Google Messages for Desktop is still runn
 |------|------|
 | `settings.json` | Always (preferences) |
 | `product-update.json` | Update / Later state |
-| `main.log` | Only if Settings → verbose main-process log is on |
+| `main.log` | Only if Settings → Advanced → verbose main-process log is on |
 | crash notes | Only if Save crash details is on |
-
 All of those sit in the OS user-data folder (Windows: `%APPDATA%\google-messages-for-desktop`). Chat history is in Chromium `persist:main` (or `persist:profile-*` / in-memory `guest`).
 
 Do not copy `persist:*` folders into a ticket.

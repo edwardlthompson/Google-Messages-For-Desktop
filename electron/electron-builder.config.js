@@ -5,6 +5,7 @@ module.exports = {
   copyright:
     "Copyright Google Messages For Desktop contributors; based on OrangeDrangon/android-messages-desktop (MIT)",
   files: ["app/**/*", "resources/**/*"],
+  asarUnpack: ["resources/sounds/**"],
   directories: {
     buildResources: "resources",
     output: "dist",

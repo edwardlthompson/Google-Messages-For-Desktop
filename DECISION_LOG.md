@@ -1,5 +1,16 @@
 # Decision Log
 
+## 2026-09-10 — /ship v1.11.0
+
+- **Status:** Accepted
+- **Context:** `/ship` after nested Settings, Pixel-style notification chime, color tray default, and Linux autostart that writes XDG immediately.
+- **Decisions:**
+  - Product **1.11.0**. Manual tag after CI (do not merge template Release Please 1.1.0).
+  - Keep `github/codeql-action@v3` (upd false-positive bundle tag skipped).
+  - Original bundled chime (not Google's proprietary Pixel Onward samples).
+  - F-009 signing stays deferred.
+- **Consequences:** GitHub Release **v1.11.0** will have unsigned Win/mac/linux artifacts.
+
 ## 2026-09-07 — /ship v1.10.3
 
 - **Status:** Accepted

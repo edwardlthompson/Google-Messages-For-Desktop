@@ -13,6 +13,7 @@ describe("native OS notification path", () => {
       "utf8"
     );
     assert.match(text, /new Notification\(/);
+    assert.match(text, /playBundledNotifyChime/);
     assert.equal(/new BrowserWindow\(/.test(text), false);
   });
 });

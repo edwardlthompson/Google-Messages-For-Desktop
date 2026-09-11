@@ -31,7 +31,7 @@ Prefer Electron packaging and protocol/onboarding work over rewriting the Messag
 
 - Session perms: allowlist only (`notifications`, clipboard, fullscreen, `media`/`mediaKeySystem`) for `messages.google.com`
 - Outer Notification catch must send empty title/body (main re-sanitizes); never raw `options.body`
-- Electron pin **41.10.3**; `overrides.fast-uri: 3.1.5`; js-yaml 4.3.0 is outside CVE-2026-59870
+- Electron pin **41.10.3**; `overrides.fast-uri: 3.1.5`; `overrides.js-yaml: 4.3.2` (CVE-2026-84375)
 - `feature-gate.sh --stack node` runs `npm --prefix electron run test:unit`
 - Git Bash: skip WindowsApps `python3` via `scripts/lib/pick-python.sh` or gates hang
 
@@ -68,9 +68,9 @@ Historical Electron/Windows issue: `app.setAppUserModelId(process.execPath)` ins
 
 - Session `persist:main` grants `"notifications"` only for `messages.google.com`.
 - On Windows, page `Notification` is routed via IPC to a main-process Electron `Notification` (4s dedupe; skip when main window focused; honors Hide Notification Content).
-- Unread tray red-dot requires tray enabled (`trayEnabled` defaults **true** on Windows for new settings; one-time `windowsTrayRolloutV1` also enables tray + color icon for older installs). Observers re-bind if the conversation list SPA remounts.
+- Unread tray red-dot requires tray enabled (`trayEnabled` defaults **true**; one-time `colorfulTrayRolloutV1` enables tray + color icon for older installs). Observers re-bind if the conversation list SPA remounts.
 - Unsigned Windows builds omit Tray GUID (GUID + path changes can prevent icon creation until the app is code-signed).
-- Look for the icon in the notification area near the clock (and the overflow chevron), not as a taskbar app button. Toggle: app **Settings → Enable Tray Icon** (not Windows Settings → Default apps).
+- Look for the icon in the notification area near the clock (and the overflow chevron), not as a taskbar app button. Toggle: app **Settings → Tray icon → Enable Tray Icon** (not Windows Settings → Default apps).
 - Unread false→true also sends a generic OS toast (no DOM snippets) through the same dedupe path.
 - Installed NSIS builds with a Start Menu shortcut remain the most reliable Action Center target; `npm run dev` / portable may still be flaky for toasts.
 
