@@ -22,9 +22,6 @@ def _hexes(tokens: dict) -> list[str]:
 
 def check_repo(root: Path) -> list[str]:
     errors: list[str] = []
-    # Pruned children without examples/web keep their own OG art; skip template web coupling.
-    if not (root / "examples" / "web").is_dir():
-        return []
     token_path = root / TOKENS
     if not token_path.is_file():
         return [f"MISSING: {TOKENS.as_posix()}"]
@@ -41,23 +38,31 @@ def check_repo(root: Path) -> list[str]:
         if hex_color.lower() not in text.lower():
             errors.append(f"{ASSET.as_posix()} missing token color {hex_color}")
     if not public.is_file():
-        errors.append(f"MISSING: {PUBLIC.as_posix()}")
+        if (root / "examples" / "web").is_dir():
+            errors.append(f"MISSING: {PUBLIC.as_posix()}")
     elif public.read_bytes() != asset.read_bytes():
         errors.append("web public social-preview.svg must match branding asset")
     index = root / INDEX
     if not index.is_file():
-        errors.append(f"MISSING: {INDEX.as_posix()}")
+        if (root / "examples" / "web").is_dir():
+            errors.append(f"MISSING: {INDEX.as_posix()}")
     else:
         html = index.read_text(encoding="utf-8")
         if 'property="og:image"' not in html or "social-preview.svg" not in html:
             errors.append("examples/web/index.html must set og:image to social-preview.svg")
+    product = root / "branding" / "product.json"
+    product_mode = ""
+    if product.is_file():
+        try:
+            product_mode = str(json.loads(product.read_text(encoding="utf-8")).get("mode") or "")
+        except json.JSONDecodeError:
+            product_mode = ""
+    if product_mode == "product":
+        errors = [e for e in errors if "missing token color" not in e]
     return errors
 
 
 def main() -> int:
-    if not (Path.cwd() / "examples" / "web").is_dir():
-        print("SKIP social preview (examples/web absent)")
-        return 0
     errors = check_repo(Path.cwd())
     if errors:
         print("Social preview token check failed:")

@@ -13,11 +13,11 @@ cd "$ROOT"
 . "$(cd "$(dirname "$0")" && pwd)/lib/resolve-python.sh"
 
 REPO="${GITHUB_REPO:-}"
-BRANCH="${GITHUB_DEFAULT_BRANCH:-main}"
+BRANCH="${GITHUB_DEFAULT_BRANCH:-}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --branch) BRANCH="${2:-main}"; shift 2 ;;
+    --branch) BRANCH="${2:-}"; shift 2 ;;
     -h|--help)
       echo "Usage: scripts/verify-branch-protection.sh [owner/repo] [--branch BRANCH]"
       exit 0
@@ -39,6 +39,10 @@ fi
 if [ -z "$REPO" ]; then
   echo "ERROR: pass owner/repo, set GITHUB_REPO, or run from a git repo with gh auth"
   exit 1
+fi
+
+if [ -z "$BRANCH" ]; then
+  BRANCH="$("$PY" "$ROOT/scripts/lib/github_default_branch.py" "$ROOT")"
 fi
 
 if ! command -v gh >/dev/null 2>&1; then

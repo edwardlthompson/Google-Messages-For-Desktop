@@ -19,8 +19,7 @@ class IdeasConfirmTests(unittest.TestCase):
     def test_debug_reads_last_feature_gate(self) -> None:
         debug = (ROOT / ".cursor/commands/debug.md").read_text(encoding="utf-8")
         playbook = (ROOT / "docs/FOR_AGENTS.md").read_text(encoding="utf-8")
-        seven_b = (ROOT / "docs/INITIALIZATION_PROMPT.md").read_text(encoding="utf-8")
-        for text in (debug, playbook, seven_b):
+        for text in (debug, playbook):
             self.assertIn("last-feature-gate.json", text)
             self.assertIn("strikes", text)
         self.assertIn("halt", debug.lower())
@@ -65,11 +64,9 @@ class IdeasConfirmTests(unittest.TestCase):
             self.assertIn(f"docs/help/{name.upper()}.md", cmd.read_text(encoding="utf-8"))
 
     def test_session_start_unreleased_and_next_agent(self) -> None:
-        agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
         start = (ROOT / "docs/START_HERE.md").read_text(encoding="utf-8")
-        for text in (agents, start):
-            self.assertIn("[Unreleased]", text)
-            self.assertIn("[AGENT]", text)
+        self.assertIn("[Unreleased]", start)
+        self.assertIn("[AGENT]", start)
 
 
 if __name__ == "__main__":

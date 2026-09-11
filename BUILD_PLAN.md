@@ -1,92 +1,72 @@
 # BUILD_PLAN — Google Messages for Desktop
 
-> Prioritized task board with owner labels. **Completed sprints:** `COMPLETED_TASKS.md`.
+<!-- remaining-tally -->
+**Remaining:** AGENT 0 · AUTO 0 · HUMAN 0 · ADB 0 · **0 open**
+<!-- /remaining-tally -->
 
-## Owner Label Legend
+Live board. Finished work: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
 
-| Label   | Owner           | When to use                                                |
-| ------- | --------------- | ---------------------------------------------------------- |
-| `AGENT` | Cursor Agent    | Code, docs, scaffolding, tests, CI config                  |
-| `HUMAN` | Human developer | Approvals, credentials, GitHub settings, product decisions |
-| `ADB`   | Human (Android) | N/A for this repo                                          |
-| `AUTO`  | CI/scripts/bots | GitHub Actions, Dependabot, pre-commit, update checker     |
-## Status markers
+**Who:** `AGENT` code · `HUMAN` person · `ADB` device · `AUTO` CI/scripts
+**State:** 🔲 open · ✅ done · ❌ blocked — reason
 
-| Marker | State   | Agent action                                                          |
-| ------ | ------- | --------------------------------------------------------------------- |
-| 🔲     | Open    | Default for new tasks; work or leave queued                           |
-| ✅     | Done    | Replace 🔲 when complete; archive sprint rows to `COMPLETED_TASKS.md` |
-| ❌     | Blocked | Replace 🔲 when blocked; add brief reason after the description       |
-**Task format:** `🔲 [OWNER] Description` · done: `✅ [OWNER] Description` · blocked: `❌ [OWNER] Description — reason`
+Format: `🔲 [AGENT] Short task`. Sequential `[AGENT]` first. Parallel scopes: [`docs/PARALLEL_AGENT_SCOPES.md`](docs/PARALLEL_AGENT_SCOPES.md). `/build` tries HUMAN/ADB after automation; failures go to `HUMAN_BACKLOG.md`.
 
-> **Sprint G — Desktop product backlog** archived in COMPLETED_TASKS.md @ `2338c31`.
+## Smoke gate (hard stop)
 
-> **Sprint F — Golden Path on Electron** archived in COMPLETED_TASKS.md @ `2338c31`.
+After every `[AGENT]` row: `python3 scripts/agent-run.py watch-agent-gates --once --autofix --scope auto`
 
-> **HUMAN automation + donations-updates** archived in COMPLETED_TASKS.md @ `2338c31`.
+After the **last** `[AGENT]`/`[AUTO]` row in a sprint is ✅, do **not** start the next sprint until this exits 0:
 
-> **HUMAN_BACKLOG device + GitHub** archived in COMPLETED_TASKS.md @ `2338c31` (working tree).
+```bash
+python3 scripts/agent-run.py smoke-sprint --require
 
-> **Ship v1.11.0** tagged @ `d8b54fa`. Residual: unsigned until `CSC_LINK` secrets (F-009).
+```
 
-> **Ship v1.10.3** tagged @ `a1a5fbe`. Residual: unsigned until `CSC_LINK` secrets (F-009).
+That command re-smokes **every** ✅ row: no errors or crashes, plus startup time and load order. Details: [`docs/SPRINT_SMOKE.md`](docs/SPRINT_SMOKE.md). Fail → leave the last row open or ❌; fix; re-run. `/gates` wrap-up includes the same check.
 
-> **Ship v1.10.2** tagged @ `96b4bac`. Residual: unsigned until `CSC_LINK` secrets (F-009).
-
-> **Ship v1.10.1** tagged @ `083c43c`. Residual: unsigned until `CSC_LINK` secrets (F-009).
-
-> **Ship v1.10.0** tagged @ `799ff61`. Residual: unsigned until `CSC_LINK` secrets (F-009).
-
-> **Ship v1.9.0** tagged @ `73290d1`. Residual: unsigned until `CSC_LINK` secrets (F-009).
-
-> **Ship v1.8.1** archived in COMPLETED_TASKS.md @ `6adf8c6`. Residual: F-009 signing.
-
-> **R-Audit-2026-08-14** archived in COMPLETED_TASKS.md.
-
-> **Ship v1.8.0** tagged + unsigned Electron artifacts on GitHub Release. Residual: F-009 signing.
-
-> **R-Audit-2026-07-29c** archived in COMPLETED_TASKS.md.
-
-## Archived Sprints
-
-| Sprint | Complete | Notes |
-|--------|----------|-------|
-| Sprint A — Phase 0 + §8 | 2026-07-29 | `COMPLETED_TASKS.md` |
-| Sprint B — Phase 1 | 2026-07-29 | `COMPLETED_TASKS.md` |
-| Sprint C — Phase 2 | 2026-07-29 | `COMPLETED_TASKS.md` |
-| Sprint D — Phase 3-4 | 2026-07-29 | `COMPLETED_TASKS.md` |
-| R-Audit-2026-07-29 | 2026-07-29 | AGENT/AUTO done |
-| R-Audit-2026-07-29b | 2026-07-29 | Windows App Host harden + docs |
-| Ship v1.5.0 | 2026-07-29 | Tag kept; empty GitHub Release deleted 2026-09-02 |
-| R-Audit-2026-07-29c | 2026-07-29 | Electron first-run audit fixes |
-| Ship v1.7.0 | 2026-07-29 | Electron multi-platform + unsigned CI artifacts |
-| Ship v1.7.1 | 2026-07-30 | Sign-in auto-complete + package verify + NativeImage |
-| Ship v1.8.0 | 2026-07-30 | Windows OS notify + tray unread |
-| R-Audit-2026-08-14 | 2026-08-14 | AGENT/AUTO done |
-| Ship v1.8.1 | 2026-08-14 | Electron 41.10.3 + 0.17.0; unsigned CI artifacts |
-| Ship v1.9.0 | 2026-08-22 | Donate + GitHub installer checks; unsigned CI artifacts |
-| HUMAN automation + donations-updates | 2026-09-02 | `COMPLETED_TASKS.md` |
-| Sprint E maintenance AGENT rows | 2026-09-02 | `COMPLETED_TASKS.md` |
-| Sprint F — Golden Path on Electron | 2026-09-02 | `COMPLETED_TASKS.md` |
-| Sprint G — Desktop product backlog | 2026-09-02 | `COMPLETED_TASKS.md` |
-| HUMAN_BACKLOG device + GitHub | 2026-09-02 | `COMPLETED_TASKS.md` |
-| Ship v1.10.0 | 2026-09-02 | Unsigned Electron artifacts; F-009 residual |
-| Ship v1.10.1 | 2026-09-02 | Splash + deferred protocol reg; unsigned artifacts |
-| Ship v1.11.0 | 2026-09-10 | Nested Settings, Pixel-style chime, color tray, Linux XDG autostart |
-| Ship v1.10.3 | 2026-09-07 | Pairing DBSC/cookie fix; unsigned artifacts |
-| Ship v1.10.2 | 2026-09-04 | Splash-first + stage bar; unsigned artifacts |
 ---
 
-## Sprint E — Ongoing maintenance
+## Product
 
-### Sequential
+**Now:** shipping **1.11.1** (`electron/`) · template **1.4.0**. Board empty. After Cloud work, `/resume`.
 
-1. 🔲 [HUMAN] F-009 Wire auto-update publish + signing before enabling launch checks
+> **Waiting HUMAN leftovers** archived in COMPLETED_TASKS.md @ `162d61d` (working tree).
+> **Sprint I — Template 1.4.0** archived in COMPLETED_TASKS.md @ `162d61d` (working tree).
+> **Sprint H — Template 1.3.0** archived in COMPLETED_TASKS.md @ `162d61d` (working tree).
+> **Ship v1.11.0** tagged @ `d8b54fa`. Residual: unsigned until `CSC_LINK` secrets.
 
-### Parallel
+### Open PRs (synced)
 
-<!-- parallel_exception: maintenance lane is reactive; no standing parallel AGENT scopes -->
+> Auto-managed on product repos too. Do not hand-edit rows inside the markers.
 
-| Task | Owner | Isolated scope |
-|------|-------|----------------|
-| *None — see exception* | — | — |
+<!-- open-prs-sync:begin -->
+_No open Dependabot or Release Please PRs._
+<!-- open-prs-sync:end -->
+
+### Template gaps (synced)
+
+> Auto-managed Monday cron + `sync-template-gaps-build-plan`. Do not hand-edit inside markers. Plan-only — run `/upgrade` then name item numbers.
+
+<!-- template-gaps-sync:begin -->
+_No template gaps; .template-version matches upstream (or template maintainer N/A)._
+<!-- template-gaps-sync:end -->
+
+### Waiting on a person
+
+_None._
+
+Done on this board: **v1.11.0** · template **1.4.0**. Archive: `COMPLETED_TASKS.md`. Launch update checks stay **off** until signed releases. Scorecard Action goes live on the next push of `scorecard.yml`.
+
+---
+
+## Ongoing Maintenance
+
+Not a checklist. GitHub Monday cron (`.github/workflows/weekly-health-check.yml`) already runs CI wait, security triage, parent template-gap BUILD_PLAN sync (this child board), radar, `update-deps` dry-run, Dependabot leftover list, open-PR BUILD_PLAN sync, and latest-release SBOM. Upgrade-sim stays on the template maintainer repo. `/ship` owns pre-release and the release tag.
+
+If Monday cron is red: Cursor Automation `weekly-maintain`, then Grok Bot 4–5. Do not put those chores back on this board. [`docs/GROK_BOTS.md`](docs/GROK_BOTS.md) · [`docs/CURSOR_AUTOMATIONS.commercial.md`](docs/CURSOR_AUTOMATIONS.commercial.md)
+
+---
+
+## Archive
+
+Older sprints: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).

@@ -7,27 +7,24 @@ import re
 import shutil
 from pathlib import Path
 
+from github_default_branch import default_branch
 from human_task_core import AttemptResult, run_cmd
 from human_task_github import automate_branch_protection
 from human_task_rows import automate_release_tag
 
+from human_task_gmfd_waiting import (
+    automate_f009_signing,
+    automate_sacred_examples_skip,
+    automate_scorecard_master_protection,
+)
+
 DEFERRED_WORKFLOWS = (
-    "scorecard.yml",
     "release-please.yml",
     "pages.yml",
     "stale.yml",
     "weekly-health.yml",
     "automerge.yml",
 )
-
-
-def _default_branch(root: Path) -> str:
-    settings = root / ".github" / "settings.yml"
-    if settings.is_file():
-        match = re.search(r"^  default_branch:\s*(\S+)", settings.read_text(encoding="utf-8"), re.M)
-        if match:
-            return match.group(1)
-    return "master"
 
 
 def automate_sign_pipeline(root: Path, _cfg: dict) -> AttemptResult:
@@ -79,7 +76,7 @@ def automate_deferred_workflows(root: Path, _cfg: dict) -> AttemptResult:
     hit = [name for name in DEFERRED_WORKFLOWS if name in live]
     if hit:
         return AttemptResult(1, "deferred-workflows", f"live deferred workflows: {', '.join(hit)}", True)
-    return AttemptResult(0, "deferred-workflows", "Scorecard/Release-Please/Pages/stale stay in workflow-examples", False)
+    return AttemptResult(0, "deferred-workflows", "Release-Please/Pages/stale/weekly-health/automerge stay deferred", False)
 
 
 def automate_engines_node(root: Path, _cfg: dict) -> AttemptResult:
@@ -112,11 +109,18 @@ def automate_init_prompt_child(root: Path, _cfg: dict) -> AttemptResult:
 
 
 def automate_gmfd_branch_protection(root: Path, cfg: dict) -> AttemptResult:
-    os.environ.setdefault("GITHUB_DEFAULT_BRANCH", _default_branch(root))
+    os.environ["GITHUB_DEFAULT_BRANCH"] = default_branch(root)
     return automate_branch_protection(root, cfg)
 
 
 GMFD_RULES: list[tuple[re.Pattern[str], str, object]] = [
+    (re.compile(r"F-009|auto-update publish \+ signing", re.I), "human", automate_f009_signing),
+    (re.compile(r"Sacred: review `examples/", re.I), "human", automate_sacred_examples_skip),
+    (
+        re.compile(r"OpenSSF Scorecard workflow", re.I),
+        "human",
+        automate_scorecard_master_protection,
+    ),
     (re.compile(r"Sign/notarize|signed Windows builds", re.I), "human", automate_sign_pipeline),
     (re.compile(r"Device smoke|Smoke: Windows toast|Smoke v1\.9\.0", re.I), "human", automate_electron_unit_smoke),
     (re.compile(r"GitHub Releases when packaging", re.I), "human", automate_github_releases_workflow),

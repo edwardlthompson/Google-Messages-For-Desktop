@@ -48,6 +48,25 @@ class FdroidScreenshotsTests(unittest.TestCase):
         verify = (ROOT / "scripts" / "verify-fdroid-metadata.sh").read_text(encoding="utf-8")
         self.assertIn("check-fdroid-screenshots.sh", verify)
 
+    def test_completeness_scaffold_ok(self) -> None:
+        from fdroid_screenshots import check_completeness
+
+        self.assertEqual(check_completeness(ROOT, submit_ready=False), [])
+
+    def test_completeness_submit_ready_fails_without_shots(self) -> None:
+        from fdroid_screenshots import check_completeness
+
+        if not (ROOT / "examples/android").is_dir():
+            self.skipTest("android example pruned")
+        errors = check_completeness(ROOT, submit_ready=True)
+        self.assertTrue(
+            any(
+                "phoneScreenshots" in e or "icon.png" in e or "images" in e
+                for e in errors
+            ),
+            errors,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

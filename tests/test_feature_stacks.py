@@ -108,8 +108,6 @@ class ShellContractTests(unittest.TestCase):
         bash = _bash()
         if not bash:
             self.skipTest("bash not available")
-        if shutil.which("go"):
-            self.skipTest("go is installed")
         proc = subprocess.run(
             [bash, "scripts/feature-gate.sh", "--skip-preamble", "--stack", "go"],
             cwd=ROOT,
@@ -118,8 +116,12 @@ class ShellContractTests(unittest.TestCase):
             check=False,
             env={**os.environ, "FEATURE_GATE_CHILD": "1"},
         )
-        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
-        self.assertIn("Skipping go gate", proc.stdout + proc.stderr)
+        out = proc.stdout + proc.stderr
+        self.assertEqual(proc.returncode, 0, out)
+        if (ROOT / "examples" / "go" / "go.mod").is_file():
+            if shutil.which("go"):
+                self.skipTest("go is installed")
+            self.assertIn("Skipping go gate", out)
 
     def test_garbage_jobs_exit_2(self) -> None:
         bash = _bash()

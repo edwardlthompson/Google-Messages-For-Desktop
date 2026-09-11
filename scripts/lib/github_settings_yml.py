@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from github_default_branch import default_branch
 from required_checks import REL as MANIFEST
 from required_checks import load_names
 
@@ -23,6 +24,11 @@ def check_repo(root: Path) -> list[str]:
         errors.append("allow_force_pushes must be false")
     if "setup-github-repo.sh" not in text:
         errors.append("must point at setup-github-repo.sh as the FOSS apply path")
+    branch = default_branch(root)
+    if f"default_branch: {branch}" not in text:
+        errors.append(f"default_branch must be {branch}")
+    if f"- name: {branch}" not in text:
+        errors.append(f"branches protection name must be {branch}")
     return errors
 
 

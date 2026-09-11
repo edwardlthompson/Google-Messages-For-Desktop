@@ -48,8 +48,9 @@ def check_ci(text: str) -> list[str]:
 
 def main() -> int:
     root = Path.cwd()
-    if not (root / "examples" / "web").is_dir():
-        print("SKIP Playwright cache-hash (examples/web absent)")
+    lock = root / "examples" / "web" / "package-lock.json"
+    if not lock.is_file():
+        print("Playwright cache-hash check skipped (no examples/web lockfile)")
         return 0
     errors = check_ci((root / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8"))
     if errors:

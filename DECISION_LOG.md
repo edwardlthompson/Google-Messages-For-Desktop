@@ -1,5 +1,52 @@
 # Decision Log
 
+## 2026-09-11 — /ship v1.11.1
+
+- **Status:** Accepted
+- **Context:** `/ship` after template 1.4.0 catch-up, Waiting HUMAN leftover automation, board cleanup, and About-gate skip for missing `examples/web`.
+- **Decisions:**
+  - Product **1.11.1**. Manual tag after CI (do not merge template Release Please 1.1.0).
+  - Keep `github/codeql-action@v3` / `@v4` pins (upd false-positive `vcodeql-bundle-*` skipped).
+  - Scorecard workflow is informational; required checks stay CI / Security Scan / CodeQL on `master`.
+  - F-009 signing stays deferred; launch update checks stay off.
+- **Consequences:** GitHub Release **v1.11.1** will have unsigned Win/mac/linux artifacts. Scorecard Action starts after this push.
+
+## 2026-09-11 — Automate Waiting-on-a-person HUMAN rows
+
+- **Status:** Accepted
+- **Context:** Five HUMAN leftovers on the slim board: F-009 signing wire-up, Sacred `examples/{node,python,web}`, OpenSSF Scorecard + `master` protection names.
+- **Decisions:**
+  - F-009: keep `CSC_LINK` wiring in `release-desktop.yml`; `checkForUpdateOnLaunchEnabled` stays **false** until secrets exist. Do not invent signing certs.
+  - Sacred 18–20: never vendor parent `examples/`; node product is `electron/`.
+  - Enable `.github/workflows/scorecard.yml` (weekly + push to `master`, informational). README Scorecard badge on. Merge-blocking checks stay **CI / Security Scan / CodeQL** on `master` (not parent template job names).
+  - Scripts: `scripts/gmfd-human-waiting.sh` (includes GitHub protection apply) and `scripts/check-gmfd-waiting.sh` (local gate in validate-bootstrap).
+- **Consequences:** BUILD_PLAN Waiting rows ✅. `HUMAN_BACKLOG.md` cleared. Scorecard GitHub Action appears after `scorecard.yml` is pushed. Unsigned installers remain until `CSC_LINK` / Apple secrets.
+
+## 2026-09-11 — Template 1.4.0 catch-up (named `/upgrade` 1–20)
+
+- **Status:** Accepted
+- **Context:** Parent `agent-project-bootstrap` **v1.4.0** (Monday template-gap BUILD_PLAN sync). Child was at template **1.3.0**. Product stays **1.11.0**. User named items **1–20**.
+- **Decisions:**
+  - Copy Canon 1–7 (`upgrade.md`, `docs/help/UPGRADE.md`, `repo_mode.py`, gap-sync scripts, `template_gap.py`).
+  - Merge Mixed 8–16: feature spec, tests, `BUILD_PLAN`/`BUILD_PLAN_TEMPLATE` markers, `UPGRADING_FROM_TEMPLATE.md`, `TEMPLATE_INDEX.json` paths, hand-pin 1.4.0, pre-commit (already matched), `weekly-health-check.yml`.
+  - Item 17: do not overwrite product CHANGELOG, AGENT_MEMORY, README body, or parent DECISION_LOG/COMPLETED_TASKS.
+  - Items 18–20: Sacred `[HUMAN]` only — did not copy `examples/`.
+  - Pin 1.4.0 by hand (not `sync-template-version.sh`). README **Version: 1.11.0**; template badge only.
+  - Weekly-health: `master` default branch push pattern; Scorecard triage non-strict; SBOM wait `continue-on-error` (Electron installers, not template Golden Path SBOMs).
+- **Consequences:** `validate-bootstrap --quick` and `feature-gate --stack node` pass. Monday cron may commit BUILD_PLAN syncs. Scorecard/`main` protection remain HUMAN_BACKLOG. F-009 signing remains the ship residual.
+
+## 2026-09-11 — Template 1.3.0 catch-up (Canon + safe Mixed)
+
+- **Status:** Accepted
+- **Context:** Child was pinned at template **1.0.0**. Parent `agent-project-bootstrap` is **1.3.0**. Named set: all Canon copies plus safe Mixed merges. Sacred files and `examples/` stayed untouched. Product semver stays **1.11.0**.
+- **Decisions:**
+  - Copy Canon from a full `v1.3.0` tree without `--delete`; restore Electron `test:unit`, GMFD helpers, and `scripts/desktop/` + `scripts/windows/`.
+  - Pin 1.3.0 by hand (do not run `sync-template-version.sh` or Release Please). README **Version: 1.11.0**; template badge only.
+  - Fork `ci_gaps.py` for `branches: [master]` and skip nix/`ci-ok` when `ci-ok` is absent. Keep `BOOTSTRAP_OPTIONAL_LINT: skip`. Inactive-stack Golden Path unittests skip on this child.
+  - Do not add parent `release.yml`, `pages.yml`, or `scorecard.yml`. Product release remains `release-desktop.yml`.
+  - OpenSSF Scorecard + `master` vs `main` branch-protection names stay on `HUMAN_BACKLOG.md`. F-009 signing remains the ship residual.
+- **Consequences:** `validate-bootstrap --quick` and `feature-gate --stack node` pass locally. `/ship` regress still treats Scorecard/`main` protection as expected FAIL.
+
 ## 2026-09-10 — /ship v1.11.0
 
 - **Status:** Accepted

@@ -2,6 +2,26 @@
 
 > Update only at milestone boundaries.
 
+## Milestone: /ship v1.11.1 (2026-09-11)
+
+- Product **1.11.1**: template 1.4.0 catch-up, Scorecard on `master`, HUMAN leftovers automated
+- F-009 auto-update signing still deferred; launch checks stay off
+- Do not merge template Release Please 1.1.0
+
+## Milestone: Waiting HUMAN leftovers automated (2026-09-11)
+
+- F-009 pipeline wired; launch update checks stay off until `CSC_LINK`
+- Sacred `examples/` stay absent; Scorecard workflow + `master` protection (CI / Security Scan / CodeQL)
+- `/cleanup` archived those five HUMAN rows; active board has **0 open**
+- Next `[AGENT]` is none; next product work is a named feature or `/ship` when signing secrets exist
+
+## Milestone: template 1.4.0 catch-up + board slim (2026-09-11)
+
+- Template pin **1.4.0**; product stays **1.11.0**
+- Monday `weekly-health-check.yml` on `master`; Sacred `examples/` not copied
+- Active board slimmed to child-template shape: waiting HUMAN rows + synced Open PRs / template gaps
+- Next `[AGENT]` is none; leftovers are F-009, Sacred examples review, Scorecard/`master` protection
+
 ## Milestone: /ship v1.11.0 (2026-09-10)
 
 - Product **1.11.0**: nested Settings menus, Pixel-style notify chime (on by default), color tray default, Linux XDG autostart written immediately

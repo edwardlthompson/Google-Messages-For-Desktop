@@ -5,7 +5,7 @@
 ## What is this?
 
 A desktop wrapper for [Google Messages for Web](https://messages.google.com/web): **Windows, macOS, and Linux** use the Electron app under [`electron/`](../electron/) (shell based on OrangeDrangon/android-messages-desktop) with `sms:`/`tel:`/`im:` protocol compose.
-Agent/process infrastructure is aligned with [`agent-project-bootstrap`](https://github.com/edwardlthompson/agent-project-bootstrap) **v1.0.0**.
+Agent/process infrastructure is aligned with [`agent-project-bootstrap`](https://github.com/edwardlthompson/agent-project-bootstrap) **v1.4.0**.
 
 ## Read order
 
@@ -14,6 +14,7 @@ Agent/process infrastructure is aligned with [`agent-project-bootstrap`](https:/
 3. `AGENTS.md`
 4. `modules/node/MODULE.md`
 5. `docs/WINDOWS_PROTOCOL_HANDLERS.md` for protocol / first-run details
+6. Optional: [`docs/GROK_BOTS.md`](GROK_BOTS.md) (not on the FOSS production path; Monday cron is `weekly-health-check.yml`)
 
 ## Do Not Do
 
@@ -28,5 +29,7 @@ Agent/process infrastructure is aligned with [`agent-project-bootstrap`](https:/
 - Shipping: electron-builder; CI workflow `release-desktop.yml`
 
 ## Agent labels
+
+On session start, name dirty `[Unreleased]` changelog notes and the next 🔲 `[AGENT]` row in `BUILD_PLAN.md`.
 
 See [`docs/help/GLOSSARY.md`](help/GLOSSARY.md): [**Sacred**](help/GLOSSARY.md#sacred) · [**Canon**](help/GLOSSARY.md#canon) · [**AGENT**](help/GLOSSARY.md#agent) · [**HUMAN**](help/GLOSSARY.md#human) · [**ADB**](help/GLOSSARY.md#adb) · [**AUTO**](help/GLOSSARY.md#auto).

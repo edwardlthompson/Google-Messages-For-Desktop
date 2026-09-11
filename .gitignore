@@ -121,3 +121,13 @@ result
 .direnv/
 scratchpad.md
 .cursor/handoff-*.md
+
+# Merged from agent-project-bootstrap v1.3.0
+.cursor/sprint-smoke.json
+.cursor/automations.yaml
+CURSOR_RADAR_BUILD_PLAN_DRAFT.md
+.envrc
+!.envrc.example
+*.jks
+*.keystore
+*.p12

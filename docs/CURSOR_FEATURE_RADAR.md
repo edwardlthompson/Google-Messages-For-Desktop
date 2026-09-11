@@ -11,19 +11,19 @@ Weekly maintainer workflow that diffs [Cursor docs index](https://cursor.com/llm
 | FOSS fit | 2 | Works without paid Cursor tiers? |
 | Child-repo value | 2 | Helps forks, not just template maintainer? |
 | Implementation cost | -2 | New scripts, CI, or breaking changes? |
-
 **Thresholds**
 
 - Score ≥ 7 → append to gitignored `CURSOR_RADAR_BACKLOG.md`
-- Score ≥ 9 → flag **suggest BUILD_PLAN** in `CURSOR_RADAR_REPORT.md` only (never auto-edit BUILD_PLAN)
+- Score ≥ 9 → flag **suggest BUILD_PLAN** in `CURSOR_RADAR_REPORT.md` and write gitignored `CURSOR_RADAR_BUILD_PLAN_DRAFT.md` (never auto-edit `BUILD_PLAN.md`)
 
 ## Run locally
 
 ```bash
 bash scripts/cursor-feature-radar.sh
+
 ```
 
-Network failures write `status: fetch_failed` and exit **0** (non-blocking in CI).
+Network failures write `status: fetch_failed` and exit **0** (non-blocking in CI). High-score rows land in `CURSOR_RADAR_BUILD_PLAN_DRAFT.md` for a human to paste after `/ideas`.
 
 ## Tier gate
 

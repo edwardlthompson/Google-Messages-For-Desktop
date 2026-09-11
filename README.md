@@ -5,10 +5,11 @@
 </p>
 
 <p>
-  <img src="https://img.shields.io/badge/template-1.0.0-656d76?style=flat-square" alt="template 1.0.0" />
+  <img src="https://img.shields.io/badge/template-1.4.0-656d76?style=flat-square" alt="template 1.4.0" />
   <img src="https://img.shields.io/badge/license-MIT-2ea043?style=flat-square" alt="MIT" />
   <img src="https://img.shields.io/badge/FOSS-no_tracking-656d76?style=flat-square" alt="FOSS" />
   <a href="https://github.com/edwardlthompson/Google-Messages-For-Desktop/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/edwardlthompson/Google-Messages-For-Desktop/ci.yml?style=flat-square&label=CI" alt="CI" /></a>
+  <a href="https://securityscorecards.dev/viewer/?uri=github.com/edwardlthompson/Google-Messages-For-Desktop"><img src="https://api.securityscorecards.dev/projects/github.com/edwardlthompson/Google-Messages-For-Desktop/badge" alt="OpenSSF Scorecard" /></a>
   <img src="https://img.shields.io/badge/node-stack-1A73E8?style=flat-square" alt="node" />
   <img src="https://img.shields.io/badge/AGENT-2ea043?style=flat-square" alt="AGENT" />
   <img src="https://img.shields.io/badge/HUMAN-0969da?style=flat-square" alt="HUMAN" />
@@ -30,7 +31,7 @@ A dedicated Electron window for [Google Messages for web](https://messages.googl
 | **macOS** | dmg, zip (build on macOS or [GitHub Actions](.github/workflows/release-desktop.yml)) |
 | **Linux** | AppImage, deb, zip (build on Linux or Actions) |
 **Downloads:** [GitHub Releases](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases) — Windows users can install with the NSIS Setup EXE or run the **portable** `.exe` / `.zip` without installing.
-**Version:** 1.11.0 (see [CHANGELOG](CHANGELOG.md))
+**Version:** 1.11.1 (see [CHANGELOG](CHANGELOG.md))
 
 ## Support / Donate
 

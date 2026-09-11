@@ -2,9 +2,10 @@
   "required_status_checks": [
     "CI",
     "Security Scan",
-    "CodeQL",
-    "Repo Hygiene",
-    "Feature Gate",
-    "Template Upgrade Simulation (Windows)"
-  ]
+    "CodeQL"
+  ],
+  "informational_status_checks": [
+    "OpenSSF Scorecard"
+  ],
+  "map_doc": "docs/CI_REQUIRED_CHECKS.md"
 }

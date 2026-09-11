@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Idempotent GitHub repo security setup via gh api.
-# Enables Dependabot alerts, private vulnerability reporting, and branch protection on main.
+# Enables Dependabot alerts, private vulnerability reporting, and branch protection
+# on the default branch from .github/settings.yml (this child: master).
 # Usage: scripts/setup-github-repo.sh [owner/repo]
 # Requires: gh CLI authenticated with admin access to the repo.
 set -euo pipefail
@@ -25,7 +26,10 @@ if [ -z "$REPO" ]; then
   exit 1
 fi
 
-BRANCH="${GITHUB_DEFAULT_BRANCH:-main}"
+BRANCH="${GITHUB_DEFAULT_BRANCH:-}"
+if [ -z "$BRANCH" ]; then
+  BRANCH="$("$PY" "$ROOT/scripts/lib/github_default_branch.py" "$ROOT")"
+fi
 # Comma-separated override: GITHUB_REQUIRED_CHECKS="CI,Security Scan,CodeQL,Repo Hygiene,Feature Gate,Template Upgrade Simulation (Windows)"
 if [ -n "${GITHUB_REQUIRED_CHECKS:-}" ]; then
   IFS=',' read -ra REQUIRED_CHECKS <<< "$GITHUB_REQUIRED_CHECKS"
@@ -41,8 +45,8 @@ MANUAL SETUP CHECKLIST (GitHub UI - API returned 422 or insufficient permissions
   1. Settings -> Code security and analysis -> Dependabot alerts: ON
   2. Settings -> Code security and analysis -> Dependabot security updates: ON
   3. Settings -> Code security and analysis -> Private vulnerability reporting: ON
-  4. Settings -> Branches -> Branch protection rules -> main:
-     - Require status checks: CI, Security Scan, CodeQL, Repo Hygiene, Feature Gate, Template Upgrade Simulation (Windows)
+  4. Settings -> Branches -> Branch protection rules -> default branch (settings.yml):
+     - Require status checks from .github/required-checks.json (this child: CI, Security Scan, CodeQL)
      - Require branches to be up to date before merging (recommended)
      - Leave "Do not allow bypassing the above settings" OFF so repo admins can merge via gh --admin
   4b. (Optional, org repos or Rulesets only) Settings -> Rules -> Rulesets -> Bypass list:
@@ -56,6 +60,10 @@ MANUAL SETUP CHECKLIST (GitHub UI - API returned 422 or insufficient permissions
   5c. Do not attach GitHub Environments to CI, Security Scan, or CodeQL
      (github-pages on Pages deploy is the exception)
   6. Re-run: bash scripts/setup-github-repo.sh
+  7. (Optional) Settings → Secrets → Actions → AUTOMERGE_TOKEN
+     PAT with contents + workflow so Dependabot/Release Please merges trigger push CI
+     AUTOMERGE_TOKEN=... bash scripts/setup-automerge-token.sh
+     Or: SETUP_AUTOMERGE_TOKEN=1 bash scripts/setup-github-repo.sh
 EOF
 }
 
@@ -198,8 +206,22 @@ ensure_discussions_qa() {
   "$PY" "$ROOT/scripts/lib/discussions_qa.py" "$REPO"
 }
 
+maybe_setup_automerge_token() {
+  if [ -n "${AUTOMERGE_TOKEN:-}" ] || [ "${SETUP_AUTOMERGE_TOKEN:-}" = "1" ]; then
+    if bash "$ROOT/scripts/setup-automerge-token.sh"; then
+      echo "OK   AUTOMERGE_TOKEN repo secret set"
+    else
+      echo "NOTE AUTOMERGE_TOKEN helper failed — re-run: bash scripts/setup-automerge-token.sh"
+    fi
+    return 0
+  fi
+  echo "NOTE Optional AUTOMERGE_TOKEN not set. Dependabot/Release Please merges may skip push CI."
+  echo "     AUTOMERGE_TOKEN=... bash scripts/setup-automerge-token.sh"
+}
+
 warn_required_check_environments
 ensure_discussions_qa
+maybe_setup_automerge_token
 
 if [ "$TRANSIENT" -gt 0 ]; then
   echo "Transient errors after retries ($TRANSIENT); re-run later"

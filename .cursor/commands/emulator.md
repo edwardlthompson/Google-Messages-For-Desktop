@@ -1,11 +1,14 @@
 # Local Android emulator (host GPU)
 
+> Skills: `.cursor/skills/emulator/`
+
 Run AOSP instrumented tests on this machine. Do **not** `git push`. Do **not** `adb reboot` or wipe a device this script did not start. `/ship` does not require this.
 
 ## Run
 
 ```bash
 python3 scripts/agent-run.py run-android-emulator-local
+
 ```
 
 - Missing SDK, hypervisor, or licenses → **SKIP exit 0** (not a failure).
@@ -17,6 +20,7 @@ python3 scripts/agent-run.py run-android-emulator-local
 
 ```bash
 python3 scripts/agent-run.py run-android-emulator-local -- --if-device
+
 ```
 
 Force skip: `ANDROID_EMULATOR_LOCAL=0`.

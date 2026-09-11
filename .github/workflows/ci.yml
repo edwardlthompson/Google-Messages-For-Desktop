@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   bootstrap-hygiene:
-    name: Bootstrap validate (quick) + hygiene
+    name: CI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

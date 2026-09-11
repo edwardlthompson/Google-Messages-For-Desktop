@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.11.1] - 2026-09-11
+
+### Added
+
+- OpenSSF Scorecard workflow (weekly + push to `master`, informational, not merge-blocking)
+- Template **1.4.0** agent/process catch-up (Canon + Mixed). Sacred parent `examples/` not vendored
+
+### Changed
+
+- Waiting HUMAN leftovers automated: F-009 launch update checks stay off until `CSC_LINK`; GitHub required checks on `master` are CI, Security Scan, and CodeQL
+- About feature-gate skips when `examples/web` is absent (this Electron child)
+
+### Notes
+
+- Desktop artifacts stay unsigned until signing secrets exist
+- Do not merge template Release Please **1.1.0** — product tag is **v1.11.1**
+
 ## [1.11.0] - 2026-09-10
 
 ### Added

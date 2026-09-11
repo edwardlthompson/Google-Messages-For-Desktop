@@ -1,5 +1,40 @@
 # Completed Tasks
 
+## Ship v1.11.1 (2026-09-11)
+
+- ✅ [AGENT] Template 1.4.0 catch-up + HUMAN leftover automation + Scorecard on `master`
+- ✅ [AGENT] Fold `[Unreleased]` into CHANGELOG `[1.11.1]`; tag `v1.11.1` after CI
+- ✅ [AUTO] CI / Security Scan / CodeQL (Scorecard informational)
+
+## Waiting HUMAN leftovers (2026-09-11)
+
+- ✅ [HUMAN] F-009 Wire auto-update publish + signing before enabling launch checks
+- ✅ [HUMAN] Sacred: review `examples/node` from parent 1.4.0 — never blind-overwrite Electron (item 18)
+- ✅ [HUMAN] Sacred: review `examples/python` from parent 1.4.0 — do not vendor (item 19)
+- ✅ [HUMAN] Sacred: review `examples/web` from parent 1.4.0 — do not vendor (item 20)
+- ✅ [HUMAN] Enable OpenSSF Scorecard workflow + align GitHub branch-protection check names with default branch `master`
+
+## Sprint I — Template 1.4.0 catch-up (2026-09-11)
+
+- ✅ [AGENT] Canon `/upgrade` command + `docs/help/UPGRADE.md` (items 1–2)
+- ✅ [AGENT] Canon gap-sync scripts + `repo_mode.py` + `template_gap.py` (items 3–7)
+- ✅ [AGENT] Mixed spec, tests, `BUILD_PLAN_TEMPLATE` markers, `UPGRADING_FROM_TEMPLATE`, `TEMPLATE_INDEX` (items 8–13)
+- ✅ [AGENT] Manual template pin 1.4.0 (item 14; not `sync-template-version.sh`)
+- ✅ [AGENT] Mixed pre-commit (item 15; already aligned with parent ruff v0.16.7)
+- ✅ [AGENT] Mixed `.github/workflows/weekly-health-check.yml` on default branch `master` (item 16)
+- ✅ [AGENT] Skip overwrite of product logs (item 17)
+
+## Sprint H — Template 1.3.0 catch-up (2026-09-11)
+
+- ✅ [AGENT] Canon agent surface from v1.3.0 + `bootstrap-lifecycle.sh --sync-adapters`
+- ✅ [AGENT] Canon scripts from v1.3.0; restore Electron `test:unit` + GMFD/windows helpers
+- ✅ [AGENT] Mixed validate-bootstrap companions (no START_HERE overwrite, no product feature-spec overwrite)
+- ✅ [AGENT] Mixed config merge (gitignore, env.example, TEMPLATE_INDEX, skills/hooks)
+- ✅ [AGENT] Mixed CI cherry-pick on `master` + `ci_gaps.py` master fork
+- ✅ [AGENT] Electron detect globs for about/crash-capture (no `/feature`)
+- ✅ [AGENT] Manual template pin 1.3.0 (not `sync-template-version.sh`)
+- ✅ [AGENT] Gates (`validate-bootstrap --quick`, `feature-gate --stack node`) + DECISION_LOG
+
 ## Ship v1.11.0 (2026-09-10)
 
 - ✅ [AGENT] Nested Settings menus; Pixel-style notify chime; color tray default; Linux XDG autostart
