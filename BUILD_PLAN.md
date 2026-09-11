@@ -28,12 +28,12 @@ That command re-smokes **every** ✅ row: no errors or crashes, plus startup tim
 
 ## Product
 
-**Now:** shipping **1.11.1** (`electron/`) · template **1.4.0**. Board empty. After Cloud work, `/resume`.
+**Now:** product **1.11.1** tagged @ `79a1e50` (`electron/`) · template **1.4.0**. Board empty. After Cloud work, `/resume`.
 
 > **Waiting HUMAN leftovers** archived in COMPLETED_TASKS.md @ `162d61d` (working tree).
 > **Sprint I — Template 1.4.0** archived in COMPLETED_TASKS.md @ `162d61d` (working tree).
 > **Sprint H — Template 1.3.0** archived in COMPLETED_TASKS.md @ `162d61d` (working tree).
-> **Ship v1.11.0** tagged @ `d8b54fa`. Residual: unsigned until `CSC_LINK` secrets.
+> **Ship v1.11.1** tagged @ `79a1e50`. Residual: unsigned until `CSC_LINK` secrets.
 
 ### Open PRs (synced)
 
@@ -55,7 +55,7 @@ _No template gaps; .template-version matches upstream (or template maintainer N/
 
 _None._
 
-Done on this board: **v1.11.0** · template **1.4.0**. Archive: `COMPLETED_TASKS.md`. Launch update checks stay **off** until signed releases. Scorecard Action goes live on the next push of `scorecard.yml`.
+Done on this board: **v1.11.1** · template **1.4.0**. Archive: `COMPLETED_TASKS.md`. Launch update checks stay **off** until signed releases. Scorecard Action is live on `master`.
 
 ---
 

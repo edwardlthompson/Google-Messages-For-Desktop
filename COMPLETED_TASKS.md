@@ -3,8 +3,8 @@
 ## Ship v1.11.1 (2026-09-11)
 
 - ✅ [AGENT] Template 1.4.0 catch-up + HUMAN leftover automation + Scorecard on `master`
-- ✅ [AGENT] Fold `[Unreleased]` into CHANGELOG `[1.11.1]`; tag `v1.11.1` after CI
-- ✅ [AUTO] CI / Security Scan / CodeQL (Scorecard informational)
+- ✅ [AGENT] Fold `[Unreleased]` into CHANGELOG `[1.11.1]`; tag `v1.11.1` @ `79a1e50`
+- ✅ [AUTO] CI / Security Scan / CodeQL green; Scorecard success; Release desktop 11 unsigned assets
 
 ## Waiting HUMAN leftovers (2026-09-11)
 

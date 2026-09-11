@@ -74,6 +74,16 @@ Historical Electron/Windows issue: `app.setAppUserModelId(process.execPath)` ins
 - Unread false→true also sends a generic OS toast (no DOM snippets) through the same dedupe path.
 - Installed NSIS builds with a Start Menu shortcut remain the most reliable Action Center target; `npm run dev` / portable may still be flaky for toasts.
 
+### Regress — /ship v1.11.1 (2026-09-11)
+
+- Product tag **v1.11.1** @ `79a1e50`. CI / Security Scan / CodeQL green. Scorecard success. Branch protection on **`master`**. Release desktop **PASS**; **11** unsigned Win/mac/linux assets
+- Local and hard GitHub `pre-release-gate` **PASS** (About-gate skips missing `examples/web`; Scorecard live)
+- `wait-release-sbom` FAIL (no CycloneDX/OpenVEX on desktop workflow — expected). Pages N/A (`check-pages-analytics` PASS). Dependabot Critical/High = 0
+- `simulate-template-upgrade` FAIL after clone `init-project.sh --stack web` (`check-readme-badges.sh` template badges). Same leftover as v1.11.0
+- No live Release Please — product tags stay manual. Template RP dry-run would open **1.1.0** (do not merge)
+- Did not apply upd’s `github/codeql-action` `vcodeql-bundle-*` rewrite
+- Security Scan YAML indent fix for Semgrep step (`79a1e50`)
+
 ### Regress — /ship v1.11.0 (2026-09-10)
 
 - Product tag **v1.11.0** @ `d8b54fa`. CI / Security Scan / CodeQL green. Release desktop **PASS**; **11** unsigned Win/mac/linux assets

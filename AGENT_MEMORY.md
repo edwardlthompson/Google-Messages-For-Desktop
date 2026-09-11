@@ -4,7 +4,8 @@
 
 ## Milestone: /ship v1.11.1 (2026-09-11)
 
-- Product **1.11.1**: template 1.4.0 catch-up, Scorecard on `master`, HUMAN leftovers automated
+- Product **1.11.1** @ `79a1e50`; GitHub Release with 11 unsigned Win/mac/linux artifacts
+- Template 1.4.0 catch-up, Scorecard on `master`, HUMAN leftovers automated
 - F-009 auto-update signing still deferred; launch checks stay off
 - Do not merge template Release Please 1.1.0
 
