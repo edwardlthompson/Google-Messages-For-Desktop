@@ -27,7 +27,7 @@
 
 > **HUMAN_BACKLOG device + GitHub** archived in COMPLETED_TASKS.md @ `2338c31` (working tree).
 
-> **Ship v1.11.0** tagged after CI. Residual: unsigned until `CSC_LINK` secrets (F-009).
+> **Ship v1.11.0** tagged @ `d8b54fa`. Residual: unsigned until `CSC_LINK` secrets (F-009).
 
 > **Ship v1.10.3** tagged @ `a1a5fbe`. Residual: unsigned until `CSC_LINK` secrets (F-009).
 

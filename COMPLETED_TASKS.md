@@ -1,5 +1,11 @@
 # Completed Tasks
 
+## Ship v1.11.0 (2026-09-10)
+
+- ✅ [AGENT] Nested Settings menus; Pixel-style notify chime; color tray default; Linux XDG autostart
+- ✅ [AGENT] Fold `[Unreleased]` into CHANGELOG `[1.11.0]`; tag `v1.11.0` @ `d8b54fa`
+- ✅ [AUTO] CI / Security Scan / CodeQL green; Release desktop 11 unsigned assets
+
 ## Ship v1.10.3 (2026-09-07)
 
 - ✅ [AGENT] Electron pairing persist: DBSC/3PCD flags, `/web/` boot, persist:main auth popups not parented; Windows host flags mirrored
