@@ -12,7 +12,8 @@ module.exports = {
   },
   publish: null,
   linux: {
-    target: ["AppImage", "deb", "zip"],
+    // Debian package is the Linux program file. Do not ship AppImage/zip.
+    target: ["deb"],
     executableName: "GoogleMessages",
     category: "Network",
     mimeTypes: [
@@ -29,6 +30,7 @@ module.exports = {
         Comment: "Google Messages for web with sms/tel/im protocol handlers",
         Categories: "Network;InstantMessaging;",
         StartupWMClass: "Google Messages",
+        SingleMainWindow: "true",
         MimeType:
           "x-scheme-handler/sms;x-scheme-handler/smsto;x-scheme-handler/tel;x-scheme-handler/callto;x-scheme-handler/im;x-scheme-handler/mms;",
       },

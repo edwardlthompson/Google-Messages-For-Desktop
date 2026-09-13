@@ -40,11 +40,15 @@ describe("parseAssetVersion", () => {
       "1.8.2"
     );
     assert.equal(
+      parseAssetVersion("Google.Messages-v1.8.2-linux-amd64.deb", "deb"),
+      "1.8.2"
+    );
+    assert.equal(
       parseAssetVersion(
         "Google.Messages-v1.8.2-linux-x86_64.AppImage",
-        "appimage"
+        "deb"
       ),
-      "1.8.2"
+      null
     );
     assert.equal(parseAssetVersion("v1.8.1", "exe"), null);
     assert.equal(parseAssetVersion("v0.22.1", "exe"), null);
@@ -103,6 +107,29 @@ describe("parseReleaseTag and resolveLatestInstaller", () => {
     assert.equal(parseReleaseTag("template-1.0.0"), null);
   });
 
+  it("picks the Linux .deb installer", () => {
+    const resolved = resolveLatestInstaller(
+      [
+        {
+          name: "Google.Messages-v1.9.1-linux-amd64.deb",
+          url: "https://example.com/deb",
+        },
+        {
+          name: "Google.Messages-v1.9.1-linux-x64.AppImage",
+          url: "https://example.com/appimage",
+        },
+      ],
+      "deb",
+      "v1.9.1",
+      "https://example.com/releases/v1.9.1"
+    );
+    assert.deepEqual(resolved, {
+      version: "1.9.1",
+      url: "https://example.com/deb",
+      filename: "Google.Messages-v1.9.1-linux-amd64.deb",
+    });
+  });
+
   it("falls back to the git tag when assets are only zip or deb", () => {
     const resolved = resolveLatestInstaller(
       [
@@ -149,6 +176,6 @@ describe("productKindForPlatform", () => {
   it("matches this OS installer kind", () => {
     assert.equal(productKindForPlatform("win32"), "exe");
     assert.equal(productKindForPlatform("darwin"), "dmg");
-    assert.equal(productKindForPlatform("linux"), "appimage");
+    assert.equal(productKindForPlatform("linux"), "deb");
   });
 });

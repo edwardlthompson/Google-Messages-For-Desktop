@@ -4,7 +4,7 @@ GitHub Release should attach:
 
 | Asset | Role |
 |-------|------|
-| Platform installers (exe, dmg, AppImage, deb) | Users |
+| Platform installers (exe, dmg, deb) | Users |
 | `SHA256SUMS` (or per-file hashes in the notes) | Integrity |
 | `sbom.cyclonedx.json` | CycloneDX of the packaged tree |
 | OpenVEX next to the SBOM | Known CVE statements |

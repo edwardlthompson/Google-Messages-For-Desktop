@@ -74,6 +74,10 @@ import { bindCertErrorInterstitial } from "./helpers/certErrorUi";
 import { bindGuestSessionWipe, currentSessionPartition } from "./helpers/sessionProfileUi";
 import { bindOsChromeTasks } from "./helpers/jumpListUi";
 import { protocolLaunchFromArgv } from "./helpers/jumpList";
+import {
+  focusExistingWindow,
+  shouldExitForSecondInstance,
+} from "./helpers/singleInstance";
 import { loadManagedPolicy } from "./helpers/managedPolicyUi";
 import { parseThemePref, windowBackgroundForTheme } from "./helpers/settingsTheme";
 import {
@@ -122,8 +126,8 @@ app.commandLine.appendSwitch("disable-features", CHROMIUM_DISABLE_FEATURES);
 
 const gotTheLock = app.requestSingleInstanceLock();
 
-if (!gotTheLock) {
-  app.quit();
+if (shouldExitForSecondInstance(gotTheLock)) {
+  app.exit(0);
 } else {
   app.on("second-instance", (_event, commandLine) => {
     const proto = protocolLaunchFromArgv(commandLine);
@@ -132,11 +136,7 @@ if (!gotTheLock) {
       console.log("Ignoring second-instance compose for onboarding probe");
       return;
     }
-    if (mainWindow) {
-      if (!mainWindow.isVisible()) {
-        mainWindow.show();
-      }
-      mainWindow.focus();
+    if (focusExistingWindow(mainWindow)) {
       if (proto) {
         void handleProtocolUrl(mainWindow, proto);
       }

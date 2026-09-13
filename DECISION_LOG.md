@@ -1,5 +1,14 @@
 # Decision Log
 
+## 2026-09-13 — Linux .deb only + one instance
+
+- **Status:** Accepted
+- **Context:** User asked for a single running instance and a `.deb` as the Linux program file.
+- **Decisions:**
+  - `electron-builder` Linux target is **`deb` only** (no AppImage or zip). Check for Updates looks for that `.deb`.
+  - `requestSingleInstanceLock` still owns the process; a second launch exits and restores the existing window (`SingleMainWindow=true` on the desktop entry).
+- **Consequences:** Next GitHub Release Linux asset is the `.deb`. Remove leftover AppImage/zip from `electron/dist/` before `package:linux`.
+
 ## 2026-09-11 — /ship v1.11.1
 
 - **Status:** Accepted

@@ -1,6 +1,6 @@
 export const MS_DAY = 86_400_000;
 
-export type ProductKind = "exe" | "apk" | "dmg" | "appimage";
+export type ProductKind = "exe" | "apk" | "dmg" | "deb";
 
 export interface NamedAsset {
   name: string;
@@ -33,7 +33,7 @@ export function isNewerVersion(current: string, latest: string): boolean {
 
 export function productKindForPlatform(platform: string): ProductKind {
   if (platform === "darwin") return "dmg";
-  if (platform === "linux") return "appimage";
+  if (platform === "linux") return "deb";
   return "exe";
 }
 
@@ -58,8 +58,8 @@ export function parseAssetVersion(
     ],
     apk: [/google-messages-(\d+\.\d+\.\d+)-foss\.apk$/i],
     dmg: [/Google[-.]Messages(?:-For-Desktop)?-v?(\d+\.\d+\.\d+)-mac-[^.]+\.dmg$/i],
-    appimage: [
-      /Google[-.]Messages(?:-For-Desktop)?-v?(\d+\.\d+\.\d+)-linux-[^.]+\.AppImage$/i,
+    deb: [
+      /Google[-.]Messages(?:-For-Desktop)?-v?(\d+\.\d+\.\d+)-linux-[^.]+\.deb$/i,
     ],
   };
   for (const re of patterns[kind]) {

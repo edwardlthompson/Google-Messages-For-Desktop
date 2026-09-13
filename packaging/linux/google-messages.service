@@ -5,7 +5,7 @@ PartOf=graphical-session.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/google-messages-for-desktop
+ExecStart=/usr/bin/GoogleMessages
 Restart=on-failure
 
 [Install]

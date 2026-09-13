@@ -12,8 +12,9 @@ usage() {
 Usage: install-and-smoke-linux-deb.sh [--uninstall]
 
   Finds the newest Google.Messages-v*-linux-*.deb under dist/ or electron/dist/,
-  installs with sudo apt-get, checks desktop MimeType/StartupWMClass, launches
-  briefly under $DISPLAY, then quits. Leaves the package installed unless
+  installs with sudo apt-get, checks desktop MimeType/StartupWMClass/SingleMainWindow,
+  launches briefly under $DISPLAY (second launch must exit), then quits.
+  Leaves the package installed unless
   --uninstall is passed.
 
 Environment:
@@ -157,13 +158,18 @@ if ! grep -q 'StartupWMClass=Google Messages' "$DESKTOP"; then
   cat "$DESKTOP" >&2
   exit 1
 fi
+if ! grep -qi 'SingleMainWindow=true' "$DESKTOP"; then
+  echo "FAIL: SingleMainWindow=true missing in $DESKTOP" >&2
+  cat "$DESKTOP" >&2
+  exit 1
+fi
 for scheme in sms smsto tel im; do
   if ! grep -Eq "x-scheme-handler/${scheme}" "$DESKTOP"; then
     echo "FAIL: MimeType missing x-scheme-handler/${scheme} in $DESKTOP" >&2
     exit 1
   fi
 done
-echo "OK   StartupWMClass + sms/smsto/tel/im MimeTypes"
+echo "OK   StartupWMClass + SingleMainWindow + sms/smsto/tel/im MimeTypes"
 
 LOG="$(mktemp -t gm-linux-smoke.XXXXXX.log)"
 echo "=== launch smoke (${HOLD_SECS}s) log: $LOG ==="
@@ -176,6 +182,19 @@ if ! kill -0 "$PID" 2>/dev/null; then
   cat "$LOG" >&2 || true
   exit 1
 fi
+
+# Second launch must hand off to the first process (single instance).
+"$BIN" >/dev/null 2>&1 &
+SECOND=$!
+sleep 2
+if kill -0 "$SECOND" 2>/dev/null; then
+  echo "FAIL: second launch stayed running (pid $SECOND); expected one instance" >&2
+  cat "$LOG" >&2 || true
+  kill -KILL "$SECOND" 2>/dev/null || true
+  exit 1
+fi
+echo "OK   second launch handed off to pid $PID"
+
 sleep "$HOLD_SECS"
 if ! kill -0 "$PID" 2>/dev/null; then
   echo "FAIL: process died before ${HOLD_SECS}s hold" >&2

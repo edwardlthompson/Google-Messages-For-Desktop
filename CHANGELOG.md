@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Linux ships only the `.deb` installer (no AppImage or zip). Help → Check for Updates looks for that `.deb`
+- A second launch restores the existing window instead of starting another process (`SingleMainWindow` on the `.desktop` file)
+
 ## [1.11.1] - 2026-09-11
 
 ### Added

@@ -32,6 +32,7 @@ export function linuxAutostartDesktopBody(opts: {
     "Terminal=false",
     "X-GNOME-Autostart-enabled=true",
     "StartupNotify=false",
+    "SingleMainWindow=true",
     "",
   ].join("\n");
 }

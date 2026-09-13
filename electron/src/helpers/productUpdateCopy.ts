@@ -15,11 +15,14 @@ export function updateAvailableDetail(
   const fileLine = filename
     ? `Download: ${filename}`
     : "Download: the GitHub release page (no matching installer filename for this OS).";
+  const installLine = filename?.toLowerCase().endsWith(".deb")
+    ? "When the download finishes, install the .deb (Software Install or sudo apt install ./file.deb) and restart Google Messages."
+    : "When the download finishes, run the installer and restart Google Messages.";
   return [
     `You are running ${currentVersion}. The latest GitHub release is ${latestVersion}.`,
     fileLine,
     "Install opens that file in your browser. This app does not download or replace itself.",
-    "When the download finishes, run the installer and restart Google Messages.",
+    installLine,
   ].join("\n\n");
 }
 

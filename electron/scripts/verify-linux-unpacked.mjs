@@ -59,3 +59,24 @@ try {
 console.log(
   `OK   linux-unpacked runtime complete (${localeCount} locales, app.asar present)`
 );
+
+const distDir = path.join(root, "dist");
+const distFiles = fs.existsSync(distDir) ? fs.readdirSync(distDir) : [];
+const debs = distFiles.filter((name) =>
+  /^Google\.Messages-v.+-linux-.+\.deb$/i.test(name)
+);
+if (!debs.length) {
+  console.error("FAIL: missing Google.Messages-v*-linux-*.deb in dist/");
+  process.exit(1);
+}
+const leftover = distFiles.filter(
+  (name) =>
+    /\.AppImage$/i.test(name) ||
+    /^Google\.Messages-v.+-linux-.+\.zip$/i.test(name)
+);
+if (leftover.length) {
+  console.error("FAIL: Linux ships .deb only; remove leftover artifacts:");
+  for (const name of leftover) console.error(`  - ${name}`);
+  process.exit(1);
+}
+console.log(`OK   Linux program file is .deb (${debs.join(", ")})`);

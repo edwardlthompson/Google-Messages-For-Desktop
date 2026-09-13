@@ -29,8 +29,8 @@ A dedicated Electron window for [Google Messages for web](https://messages.googl
 |----------|---------|
 | **Windows** | NSIS installer, portable EXE, zip |
 | **macOS** | dmg, zip (build on macOS or [GitHub Actions](.github/workflows/release-desktop.yml)) |
-| **Linux** | AppImage, deb, zip (build on Linux or Actions) |
-**Downloads:** [GitHub Releases](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases) — Windows users can install with the NSIS Setup EXE or run the **portable** `.exe` / `.zip` without installing.
+| **Linux** | `.deb` install (build on Linux or Actions) |
+**Downloads:** [GitHub Releases](https://github.com/edwardlthompson/Google-Messages-For-Desktop/releases) — Windows users can install with the NSIS Setup EXE or run the **portable** `.exe` / `.zip` without installing. Linux users install the `.deb`.
 **Version:** 1.11.1 (see [CHANGELOG](CHANGELOG.md))
 
 ## Support / Donate

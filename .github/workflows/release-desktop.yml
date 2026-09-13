@@ -57,7 +57,6 @@ jobs:
             electron/dist/*.exe
             electron/dist/*.zip
             electron/dist/*.dmg
-            electron/dist/*.AppImage
             electron/dist/*.deb
             electron/dist/*.blockmap
           if-no-files-found: warn

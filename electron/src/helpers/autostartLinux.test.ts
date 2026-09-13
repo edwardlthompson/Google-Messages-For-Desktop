@@ -27,6 +27,7 @@ describe("autostartLinux", () => {
     assert.match(body, /^\[Desktop Entry\]/m);
     assert.match(body, /X-GNOME-Autostart-enabled=true/);
     assert.match(body, /Exec="\/opt\/Google Messages\/GoogleMessages"/);
+    assert.match(body, /SingleMainWindow=true/);
     assert.equal(/Hidden=true/.test(body), false);
   });
 
