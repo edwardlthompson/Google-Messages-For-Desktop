@@ -135,3 +135,10 @@ Do not file vulnerabilities in public issues. See [`SECURITY.md`](SECURITY.md) a
 ## License
 
 MIT. Dual copyright in [`LICENSE`](LICENSE) (Kelvin Nguyen; Edward L. Thompson). Electron shell credit: OrangeDrangon (MIT).
+
+## What this is not
+
+- A finished commercial product promise
+- A place for secrets or production credentials
+- An unbounded scope — see README goals above
+
