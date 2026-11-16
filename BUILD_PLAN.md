@@ -70,3 +70,9 @@ If Monday cron is red: Cursor Automation `weekly-maintain`, then Grok Bot 4–5.
 ## Archive
 
 Older sprints: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
+
+## News inbox (synced)
+
+P1/P2 tasks auto-synced by News Bot from [`docs/NEWS_INBOX.md`](docs/NEWS_INBOX.md).
+
+- 🔲 [AGENT][LOCAL] Upgrade electron 41.10.3 to 45.3.3 — scope: electron/ (news P1, 2026-11-16) https://github.com/electron/electron/releases/tag/v45.3.3
