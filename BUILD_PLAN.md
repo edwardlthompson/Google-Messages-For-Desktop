@@ -57,6 +57,23 @@ _None._
 
 Done on this board: **v1.11.1** · template **1.4.0**. Archive: `COMPLETED_TASKS.md`. Launch update checks stay **off** until signed releases. Scorecard Action is live on `master`.
 
+### Local agent (This Computer)
+
+Standing queue for This Computer. Rows: `🔲 [AGENT][LOCAL] … — scope: path`.
+
+<!-- local-agent-lane:begin -->
+- 🔲 [AGENT] Upgrade electron 41.10.3 to 45.3.3 — scope: electron/ (news P1, 2026-11-16) https://github.com/electron/electron/releases/tag/v45.3.3
+<!-- local-agent-lane:end -->
+
+### Cloud agent (Cursor Cloud)
+
+Standing queue for Cursor Cloud. Rows: `🔲 [AGENT][CLOUD] … — scope: path`.
+
+<!-- cloud-agent-lane:begin -->
+_No cloud agent items._
+<!-- cloud-agent-lane:end -->
+
+
 ---
 
 ## Ongoing Maintenance
@@ -70,19 +87,4 @@ If Monday cron is red: Cursor Automation `weekly-maintain`, then Grok Bot 4–5.
 ## Archive
 
 Older sprints: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
-### Local agent (This Computer)
-
-Standing queue for This Computer. Rows: `🔲 [AGENT][LOCAL] … — scope: path`.
-
-<!-- local-agent-lane:begin -->
-- 🔲 [AGENT][LOCAL] Upgrade electron 41.10.3 to 45.3.3 — scope: electron/ (news P1, 2026-11-16) https://github.com/electron/electron/releases/tag/v45.3.3
-<!-- local-agent-lane:end -->
-
-### Cloud agent (Cursor Cloud)
-
-Standing queue for Cursor Cloud. Rows: `🔲 [AGENT][CLOUD] … — scope: path`.
-
-<!-- cloud-agent-lane:begin -->
-_No cloud agent items._
-<!-- cloud-agent-lane:end -->
 
