@@ -88,3 +88,18 @@ If Monday cron is red: Cursor Automation `weekly-maintain`, then Grok Bot 4–5.
 
 Older sprints: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
 
+<!-- argus-portfolio-chores:start -->
+## Argus portfolio chores
+
+Synced from argus-runner (2026-11-18). Prefer YOLO maintain on the runner; keep these until cleared.
+
+| Status | Venue | Task |
+|--------|-------|------|
+| 🔲 | `[AUTO][CLOUD]` | Clear open Dependabot alerts |
+
+```text
+Repo: edwardlthompson/Google-Messages-For-Desktop
+Merge green Dependabot PRs (--squash). Template pin already 1.13.0.
+Gate: Dependabot alert count 0.
+```
+<!-- argus-portfolio-chores:end -->
