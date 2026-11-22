@@ -5,7 +5,7 @@
 </p>
 
 <p>
-  <img src="https://img.shields.io/badge/template-1.4.0-656d76?style=flat-square" alt="template 1.4.0" />
+  <img src="https://img.shields.io/badge/template-1.13.1-656d76?style=flat-square" alt="template 1.13.1" />
   <img src="https://img.shields.io/badge/license-MIT-2ea043?style=flat-square" alt="MIT" />
   <img src="https://img.shields.io/badge/FOSS-no_tracking-656d76?style=flat-square" alt="FOSS" />
   <a href="https://github.com/edwardlthompson/Google-Messages-For-Desktop/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/edwardlthompson/Google-Messages-For-Desktop/ci.yml?style=flat-square&label=CI" alt="CI" /></a>
