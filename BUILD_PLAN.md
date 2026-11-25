@@ -1,7 +1,7 @@
 # BUILD_PLAN — Google Messages for Desktop
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 0 · AUTO 0 · HUMAN 0 · ADB 0 · **0 open**
+**Remaining:** AGENT 1 · AUTO 0 · HUMAN 0 · ADB 0 · **1 open**
 <!-- /remaining-tally -->
 
 Live board. Finished work: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
@@ -62,7 +62,7 @@ Done on this board: **v1.11.1** · template **1.4.0**. Archive: `COMPLETED_TASKS
 Standing queue for This Computer. Rows: `🔲 [AGENT][LOCAL] … — scope: path`.
 
 <!-- local-agent-lane:begin -->
-- 🔲 [AGENT] Upgrade electron 41.10.3 to 45.3.3 — scope: electron/ (news P1, 2026-11-16) https://github.com/electron/electron/releases/tag/v45.3.3
+- 🔲 [AGENT] Upgrade electron 42.11.18 to 45.5.0 — scope: electron/ (news P1, 2026-11-25) https://github.com/electron/electron/releases/tag/v45.5.0
 <!-- local-agent-lane:end -->
 
 ### Cloud agent (Cursor Cloud)
