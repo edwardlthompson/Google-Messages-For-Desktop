@@ -41,3 +41,9 @@ A Cursor planning agent should review these items and fold the useful ones into 
 **News and updates**
 
 - Conductor moved its agent-workspace desktop app from Tauri to Electron (0.95.0, Nov 16; numbers posted Nov 24), keeping its Rust local server: workspaces open 71% faster, startup-to-render is 4.6x faster and RAM is 35% lower, while the download grew from about 200 MB to about 500 MB. A real-world counterpoint to "Tauri is always lighter": measure cold start and RAM on the real WebView (WebKitGTK on Linux, WebView2 on Windows) rather than assume. [Conductor 0.95.0](https://www.conductor.build/changelog/0.95.0-agents-that-manage-your-local-workspaces) · [X post](https://x.com/charlieholtz/status/2125351294965805147) News only: a data point for staying on Electron.
+
+## 2026-11-27
+
+**News and updates**
+
+- Correction: the official [Electron schedule](https://releases.electronjs.org/schedule) now lists Electron 46 beta on Dec 3, 2026 and stable on Jan 5, 2027 (yesterday's notes said stable Dec 3); Electron 43 reaches EOL the same day, and 45 is supported until Apr 27, 2027. This repo still locks electron 42.11.18 (EOL since Oct 20); the open P1 board row "Upgrade Electron 42.11.18 to 45.5.0" remains the right fix, so no new task.
